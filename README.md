@@ -306,3 +306,43 @@
         x = 10
         print(x)
       ```
+
+### Lesson 1.4 Operators
+
+- **Assign A Value**
+
+  - Use the `=` operator to assign a value. The name on the left is assigned the value on the right.
+  - The `=` operator is also used to modify or reassign a value.
+  - The following code declares a `shoeSize` variable and assigns `8` as its value. The value is then modified to 9:
+
+    - ```swift
+        var shoeSize = 8
+        shoeSize = 9 // Reassigns shoeSize to 9
+      ```
+
+- **Basic Arithmetic**
+  - You can use the `+`, `-`, `*`, and `/` operators to perform basic math functionality.
+  - When you use the division operator (`/`) on `Int` values, the result will be an `Int` value rounded down to the nearest whole number, because the `Int` type supports whole numbers.
+  - If you explicitly declare constants or variables as `Double` values, the results will include decimal values.
+  - Make sure to use `Double` values whenever your code requires decimal-point accuracy.
+- **Compound Assignment**
+  - It's a better way to modify a value. You can use a compound assignment operator, which adds the `=` operator after an arithmetic operator: `+=`, `-=`, `*=`, and `/=`.
+  - Compound assignment operators help you write cleaner, more concise code.
+- **Remainder Operator**
+  - Use the remainder operator (`%`) to quickly calculate the remainder from the division of two `Int` values.
+- **Order of Operations**
+  - Mathematic operations always follow a specific order.
+  - Multiplication and division have priority over addition and subtraction, and parentheses have priority over all four.
+  - The remainder operator has the same precedence as multiplication and division.
+- **Numeric Type Conversion**
+
+  - As you've learned, you can't mix and match number types when performing mathematical operations.
+  - You can create a new type by prefixing the type you want to convert it.
+
+    - ```swift
+        let x = 3
+        let y = 0.14
+        let pi = Double(x) + y
+      ```
+
+    - `Double(x)` creates a new `Double` value from the `Int` value `x`, enabling the compiler to add it to `y` and assign the result to `pi`.
