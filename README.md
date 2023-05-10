@@ -346,3 +346,57 @@
       ```
 
     - `Double(x)` creates a new `Double` value from the `Int` value `x`, enabling the compiler to add it to `y` and assign the result to `pi`.
+
+### Lesson 1.5 Control Flow
+
+- You will write code that makes decisions about what lines of code should be executed depending on results of previously executed code. This is call control flow.
+- In this lesson, you'll learn how to use logical operators to check conditions and to sue control flow statements (`if`, `if-else`, and `switch`) to choose what code will be executed as a result.
+- **Logical and Comparison Operators**
+  - Each if statement uses a logical or comparison operator to decide if something is true or false. The result determines whether to run the block of code or to skip it.
+  - Here’s a list of the most common logical and comparison operators:
+    | Operator | Type | Description |
+    |:--:|:---|:---|
+    | == | Comparison | Two items must be equal. |
+    | != | Comparison | The values must not be equal to each other. |
+    | > | Comparison | Value on the left must be greater than the value on the right. |
+    | >= | Comparison | Value on the left must be greater than or equal to the value on the right. |
+    | < | Comparison | Value on the left must be less than the value on the right. |
+    | <= | Comparison | Value on the left must be less than or equal to the value on the right. |
+    | && | Logical | AND - The conditional statement on the left and right must be `true`. |
+    | || | Logical | OR - The conditional statement on the left or right must be `true`. |
+    | ! | Logical | NOT - Returns the logical opposite of the conditional statement immediately following the operator. |
+  - You can mix and match operators to create a Boolean value, or `Bool`.
+  - Boolean values are either `true` or `false` and you can combine them with an `if` statement to determine if code should be run or skipped.
+- **If Statements**
+  - The most straightforward conditional statement is the if statement.
+  - An if statement says that “If this condition is true, then run this block of code.” If the condition isn't true, the program skips the block of code.
+  - In most cases, you’ll use an if statement to check simple conditions with only a few possible outcomes.
+- **If-Else Statements**
+  - By adding an else clause to an `if` statement, you can specify a block of code to execute if the condition is not `true`.
+  - Bu using `else if`, you can declare more blocks of code to run based on any number of conditions.
+- **Boolean Values**
+  - You can assign the results of a logical comparison to a `Bool` constant or variable to check or access the value later.
+    - `Bool` values can only be `true` or `false.
+  - It's also possible to invert a `Bool` value using the logical NOT operator, which is represented with `!`.
+  - In the same way, you can use the logical AND operator, represented by `&&`, to check if two or more conditions are `true`.
+  - You have yet another option: the logical OR operator, represented by `||`, to check if either one of two conditions is `true`.
+- **Switch Statement**
+  - You’ve seen `if` statements and `if-else` statements that you can use to run certain blocks of code depending on certain conditions.
+    - But a long chain of `if`, `else if`, `else if ... else` statements can become messy and difficult to read after a small number of options.
+  - Swift has another tool for control flow known as a `switch` statement that’s optimal for working with many potential conditions.
+  - A basic `switch` statement takes a value with multiple options and allows you to run separate code based on each option, or `case`.
+    - You can also provide a `default` case to specify a block of code that will run in all the cases you haven’t specifically defined.
+  - Any given `case` statement can also evaluate multiple conditions at once: `case "a", "e", "i":`.
+  - When working with numbers, you can use interval matching to check for inclusion in a range: `case 0...9:`.
+  - The `switch` operator is the right tool for control flow when you want to run different code based on many different conditions.
+- **Ternary Conditional Operator**
+  - An interesting (and very common) use case for an `if` statement is to set a variable or return a value.
+    - If a certain condition is `true`, you want to set a variable to one value.
+    - If the condition is `false`, you want to set the variable to a different value.
+  - Because this situation is so common in programming, many languages include a special operator, known as a ternary conditional operator (`?:`), for writing more concise code.
+    - Swift programmers generally leave out the word “conditional” and refer to this as simply the “ternary operator.”
+  - The ternary operator has three parts:
+    - A question with a `true` or `false` answer.
+    - A value if the answer to the question is `true`.
+    - A value if the answer to the question is `false`.
+      - `condition ? true : false`
