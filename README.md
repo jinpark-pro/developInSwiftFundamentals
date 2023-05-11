@@ -400,3 +400,66 @@
     - A value if the answer to the question is `true`.
     - A value if the answer to the question is `false`.
       - `condition ? true : false`
+
+### Lesson 1.6 Xcode
+
+- To begin your exploration of the Xcode IDE, you'll need to create a new project. Open Xcode and select "Create a new Xcode project."
+- On the next screen, you'll see that Xcode provides many starting templates for creating new applications, sectioned according to the platforms that Xcode supports: iOS, watchOS, tvOS, and macOS.
+  - Select the iOS App template. Click Next.
+- Enter Product Name, Set Interface to "Storyboard", set Language to "Swift", Leave Use Core Date and Include Tests unselected. Click Next.
+- Select a location for saving your project and click Create.Until you work with a version control system, such as Git, you can leave the box that asks if you’d like to create a git repository unselected.
+- Now that you’ve created the project, you’ll arrive at the main interface of Xcode. You’ll notice that it takes up a lot of space. You might want to resize the window to fill the majority of your desktop—or take Xcode full-screen by clicking the green circle in the upper left of the window or using the Command-Control-F keyboard shortcut.
+- **Xcode Interface**
+
+  - The Xcode workspace is divided into five main sections. Click each call out to see more information.
+  - <img src="./resources/xcode_interface.png" alt="Xcode Interface" width="600" />
+
+  1. Editor Area
+
+     - <img src="./resources/editor_area.png" alt="Editor Area" width="600" />
+
+       1. The first is the editor area, where you spend most of your time writing Swift code and building UIs using Interface Builder.
+       2. The file you select in the Project navigator column on the left determines what's displayed in the editor area.
+       3. When you edit code, an overview of the entire file optionally appears on the right. This overview is the minimap (choose Editor > Minimap from the menu bar). This overview is the min map. You can interact with the minimap to navigate your source code quickly.
+
+     - Jump Bar
+
+       - Above the editor area is the jump bar, which contains the following controls from left to right
+       - <img src="./resources/jump_bar.png" alt="Jump Bar" width="600" />
+
+         1. Related Items - Allows you to navigate to various related items for the file you're currently editing.
+         2. Go Back/Forward - Navigation buttons to move back and forth through your navigation history within the editor. This includes navigation actions such as jumping between definitions within a file and moving between different files.
+         3. Path - A breadcrumb style control showing you the current editing context relative to tis parent groups and folders in the project. Click on any item in this control to navigate to other items at the same level. Note that the farthest right item navigates the structure within the file. (It might say "No Selection.")
+         4. Code Review - Displays side-by-side views of the current version and other versions if you're using a source control system, such as Git, to manage your Xcode files.
+         5. Adjust Editor Options - Allows you to change the options of the current editor as well as create an Assistant Editor that appears alongside your current editor with related files. Most useful when referencing other source files and when creating connections between source code and Interface Builder.
+         6. Add Editor - Allows you to add an additional editor to the window - much like the assistant editor. By default this will add an editor to the right. By holding the Option key you can add an editor below. Once multiple editors are present two new buttons appear at the very left of the jump bar. One that closes the editor and another that focuses the editor - causing it to hide all others. Using multiple editors is an advanced feature that can greatly improve productivity when referencing and editing multiple files.
+
+  2. Toolbar Area
+
+     - Next is the toolbar, which spans the top of the Xcode workspace.
+     - Moving from left to right are the following buttons:
+       - <img src="./resources/toolbar.png" alt="Toolbar" width="600" />
+
+  3. Navigator Area
+
+     - The third section is the Navigator area, a narrow column on the left. At the top of the column is the project jump bar, which allows you to select which navigator is displayed.
+     - <img src="./resources/navigator.png" alt="Navigator" width="600" />
+
+       1. Project navigator - Lists all files associated with your project.
+       2. Source Control navigator - Displays information about your project's Git repository if one is set up.
+       3. Symbol navigator - Lists all the symbols, or data types, you've defined in your project. Since a single file can contain multiple symbol definitions, use this navigator when you're unsure which file a symbol defines.
+       4. Find navigator - Allows you to perform a search for specified text throughout your project, with the option to also replace the text.
+       5. Issue navigator - Displays all the warnings or build errors that were encountered the last time your app was built.
+       6. Test navigator - Lists all the tests that you've written for your application and allows you to run each test individually.
+       7. Debug navigator - Displays the order in which the code was executed when you're actively debugging an app.
+       8. Breakpoint navigator - Lists all the breakpoints you've added to your project and makes it easy to enable or disable them individually.
+       9. Report navigator = Provides a detailed log of each build of your project.
+
+  4. Debug Area
+
+     - At the bottom of the Xcode window is the fourth main section: the debug area.
+     - To the left of this area is the variables view, which lists the value of each variable while you're actively debugging an app. To the right is the console pane, which displays any `print` statements you or the system has output. Each of these views can be shown or hidden using the button in the bottom right.
+     - <img src="./resources/debug_area.png" alt="Debug Area" width="600" />
+
+  5. Inspector Area
+     - Finally, the Inspector area is a context-sensitive pane that displays details about any file selected in the Project navigator, such as the file's location on disk or the apps in which the file is included. When you're using Interface Builder, you'll find that this area is particularly useful for adjusting the attributes of your UI elements, including position, size, and color.
