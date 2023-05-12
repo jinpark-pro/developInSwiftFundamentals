@@ -463,3 +463,53 @@
 
   5. Inspector Area
      - Finally, the Inspector area is a context-sensitive pane that displays details about any file selected in the Project navigator, such as the file's location on disk or the apps in which the file is included. When you're using Interface Builder, you'll find that this area is particularly useful for adjusting the attributes of your UI elements, including position, size, and color.
+
+- **Xcode File Types**
+
+  - Xcode knows how to work with a variety of files that span across multiple programming languages.
+    - For now, you'll learn about files related to projects written in the Swift language.
+    - The files in your project have filename extensions that you might see in the Finder, such as .swift and .xcodeproj, which Xcode doesn't show by default.
+    - Instead, it uses icons to indicate the file type.
+  - At the very top of the Project navigator, you'll see a file with a tiny blue Xcode icon.
+    - <img src="./resources/xcode_icon.png" alt="Xcode Icon" width="20" />
+    - Click the file to open it in the editor area.
+    - This is the project file, which includes all the settings for your project and its targets.
+    - Each target is a product that Xcode can build from the project.
+    - For now, the targets you'll build will be executable apps.
+    - Later, you may use targets to build frameworks, different versions of a particular app, or versions for different platforms like watchOS or tvOS.
+  - The particular project you’re working with has only one target: an iOS app.
+
+    - Within the project file, you can change all the details of a particular target.
+    - For example, under Deployment Info, you can specify which version of iOS your code must support, change which devices your app is intended to run on, or show/hide the status bar. (1)
+    - <img src="./resources/deployment_info.png" alt="Deployment Info" width="600" />
+
+  - By selecting Signing & Capabilities at the top of the pane, you can configure code signing, which is a requirement for deploying to devices or the App Store. (1)
+    - From this screen, you can also enable different features within the selected target.
+    - For example, if your application needs to accept push notifications, you can add the Push Notifications capability and Xcode configures everything necessary for your app to receive notifications from the Apple Push Notifications service.
+    - You can add capability configurations by clicking the + Capability button. (2)
+  - Some capabilities have configuration options that you can disclose by clicking the triangle next to them.
+  - <img src="./resources/signing_capabilities.png" alt="Signing and Capabilities" width="600" />
+
+  - <img src="./resources/swift_icon.png" alt="Swift Icon" width="20" />
+
+    - Files with this icon contain Swift code, as you'd expect.
+    - Whenever you build your app, Xcode gathers up all included Swift files and runs them through the Swift compiler, which converts the code into a format your selected device understands.
+
+  - <img src="./resources/storyboard_icon.png" alt="Storyboard Icon" width="20" />
+
+    - This icon represents a storyboard.
+    - All storyboard files are unique to Interface Builder.
+    - They contain information about the design of each scene within your application, as well as how one screen transitions to another.
+
+  - <img src="./resources/asset_icon.png" alt="Asset Catalog Icon" width="20" />
+
+    - This icon represents an asset catalog.
+    - In an asset catalog, you can manage many different kinds of assets.
+    - This includes your app's icon, images, color definitions, and other forms of data to be bundled with your app.
+    - An asset catalog also allows you to specify variants of your assets based on device settings and capabilities such as light and dark appearance, accessibility settings for high and low contrast, and hardware differences from screen resolutions to memory capacity and graphics chip support.
+
+  - <img src="./resources/list_icon.png" alt="List of Properties Icon" width="20" />
+
+    - This icon represents a file containing a list of properties and settings for your app.
+    - Xcode provides a special interface for editing this file so that you rarely need to interact with it directly.
+    - These settings are organized on various screens that you can find when you select the project file you learned about earlier.
