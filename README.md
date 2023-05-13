@@ -513,3 +513,26 @@
     - This icon represents a file containing a list of properties and settings for your app.
     - Xcode provides a special interface for editing this file so that you rarely need to interact with it directly.
     - These settings are organized on various screens that you can find when you select the project file you learned about earlier.
+
+- **Keyboard Shortcuts**
+
+  - As you become more proficient with Xcode, you’ll discover that it’s much faster to execute tasks using keyboard shortcuts. Make sure to learn the most common shortcuts right away:
+    - Command-B: Build the project
+    - Command-R: Build and run the project
+    - Command-.: Stop building or running
+    - Command-/: Toggle comments on selected rows of code
+    - Command-[: Shift the selected code left
+    - Command-]: Shift the selected code right
+    - Control-I: Reindent the selected code
+    - Command-0: Show and hide the Navigator area
+    - Command-⬆️: Move to the top of a file
+    - Option-Command-0: Show and hide the Inspector area
+  - To learn more keyboard shortcuts, look on the right side of any menu, or choose Xcode > Preferences from the menu bar and select Key Bindings at the top of the window.
+
+- **Xcode Preferences**
+  - Xcode is a powerful tool with many options. As you work with Xcode you'll learn more about what it can do and how you can customize it to work how you want it to.
+  - Check out the Xcode Preferences by choosing Xcode > Settings from the menu bar. You can use the Preferences to add developer accounts, customize navigation or fonts, or choose certain behaviors when text editing and more.
+  - Open Xcode Preferences and navigate to the Fonts & Colors pane.
+    - You can choose a new theme, or set of colors and fonts, by selecting different options in the list on the left. Some themes have a suffix of "(Light)" or "(Dark)." These variants are used respectively based on the system's current light or dark appearance.
+    - Xcode also allows you to override its appearance behavior independent of the system setting from the General pane.
+  - To read more about Xcode and its various tools, read the Xcode Help documentation by choosing Help > Xcode Help from the menu bar.
