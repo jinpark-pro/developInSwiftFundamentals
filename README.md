@@ -536,3 +536,46 @@
     - You can choose a new theme, or set of colors and fonts, by selecting different options in the list on the left. Some themes have a suffix of "(Light)" or "(Dark)." These variants are used respectively based on the system's current light or dark appearance.
     - Xcode also allows you to override its appearance behavior independent of the system setting from the General pane.
   - To read more about Xcode and its various tools, read the Xcode Help documentation by choosing Help > Xcode Help from the menu bar.
+
+### Lesson 1.7 Building, Running, and Debugging an App
+
+- **Building and Running**
+  - When creating a project, make sure the interface option is set to Storyboard.
+    - You'll be presented with the Xcode workspace. Locate the Scheme menu on the Xcode toolbar, then choose the device you want to simulate from the list.
+    - Click the Run button ▶️, or use the keyboard shortcut (`Command-R`) to begin launching the app in Simulator.
+  - After Simulator has launched, you should see a device image with a white background. ​To rotate the image from portrait to landscape orientation, use the keyboard shortcuts `Command-Left Arrow` and `Command-Right Arrow`.
+  - The simulator image may appear quite large, depending on the screen resolution of your Mac and the device you chose to simulate.
+  - From inside the Simulator application, you can use keyboard shortcuts, from `Command-1` to `Command-3`, to scale the device image up or down.
+    - If you're using an older Mac, you may want to select an older lower-resolution device, such as an iPhone SE, to reduce the total impact of the Simulator on your system.
+  - To quit Simulator, use the keyboard shortcut `Command-Q`. Or just go back to Xcode.
+  - Simulator doesn't work for all portions of an app. Certain interactions depend on the actual physical device to run.
+    - For example, if you try to use Simulator to test an interaction with the Camera app, the program will crash. If your code depends on other hardware components that don't exist on a Mac — maybe an accelerometer, a gyroscope, or a proximity sensor — you'll want to test with an actual device.
+  - Simulator also has some software limitations.
+    - For example, push notifications can be delivered only to physical devices, and the MessageUI framework — which helps compose email and text messages — is incompatible with Simulator. If you're running into a lot of issues in Simulator, try testing the code on your iPhone or iPad. Your issues may be resolved.
+  - Simulator runs on a Mac, many of which are built on the Intel "x86-64" architecture, but iOS devices are built on the ARM (Advanced RISC Machine) architecture.
+    - This means there can be underlying (and sometimes subtle) differences in how your app works.
+  - Overall, Simulator works well when you're developing and debugging apps, but you should always test your code on actual hardware.
+- **Using A Personal Device**
+  - The beauty of mobile apps is that you can take them anywhere. You may find that you want to share your programming progress with friends and coworkers. But before you can begin running your code on a physical device, you must have an account on the Apple Developer website. Accounts are free, so don’t worry.
+  - Using a web browser, go to developer.apple.com and click Account. You can sign up using your existing Apple ID. If you don’t have an Apple ID, go ahead and create one — it’s also free.
+    - Once you’ve entered your Apple ID, your developer account is good and you can head on back to Xcode.
+      - With a free account, you can run your iOS apps on only one physical device. To distribute your apps to multiple devices or publish them to the App Store, you need to enroll in the Apple Developer Program.
+  - Now, you need to tell Xcode about your new developer account. Open Xcode Settings using the keyboard shortcut `Command-Comma` (or choose Xcode > Settings from the Mac menu bar), and then select the Accounts button near the upper-left corner. Click the “+” button in the lower-left corner and choose Add Apple ID from the menu.
+    - After entering your credentials, you're ready to run and debug apps on a physical iOS device.
+  - Connect your iOS device to your Mac using the appropriate USB cable. Xcode will automatically download the necessary information from the device and will display its name in the Scheme menu. Choose the name of your physical device — which will typically be at the top of the list, before the device simulators.
+  - Build and run the app again. You may receive a prompt asking you to trust the developer certificate. Follow the instructions within the alert to allow the device to run your apps.
+  - Build and run once more, and you should see the same simple white screen on your iOS device.
+    - To stop the app from running, click the Stop button near the left end of the Xcode toolbar (or use the Command-Period keyboard shortcut).
+  - Building and Running Wirelessly
+    - Xcode also gives you the option of deploying an app to your device over your network.
+    - To do this, connect your iOS device to your Mac using the appropriate USB cable, and open the Devices and Simulators window by selecting Devices and Simulators from the Window dropdown.
+    - Ensure that your device is selected in the list farthest to the left in the Devices and Simulators window. Check the Connect via network box.
+  - If your device is on the same network as your Mac, you’ll see a globe appear next to your device’s name within a few moments. This indicates that your device is wirelessly connected.
+  - You can now disconnect the USB cable connecting your device to your Mac, and build and run your app wirelessly.
+  - In most cases, the above steps are sufficient for wireless pairing.
+    - However, if this doesn’t work for you, you might be on a corporate or institutional network where the system administrator has put in place certain network restrictions.
+    - In this case, open the Devices and Simulators window,
+    - hold Control and click your device,
+    - then click Connect via IP Address in the menu presented.
+    - You then need to find your device's IP Address from your device's Settings, enter it in the prompt, and click Connect.
+    - This should successfully pair your device. If you run into problems with wireless debugging, you can always pair over a USB cable.
