@@ -579,3 +579,92 @@
     - then click Connect via IP Address in the menu presented.
     - You then need to find your device's IP Address from your device's Settings, enter it in the prompt, and click Connect.
     - This should successfully pair your device. If you run into problems with wireless debugging, you can always pair over a USB cable.
+- **Debugging An Application**
+
+  - Even the best developers struggle to write perfect code. Debugging is the process of identifying and removing problems that may arise in your app. Xcode provides tools to help you through this process.
+  - When you run an app as described above, either on Simulator or on your device, Xcode will connect the app to its debugger.
+  - This allows you to watch the execution of your code in real time, stop code execution using breakpoints, print information from your code to the console, and much more.
+  - As you proceed through this course, you’ll encounter three types of issues: warnings, compiler errors, and bugs.
+  - **Warnings**
+    - Warnings are the simplest kinds of issues to fix. They’re generated whenever your code is built, but they don’t prevent your program from successfully compiling and running. Some of the conditions that can throw a warning include:
+      - Writing code that never gets executed
+      - Creating a variable that never changes
+      - Using code that’s out of date (also known as deprecated code)
+    - Take a look at a warning. Back in Xcode, select ViewController in the Project navigator and, in the editor area, add the following line of code just below `super.viewDidLoad()`: `let x = 4`
+    - This code assigned a value of `4` to a constant named `x`.
+    - Build your application using `Command-B`. You should see a yellow caution sign with an explanation on the line you just added.
+      - `Initialization of immutable value 'x' was never used; consider replacing with assignment to '_' or removing it`
+      - Xcode will do its best to explain the warning in a straightforward way.
+      - The compiler is telling you that it created `x` but, because it's not used in a meaningful way, you can remove it. Delete the line and rebuild to remove the warning.
+  - **Compiler Errors**
+    - An error is indicative of a more serious issue — for example, invalid code (such as a typo), improperly declaring a variable, or improperly calling a function.
+    - Unlike a warning, an error prevents the code from ever being executed.
+    - Simulator won’t even launch if your code has an error.
+    - Here’s a look at two different errors in the making.
+      - In ViewController, remove the open and closing parenthesis on the end of `super.viewDidLoad()`, leaving `super.viewDidLoad`. Beneath this line of code, write `navigationController.title = “Debugging”`.
+    - After you build the app, you'll see two red error symbols with explanations on the lines you just updated.
+      - <img src="./resources/compiler_errors.png" alt="Compiler Errors" width="600" />
+      - <img src="./resources/compiler_errors_2.png" alt="Compiler Errors 2" width="600" />
+      - The first error has an icon with an "X" in the center. Xcode provides a message that can help you identify the issue. The compiler expected to see an open and closing parenthesis as the proper syntax for calling a function. Add both characters at the end of `super.viewDidLoad` to remove the error.
+      - The other error of the errors has a dot in the center.
+        - Click this error and Xcode displays a suggestion to fix the code.
+        - Click the Fix button to have Xcode implement this suggestion.
+        - In this instance, Xcode provides a valid fix. However, you can’t rely on the compiler to properly fix all errors — you need to be able to address errors on your own.
+  - **Bugs**
+
+    - The third type of issue is known as a bug — and it’s the hardest issue to track down.
+    - A bug is an error that occurs while running the program, resulting in a crash or incorrect output.
+    - Finding bugs can involve some time and some real detective work.
+    - In ViewController, add the following lines of code below `super.viewDidLoad()`:
+
+      - ```swift
+          var names = [”Tammy”, “Cole”]
+          names.removeFirst()
+          names.removeFirst()
+          names.removeFirst()
+        ```
+
+    - You may not be familiar with Swift at this point, and that’s OK. These lines are simple to understand. names is a list containing two pieces of text, “Tammy” and “Cole.”
+    - Each subsequent line removes the first item from the list. Since there are three calls to remove the first item, but only two items in the list, what do you expect will happen?
+      - Build your application. Since the syntax is valid, you’ll receive the “Build Succeeded” message. Now try running the app. After a few moments, the program will crash, and the following message will appear in red on the last line of code above: `Thread 1: Fatal error: Can't remove first element from an empty collection`
+      - The program crashed when it tried to remove the remaining first element and couldn't find one. You've already guessed that. But imagine you're unsure how to fix the problem. Xcode can help you to step through the program one line at a time.
+    - Before you start looking for the bug, you'll need to add a breakpoint to your code.
+      - A breakpoint pauses the execution of a program at a specified point. Create a breakpoint by clicking in the gutter area to the left of the line where you want execution to pause. In this case, add the breakpoint to the `var names = [”Tammy”, “Cole”]` line.
+    - Build and run your app. You'll see the program pause at the breakpoint(1). That's good.
+      - In the debug area(2), show the variables view to inspect the current values (the button is on the lower right(3)).
+      - Because the breakpointed line hasn't yet been executed, names contains no values.
+    - From here, you can use the step control buttons at the top of the debug area to slowly continue code execution:
+      - Continue — Resumes code execution until the next breakpoint is reached. If you select this button now, the code will crash, since there are no other breakpoints before the third names.removeFirst().
+      - Step over — Executes the selected line and pauses execution on the next line.
+      - Step into — If clicked on a line with a function call, advances to the first line of the function, then pauses execution again.
+      - Step out — Executes all remaining lines in the function call and pauses execution on the line after the function.
+    - <img src="./resources/bugs.png" alt="Bugs" width="600" />
+    - Click the "Step over" button to advance execution by one line. In the variables view, you can see that names has been assigned the proper values. So far, so good.
+    - Click the “Step over” button to execute the first call to `names.removeFirst()`. names no longer includes “Tammy” in its list, so that worked fine.
+    - Click “Step over” again to execute the second call to `names.removeFirst()`, leaving names an empty list with zero values. Still OK.
+    - By now, it should be clear that the third call to `names.removeFirst()` is responsible for the bug.
+    - Remove the third call to `names.removeFirst()` and run the program again to verify that the error has been fixed.
+    - Debugging is a crucial skill for developers to build. When debugging, take the following approach:
+      1. Try to understand the problem
+      2. Brainstorm a potential solution
+      3. Try the solution
+      4. Verify it worked, repeat as necessary
+    - Take each bug one step at a time. It can be frustrating to run into bugs when building apps, but it feels great when you’re able to fix them.
+
+  - **Lab - Debug Your First App**
+    - The objective of this lab is to find and resolve compiler errors, runtime errors, and compiler warnings.
+    - Step 1
+      - Find and Fix Compiler Errors
+        - Open the Xcode project, “FirstTimeDebugging.”
+        - Try to run the app. Note that it won’t run due to a few compiler errors. As you’ve learned in this lesson, compiler errors are indicated by red symbols in line with the mistake — or where the compiler guesses the mistake might be. All compiler errors are also listed in the Issue navigator.
+        - Fix the compiler errors so that you can run the app. Here are two of the more common mistakes that may have caused this app’s compiler errors:
+          - Missing or extra parentheses or braces (whether opening or closing).
+          - Referencing a function or property but with incorrect spelling (The compiler is very literal and expects you to reference a function or property exactly by the name you gave it.)
+            - ​Hint: Sometimes a single mistake can cause the compiler to flag multiple errors. Fix one mistake and you might eliminate all the error symbols.
+    - Step 2
+      - Find and Fix Runtime Errors
+        - Were you able to remove all the red error symbols from the project? If so, try to run the app again.
+        - This time, notice that the app stops execution right after opening in Simulator and that there’s a red line across one of the lines of code on the screen. The fact that the line is red indicates something went wrong. Look at the text in the console area to learn what the issue might be. Try to solve this runtime error. If it’s helpful, you might want to add breakpoints at and before the affected code, then run the app again.
+    - Step 3
+      - Find and Fix Compiler Warnings
+      - Now that the app runs, focus your attention on a few more problems. Open the project’s Issue navigator. You’ll note several warnings, indicated by yellow triangles. Address all of these warnings.
