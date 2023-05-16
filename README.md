@@ -668,3 +668,29 @@
     - Step 3
       - Find and Fix Compiler Warnings
       - Now that the app runs, focus your attention on a few more problems. Open the project’s Issue navigator. You’ll note several warnings, indicated by yellow triangles. Address all of these warnings.
+
+### Lesson 1.8 Documentation
+
+- Every developer has a preferred method of accessing documentation. Some prefer to view it in a web browser, while others like to use the documentation browser provided by Xcode. By learning multiple ways to interact with documentation, you can decide which method works best for you. The faster you can find answers to your questions, the faster you can get back to writing code.
+- **Documentation Browser**
+  - In the previous lesson, you added lines of code inside the viewDidLoad() function. Do you have any idea what that function does or when the function is called in your program? Xcode provides a fast answer using the Quick Help feature. Option-click the viewDidLoad() method name, and Xcode displays a popover with a brief description of the function.
+  - Within the Quick Help popover, click Open in Developer Documentation to conveniently access the Xcode Developer Documentation for the function. The documentation includes a more thorough explanation of the function, the OS versions that support it, the framework it belongs to (in this case UIKit), and references to related functions.
+  - In the navigation on the left, you can jump quickly to different sections of the Developer Documentation. (You can also access Developer Documentation from the Window menu or by using the shortcut, Command-Shift-0.)
+  - At the top of the documentation window, you’ll see a search field, which allows you to look up documentation about any function, class, or framework. This feature makes it quick to search through thousands of pages of documentation, so answers are readily available—which is why many developers choose to leave the documentation window open while they’re coding.
+  - Try navigating through the Xcode documentation. Start typing UIViewController. As you type, Xcode will suggest matching options with autocompletion. As soon as you see UIViewController in the menu, select it to display the documentation for UIViewController.
+  - In the right-hand column, under On This Page, click the Topics link to jump down the page. The Topics section displays a list of symbols grouped by topic. A symbol is a function or variable associated with a particular class. In the documentation, these symbols are sorted into logical categories rather than in alphabetical order, so you can more easily locate items that interest you.
+  - When you're building a new feature, these logical categories are a great way to find out if the object can do what you need.
+  - Look through the topics for UIViewController and try to find the symbol for the view property. Click this symbol.
+  - Here you’ll see information for your selected property. Most instance property documentation will follow a similar pattern:
+    - A short description - A quick summary of what the property is
+    - Declaration - The name used to access the property and the property’s associated type
+    - Discussion - An in-depth description, discussing the finer (albeit, important) elements to consider when using the property
+    - See Also - Other symbols that are related to the property that may be of interest
+  - In the upper-left corner, you’ll see two buttons with chevrons < >. Use these to navigation backward < and forward > through your viewing history. Click the back button to return to the documentation for UIViewController. Find the symbol for the function `viewWillAppear(_:)`.
+  - Most method documentation will follow a very similar pattern to instance property documentation with one possible addition:
+    - Parameters — If the function has parameters (inputs), they are listed with the name used to access the parameter and a short description of the parameter
+  - You’ll work more with the documentation browser as you work through this course.
+- **Sample Code and Topics**
+  - There's more to Developer Documentation than just descriptions of types and methods. As you work your way through coding concepts, it can be useful to read more about a certain topic or try out some sample code. The top level of documentation for the UIKit framework, for example, includes numerous overview topics and articles to help you get started. And the views and controls subtopic includes a UIKit Catalog sample code project.
+  - You'll need to learn how to read and understand documentation to be a successful developer. Because documentation is very technical, it can be hard to digest when reading it the first time. It takes practice.
+  - Throughout this course you will be given links to reference guides and API documentation in the “Related Resources” section. Read through them. You may not always understand every sentence or concept from reading, but you will be building a very useful skill that will help you be a successful developer.
