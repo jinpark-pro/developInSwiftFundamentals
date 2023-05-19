@@ -719,3 +719,20 @@
   - Go ahead and release the mouse or trackpad to insert the button into the view. Notice that the button object now shows up in the Document Outline as well.
   - On the right side of the screen, you see the Inspector area. If you don’t see it, click the "Hide or Show the Inspectors" button at the top left of the toolbar or use the keyboard shortcut, Option-Command-0.
   - In addition to the File, History, and Quick Help inspectors (which are always available), the top of the Inspector area displays four context-sensitive inspectors when you're in Interface Builder. To explore these different inspectors and how they can help you customize the objects in your view, select the button you just added—either in the Document Outline or in the scene itself.
+- **Outlets And Actions**
+  - You'll often need a way to reference your visual elements in code so that they can be adjusted at runtime, or when the app is already running. This reference from Interface Builder to code is called an outlet. When you have an object that you want the user to interact with, you create an action—a reference to a piece of code that will execute when the interaction takes place.
+  - Select the view controller in the outline view, then select the Identity inspector. The template you chose when creating the project has set the Custom Class to ViewController. Open the assistant editor by clicking the Adjust Editor Options button and choosing Assistant Editor.
+  - The source code of ViewController is displayed alongside the storyboard (because it corresponds to the Custom Class field in the Identity inspector).
+  - But the ViewController class still doesn’t have access to the button you added. To make the object accessible in code, you’ll need to create an outlet.
+  - Creating an Outlet
+    - Control-click (or right-click) the button in the storyboard, and start dragging toward the assistant editor pane that contains the ViewController class definition. As you drag the pointer into the code, you see a blue line.
+    - When you release the pointer, the "Outlets and Actions" dialog appears. Make sure that Connection is set to Outlet and Storage is set to Strong. In the Name field, specify a variable name for the button: "myButton." Click the Connect button to finalize the creation of the outlet, generating a line of code that defines the outlet.
+    - Now that you have access to the button in code, add the following line inside the viewDidLoad() function: `myButton.tintColor = .red`
+    - This line changes the color of the button’s title from blue to red. Build and run your application to see the change take effect.
+    - That’s great, but you’ll probably notice that nothing happens when you try clicking the button. To add functionality, you’ll need to create an action that’s tied to the button.
+  - Creating an Action
+    - Once again, Control-click (or right-click) the button in the storyboard, and drag the cursor into the ViewController class definition.
+    - When the “Outlets and Actions” dialog appears, set Connection to Action. In this situation, your entry in the Name field doesn’t define a variable; it defines the action the button tap is tied to. Name the action “buttonPressed.” Click the Connect button to finalize the creation of the action.
+    - You now have a function to execute whenever the button is tapped. To test it, add the following line inside the buttonPressed function: `print(”The button was pressed”)`
+    - This code prints a message to the Xcode console whenever the function is executed. Build and run your app, then click the button to see the message print in the console at the bottom right of the screen.
+    - Back in the outline view, select the button again, then select the Connections inspector. Now that you’ve wired up an outlet and an action to the button, you’ll see them both in the Connections pane.
