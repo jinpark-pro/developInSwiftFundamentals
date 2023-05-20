@@ -702,7 +702,7 @@
   - When creating the project, make sure the interface option is set to Storyboard. Name the project "IBBasics."
 - **Storyboards**
   - Interface Builder opens whenever you select an XIB file (.xib) or a storyboard file (.storyboard) from the Project navigator.
-  - An XIB file contains the user interface for a single visual element, such as a full-screen view, a table view cell, or a custom UI control. XIBs were used more heavily before the introduction of storyboards and you may hear seasoned macOS or iOS developers refer to XIB files as “Nib” files. They're still a useful format in certain situations, but this lesson focuses on storyboards.
+  - An XIB file contains the user interface for <u>a single visual element</u>, such as a full-screen view, a table view cell, or a custom UI control. XIBs were used more heavily before the introduction of storyboards and you may hear seasoned macOS or iOS developers refer to XIB files as “Nib” files. They're still a useful format in certain situations, but this lesson focuses on storyboards.
   - In contrast with an XIB, a storyboard file includes many pieces of the interface, defining the layout of one or many screens as well as the progression from one screen to another. As a developer, you'll find that the ability to see multiple screens at once will help you understand the flow within your app.
   - <img src="./resources/storyboard.png" alt="Storyboard" widt="600" />
   - By default, a new iOS app project comes with one storyboard named Main.storyboard. Because Xcode doesn't show file extensions by default, it appears as Main in the Project navigator. Click it now to open the storyboard in Interface Builder. In the center of the screen, you'll see a single scene with a plain white view on an otherwise blank canvas. This scene is called the initial view controller, and it is the first screen that will appear when you open the app. As you add more scenes to the storyboard, you can drag them anywhere on the canvas. To see more view controllers at once, use two fingers on a Multi-Touch trackpad to pinch and zoom the canvas out or to zoom in on a particular view. If you don't have a trackpad, you can use the zoom buttons near the bottom of the canvas to achieve the same result.
@@ -736,3 +736,37 @@
     - You now have a function to execute whenever the button is tapped. To test it, add the following line inside the buttonPressed function: `print(”The button was pressed”)`
     - This code prints a message to the Xcode console whenever the function is executed. Build and run your app, then click the button to see the message print in the console at the bottom right of the screen.
     - Back in the outline view, select the button again, then select the Connections inspector. Now that you’ve wired up an outlet and an action to the button, you’ll see them both in the Connections pane.
+- **A Note About Interface Builder**
+
+  - Every attribute in Interface Builder represents a property that can also be configured programmatically, or in code. Interface Builder is simply a graphical interface for configuring and setting properties on UIKit classes that are displayed in your app.
+  - Add a label to your scene, then look at the Attributes inspector for the label.
+  - Now look up the symbols, or properties and functions, for UILabel in the Documentation Browser. You’ll find that each setting in Interface Builder has a companion property.
+  - | Interface Builder Attribute | Property Name                        |
+    | --------------------------- | ------------------------------------ |
+    | Text                        | text                                 |
+    | Color                       | textColor                            |
+    | Dynamic Type                | adjustsFontForContentSizeCategory    |
+    | Font                        | font                                 |
+    | Alignment                   | textAlignment                        |
+    | Lines                       | numberOfLines                        |
+    | Enabled                     | enabled                              |
+    | Highlighted                 | isHighlighted                        |
+    | Baseline                    | baselineAdjustment                   |
+    | Line Break                  | lineBreakMode                        |
+    | Autoshrink                  | adjustsFontSizeToFitWidth            |
+    | Tighten Letter Spacing      | allowsDefaultTighteningForTruncation |
+    | Highlighted                 | highlightedTextColor                 |
+    | Shadow                      | shadowColor                          |
+    | Shadow Offset               | shadowOffset                         |
+  - Many objects that you can configure in Interface Builder have properties that can only be set programmatically. For example, `UIScrollView` has a `contentSize` property that does not have a matching option in the Attributes inspector.
+  - When you need to adjust one of these settings, you can do so programmatically by setting up an @IBOutlet for the scroll view and updating the properties using dot-notation. `scrollView.contentSize = CGSize(width: 100, height: 100)`
+  - In fact, everything that you can do in Interface Builder can also be done programmatically, including setting up all child views and adding them to the screen.
+
+    - ```swift
+        let label = UILabel(frame: CGRect(x: 16, y: 16, width: 200, height: 44))
+        view.addSubview(label) // Adds label as a child view to `view`
+      ```
+
+  - This type of setup is most commonly done in the viewDidLoad() method of a view controller, which gives you access to the view controller’s main view property before it’s displayed on the screen.
+  - While you can do everything programmatically, you can see that Interface Builder can save you a lot of time when setting up complex views. As your projects grow, storyboards help you more easily maintain your interface setup. Additionally, Interface Builder has support for building complex views that support multiple device sizes, all in one place.
+  - You will learn much more about Interface Builder and storyboards as you work through the rest of the course.
