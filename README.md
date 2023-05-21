@@ -770,3 +770,25 @@
   - This type of setup is most commonly done in the viewDidLoad() method of a view controller, which gives you access to the view controller’s main view property before it’s displayed on the screen.
   - While you can do everything programmatically, you can see that Interface Builder can save you a lot of time when setting up complex views. As your projects grow, storyboards help you more easily maintain your interface setup. Additionally, Interface Builder has support for building complex views that support multiple device sizes, all in one place.
   - You will learn much more about Interface Builder and storyboards as you work through the rest of the course.
+
+### Guided Project: Light
+
+- You'll have created an app, called Light, that changes the screen from black to white, and back again, whenever the user taps a button.
+- To successfully build the light, you'll need to use Xcode documentation, set breakpoints, and create outlets and actions.
+
+#### 1. Create A Button and An Action
+
+- Create a new Xcode project using the iOS App template, set the interface option to Storyboard, and name the project "Light."
+- Select the Main storyboard in the Project navigator to open your storyboard in Interface Builder.
+- Select View Controller in the Document Outline, then click the Identity inspector button at the top of the Inspector area to confirm that this particular view controller is of type ViewController.
+- If you're using Simulator, use the Devices button at the bottom of the canvas (the current selection is shown next to the button) to adjust the size of the canvas. Set the canvas size to the iPhone 13 Pro configuration, and select the iPhone 12 Pro or iPhone 13 Pro simulator from the menu toward the left end of the Xcode toolbar.
+- If you’re using your own device for this project, the size of the view controller may not be identical to the size of your screen. Use the “View as” button at the bottom of the canvas to adjust the size of the canvas to match your device, but leave it in portrait orientation.
+- Select the view controller’s view, then select the Attributes inspector, which will allow you to customize the attributes of any interface element. The background color for this view has already been set to white. That’s the desired state of your app on launch, so you don’t need to change anything right now.
+- Next, add a button that’ll be used to change the view's background color, simulating a light turning on and off. Press the + button at the top right of the toolbar to open the Library. As you learned in an earlier lesson, this library includes a list of common objects you can add to a storyboard. Scroll through the list, or use the search filter at the top of the library area.
+- Find the “Button” object in the library and drag it over on top of the view. When you release the cursor, the Document Outline should indicate that the button has been added as a subview.
+- Move the button to the upper-left corner of the view. Margin-alignment guides will help snap the object into the correct position.
+- Give your button an action to perform when it's clicked or tapped. Add an assistant editor using the Adjust Editor Options button and choose Assistant Editor to split the Xcode workspace into two parts: Interface Builder and its corresponding code.
+- Now Control-drag (or right-click) the button into an available area within the ViewController class definition. As you drag, a blue line extends from the button and a blue horizontal bar will display below your cursor, indicating a valid place to create a connection.
+- When you release the mouse cursor, you will be prompted to create an outlet or define an action. Change Connection to Action, then set Name to “buttonPressed.” When you click the Connect button, Xcode will create a new method that will be called whenever the button is tapped. You may notice the @IBAction keyword right before the buttonPressed(\_:) method. @IBAction signals to Xcode that a relationship can be created between a visual element in a storyboard and the function.
+- Build and run the app. When you press the button, nothing happens, because there’s no code within the buttonPressed(\_:) method to execute. To verify that the method is being called, you can place a breakpoint within the method definition. Now press the button and the breakpoint will be triggered.
+- Now that you’ve verified that the action is working correctly, you can add some code to change the background color. Remove the breakpoint before proceeding.
