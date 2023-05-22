@@ -799,8 +799,6 @@
 - Near the top of the ViewController class definition, create a variable called lightOn and set the initial value to true, since the screen starts off with a white background. `var lightOn = true`
 - Each time the button is tapped, the value should change from true to false, or from false to true. Swift booleans have a method, toggle(), that does precisely this. Since the buttonPressed(\_:) method is called whenever the tap is executed, make the change there.
 
-
-
   - ```swift
       @IBAction func buttonPressed(_ sender: Any) {
           lightOn.toggle()
@@ -844,3 +842,50 @@
 
 - Notice the `fileprivate` keyword that Xcode used in front of the method name. Swift uses this special access modifier to specify where the method can be called from. If you use the Xcode refactor feature and need to call your method outside of the file it’s defined in, remove the fileprivate keyword in front of it.
 - This is a small change for a small app. You will see this pattern persist throughout this book, and you will find it much easier to debug interface issues if the code that updates the view is all contained in a single method.
+
+#### 3. Update The Button Text
+
+- You’ve now successfully set the button to change the background color of the view, but the title of the button text remains the same no matter the state of the light. At the moment, there’s no way to reference your newly created button in code. You must first create an outlet to the button. Control-drag the button in Interface Builder to an empty space at the top of the view controller’s definition in the editor area. In the popover, verify that Outlet is selected under Connection, and enter “lightButton” in the Name field.
+- As you learned in an earlier lesson, you’re able to see these details of the outlet, from left to right:
+  - Circle — The filled circle indicates that the outlet is connected. The circle would be empty if the property isn’t connected to anything.
+  - @IBOutlet — This keyword signals to Xcode that the property on this line is an outlet.
+  - var lightButton — This declares a property called “lightButton.”
+  - UIButton! — The type of the property is UIButton!. The exclamation point warns you that the program will crash if you try to access this property and the outlet isn’t connected. You’ll learn more about the exclamation point when you learn about optionals in a later unit.
+- Having created the outlet, you can now make changes to the button programmatically. Start by finding the right place for updating the button’s title and the right action for it to perform.
+- <img src="./resources/breakpoint.png" alt="Breakpoint" width="400" />
+- Add a breakpoint to the first line of the `buttonPressed(_:)` method, then build and run your app. As you might expect, when you press the button to change the color, the corresponding action, `buttonPressed(_:)`, will be executed. But since you added a breakpoint, the code will pause before executing the line with the breakpoint.(1)
+- Click the “Step over” button (2) to run the first line. Now your app is paused just before running the updateUI() method. Click the “Step into” button (3). Now the app is paused just before executing the first line of updateUI.
+- Take a moment to try and read the body of the updateUI() method. Since Swift is a very readable programming language, you can probably interpret the lines to say: “If the light is on, the view’s background color should be white, or else the view’s background color should be black.”
+- Now consider how the button’s title should be decided. If the light is on, the button’s title should read “Off,” or else the button’s title should read “On.” It makes sense that the button’s title should be updated in a similar way to the view’s background color.
+- You’ve now found a reasonable place to update the text—in the updateUI() method. But what’s the actual function for doing so? As you learned earlier, Xcode documentation is always available to support you. So whenever you’re unsure of something, it’s a good habit to look to the documentation for answers.
+- To learn how to set the title of lightButton, start by reading the documentation on its type, UIButton. You can access the documentation directly using Window > Developer Documentation from the Xcode menu. This opens a separate window with the documentation viewer.
+- Start entering UIButton in the documentation search field. Autocompletion quickly suggests options. As soon as you see UIButton in the menu, go ahead and select it.
+- Scroll down to the Symbols section to find a list called “Configuring the Button.” ​There you’ll find a function to set the title: `func setTitle(String?, for: UIControl.State)`.
+- Click the function name to see its declaration and a list of its parameters. The first parameter is the desired text, and the second parameter is a UIControl.State. UIControl.State represents the different potential states of a button, for example: if it is sitting idle, if the user has begun tapping it, or if the button is disabled. Click UIControl.State in the Declaration section.
+- In this new list of symbols, the Constants section contains a normal constant, which corresponds to the state of the button when it’s enabled and sitting idle on the screen. This is the correct state for setting the button’s title.
+- With your new knowledge of the updateUI() method, you can remove the breakpoints you added earlier and adjust the method to look like the following:
+
+  - ```swift
+      func updateUI() {
+        if lightOn {
+          view.backgroundColor = .white
+          lightButton.setTitle(”Off”, for: .normal)
+        } else {
+          view.backgroundColor = .black
+          lightButton.setTitle(”On”, for: .normal)
+        }
+      }
+    ```
+
+- Build and run your app. Clicking or tapping the button should now change both the background color and the button text. But there’s a bug: Before the button is clicked, the text still reads “Button,” not “On” or “Off.” How can you update the code to resolve this issue?
+- Your project already has code that will make sure the button’s text matches the on or off state of the light: updateUI(). You just need to call it when the view first loads — so that the button is updated when the view appears, instead of when the user first taps the button. You can run setup code in the viewDidLoad() function, which is already defined in your view controller subclass and is called when the view controller is ready to appear on the screen.
+- Call updateUI() within this method, as shown in the following example:
+
+  - ```swift
+      override func viewDidLoad() {
+          super.viewDidLoad()
+          updateUI()
+      }
+    ```
+
+- Build and run your app again. On launch, the text of the button should now read "Off."
