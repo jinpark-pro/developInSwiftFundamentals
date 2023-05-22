@@ -792,3 +792,55 @@
 - When you release the mouse cursor, you will be prompted to create an outlet or define an action. Change Connection to Action, then set Name to “buttonPressed.” When you click the Connect button, Xcode will create a new method that will be called whenever the button is tapped. You may notice the @IBAction keyword right before the buttonPressed(\_:) method. @IBAction signals to Xcode that a relationship can be created between a visual element in a storyboard and the function.
 - Build and run the app. When you press the button, nothing happens, because there’s no code within the buttonPressed(\_:) method to execute. To verify that the method is being called, you can place a breakpoint within the method definition. Now press the button and the breakpoint will be triggered.
 - Now that you’ve verified that the action is working correctly, you can add some code to change the background color. Remove the breakpoint before proceeding.
+
+#### 2. Change The Background
+
+- If the light is on (that is, if the background color is white) then the light should be switched off. Otherwise, if the light is off (the background is black), then the light should be switched on. The statement "the light is on" is either a true or false statement, so it would make sense to use a Boolean to determine how to change the background color.
+- Near the top of the ViewController class definition, create a variable called lightOn and set the initial value to true, since the screen starts off with a white background. `var lightOn = true`
+- Each time the button is tapped, the value should change from true to false, or from false to true. Swift booleans have a method, toggle(), that does precisely this. Since the buttonPressed(\_:) method is called whenever the tap is executed, make the change there.
+
+
+
+  - ```swift
+      @IBAction func buttonPressed(_ sender: Any) {
+          lightOn.toggle()
+      }
+    ```
+
+- After the value has been changed, you can use the new value to determine how to change the background color. If the light is supposed to be off, change it to black. Or if it’s supposed to be on, change it to white. You can write this logic using a simple if-statement.
+
+  - ```swift
+      @IBAction func buttonPressed(_ sender: Any) {
+          lightOn.toggle()
+          if lightOn {
+            view.backgroundColor = .white
+          } else {
+            view.backgroundColor = .black
+          }
+      }
+    ```
+
+- Build and run your application, and the background should successfully change on each press.
+- As your application’s size continues to grow, make sure that your code stays organized. Rather than put the if-statement directly inside the buttonPressed(\_:) method, you can move it to a new method that handles updating the entire user interface.
+- Select the entire if-statement, and then choose Editor > Refactor >​ Extract to Method.
+- Xcode moves the code out of place into a new method and enters a special editing mode that allows you to set the new method's name and update where it’s called at the same time. Type updateUI and press the Return key to set the name.
+- Xcode moved the selected code into a new method named updateUI(), and then added a call to updateUI() where the code once lived.
+- The result should look like the following:
+
+  - ```swift
+      fileprivate func updateUI() {
+        if lightOn {
+          view.backgroundColor = .white
+        } else {
+          view.backgroundColor = .black
+        }
+      }
+       
+      @IBAction func buttonPressed(_ sender: Any) {
+          lightOn.toggle()
+          updateUI()
+      }
+    ```
+
+- Notice the `fileprivate` keyword that Xcode used in front of the method name. Swift uses this special access modifier to specify where the method can be called from. If you use the Xcode refactor feature and need to call your method outside of the file it’s defined in, remove the fileprivate keyword in front of it.
+- This is a small change for a small app. You will see this pattern persist throughout this book, and you will find it much easier to debug interface issues if the code that updates the view is all contained in a single method.
