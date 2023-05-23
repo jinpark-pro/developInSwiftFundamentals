@@ -889,3 +889,29 @@
     ```
 
 - Build and run your app again. On launch, the text of the button should now read "Off."
+
+#### 4. Improve The User Experience
+
+- Now take a moment to think about its design and how the user experiences the app. What could be improved?
+- Looking at the button, you might realize that the text feels extraneous. It’s pretty clear whether the light is currently on or off — the background color indicates that. Does the user need to see the text at all?
+- Does it matter where on the screen the button is located? And isn’t it a little odd that most of the screen isn’t tappable?
+- It may be better to remove the text from the button and to make the button fill the entire screen. That way, the user can tap anywhere on the screen to turn the light on and off. An important part of building any app is considering the little details and trying to build an intuitive, simple, powerful user interface. In this case, it makes sense for the user to be able to tap anywhere on the screen to toggle the background color.
+- To begin, you’ll need to resize the button to fill the screen. Select the button in Interface Builder, then drag its top-left and bottom-right corners, extending the button to cover the entire white view.
+- Remove the title text for the button. The tappable area of the button will still perform as expected, but it will now appear as though only the white view exists on the canvas.
+- With the text gone, you can remove the lines of code in updateUI() that make changes to the button’s title.
+- In this updated design, the button’s properties don’t need to change while someone is using the app. That means the outlet — which you created at the beginning of the project — is no longer needed. As a developer, you want to keep your code as clean as possible, so it’s a good idea to clear out the @IBOutlet.
+- First, sever the connection between the button and its outlet. To do so, select the button in Interface Builder, then show the Connections inspector. Here you can see all the events and outlets connected to a particular object. In this case, you can see that the button is tied to the buttonPressed: action and to the lightButton outlet. ​Click the X next to the outlet to remove it.
+- Since there are no longer any objects connected to lightButton, the little circle next to @IBOutlet is no longer filled in. It’s now safe to delete the declaration of lightButton.
+- Build and run your app one last time to test your new design improvements. You should now be able to tap or click anywhere on the screen to change its background color.
+- Because both lines in the if-else statement do the same thing (set the backgroundColor), the updateUI() method might look cleaner if you use a ternary operator instead of an if-else statement.
+
+  - ```swift
+      func updateUI() {
+        view.backgroundColor = lightOn ? .white : .black
+      }
+    ```
+
+- Build and run your application once more to verify that the ternary operator works as intended.
+
+- **Wrap-Up**
+  - You've successfully created an app that changes the screen from black to white, and back, at the tap of a button—something like a flashlight. You've simplified the design of the app as well, making conscious decisions to improve the user experience by removing the button title and filling the screen with a tappable area. Even though you have limited knowledge of Swift, you were able to step through lines of code and refer to the documentation to complete this project.
