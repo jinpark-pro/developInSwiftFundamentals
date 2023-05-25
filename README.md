@@ -933,3 +933,56 @@
 - Map
   - In the last unit, you outlined a concrete plan for what features and functionality your app should have, including choosing an MVP feature that can help a user solve the primary problem. Starting with this feature set, you are ready to create a prototype to show potential users. The first step in this process is to turn your list of features into workflows showing how a user will navigate within the app. This is where your app starts to take shape.
   - Complete the Map section of the App Design Workbook. In these activities, you’ll create an outline of the information and functions on each screen — and how they relate to each other. You’ll derive your app’s architecture from the its key functions, making decisions based on how you expect users to work with it. By the end of this section you’ll have a Keynote file with linked screen outlines, which is the beginning of your prototype.
+
+### Lesson 2.2 Strings
+
+- Swift’s strings are represented by the String type, and the most common way to define one is by using a string literal.
+- A string literal is a raw representation of a String value. You write a string literal by surrounding a set of characters with double quotation marks “.
+- String literals are commonly used to set an initial value for a constant or variable: `let greeting = “Hello”`, `var otherGreeting = “Salutations”`
+  - If you assign a string to a constant (using let), the string is immutable and can't be modified.
+  - If the string is assigned to a variable (using var), the string is mutable and can change.
+- If your string literal needs to be multiple lines, simply surround your set of characters with three double quotation marks “””. In its multiline form, the string literal includes all of the lines between its opening and closing quotes. The string begins on the first line after the opening quotes and ends on the line before the closing quotes.
+
+  - ```swift
+      let joke = “””
+        Q: Why did the chicken cross the road?
+        A: To get to the other side!
+        “””
+      print(joke)
+      Console Output:
+      Q: Why did the chicken cross the road?
+      A: To get to the other side!
+    ```
+
+- Any space preceding each line in your multiline string literal will be ignored if it aligns with the closing """ quotation marks. Multiline string literals may contain double quotes (").
+
+  - ```swift
+      let greeting = """
+        It is traditional in programming to print "Hello, world!"
+        """
+    ```
+
+- To include double quotes in single-line string literals, you'll need to use the backslash (\), known in Swift as the escape character. That's because you're “escaping” the normal interpretation of characters in the string, `let greeting = “It is traditional in programming to print \”Hello, world!\””`
+- You can use the escape character with other letters and symbols to produce specific results:
+  - Double quote: \”
+  - Single quote: \’
+  - Backslash: \\
+  - Tab: \t
+  - Newline (go to the next line—like pressing Return): \n
+- You’ll often find that you want to start with an empty string, then add to it over time. This means you’ll need to make it a variable. Use the following syntax to initialize the string without any text: `var myString = “”`
+- If you need to check if a Swift String is empty, you can use the Boolean property, `isEmpty`:
+
+  - ```swift
+      var myString = “”
+       
+      if myString.isEmpty {
+        print(”The string is empty”)
+      }
+    ```
+
+- As you might expect, individual characters are of type Character. But since strings are much more common in programming than individual characters, Swift will always infer the type of a collection of characters — or even a single character — as String, unless you specify otherwise with a type annotation:
+
+  - ```swift
+      let a = “a” //’a’ is a String
+      let b: Character = “b” //’b’ is a Character
+    ```
