@@ -915,3 +915,21 @@
 
 - **Wrap-Up**
   - You've successfully created an app that changes the screen from black to white, and back, at the tap of a button—something like a flashlight. You've simplified the design of the app as well, making conscious decisions to improve the user experience by removing the button title and filling the screen with a tappable area. Even though you have limited knowledge of Swift, you were able to step through lines of code and refer to the documentation to complete this project.
+
+## Unit 2 Introduction To UIKit
+
+- You'll learn about structures, collections, loops, and different ways to work with the information that makes up an app. You'll also build a Keynote prototype of your own app idea and think about how the skills you're learning can be used to eventually build a functioning app. At the end of the unit, you'll build an ambitious project.
+- What You'll Design
+  - The App Design Workbook will guide you through designing a working prototype of your app in Keynote.
+- What You’ll Build
+  - Apple Pie is a simple word-guessing game where the user must guess a word, letter by letter, before all the apples fall off the apple tree. If there are apples remaining, the user wins—and can eat delicious Apple Pie.
+
+### Lesson 2.1 Start Your App Prototype
+
+- Before diving into coding, most app developers save time and energy by first creating a working prototype to iterate on their ideas and get feedback before finalizing the structure of their app. Developers build prototypes in all sorts of ways, from simple notebook sketches to partially completed apps in Xcode.
+- In this unit, you’ll build a prototype in Keynote—a happy medium. It’ll be easier to create than using Xcode, but have more fidelity to the look and feel of an app than paper. In this lesson, you’ll start by mapping screens to form an app architecture.
+- Prototyping
+  - A prototype is a fake version of your app that you can show other people to get feedback. It should give users a sense of how your app works, even though it may not do much. If you start from your app's goals and features, creating a prototype can be fun, and it can delight your users even if you don't write a single line of code.
+- Map
+  - In the last unit, you outlined a concrete plan for what features and functionality your app should have, including choosing an MVP feature that can help a user solve the primary problem. Starting with this feature set, you are ready to create a prototype to show potential users. The first step in this process is to turn your list of features into workflows showing how a user will navigate within the app. This is where your app starts to take shape.
+  - Complete the Map section of the App Design Workbook. In these activities, you’ll create an outline of the information and functions on each screen — and how they relate to each other. You’ll derive your app’s architecture from the its key functions, making decisions based on how you expect users to work with it. By the end of this section you’ll have a Keynote file with linked screen outlines, which is the beginning of your prototype.
