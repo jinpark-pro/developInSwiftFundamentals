@@ -1033,4 +1033,75 @@
       }
        
       setLabel(myLabel, to: "There are \(items) items on your \(listName) list")
+      // The label displays "There are 14 items on your Shopping list"
+    ```
+
+#### String Equality And Comparison
+
+- Developers often need to compare String values to see if they’re equal to each other.
+- Just as you do with numbers, you can check for equality between two strings using the == operator. As you might expect, == checks for identical characters in the same order. Since uppercase characters aren’t identical to their lowercase counterparts, the strings have the same value if the case of each character also matches. This is known as case sensitivity.
+- But maybe you want to ignore the capitalization of a string when checking for string equality. You can use the `lowercased()` method to normalize the two, comparing an all-lowercase version of the string with an all-lowercase version of the calling string.
+- You could have also used lowercased()'s counterpart, `uppercased()`, which creates an all-uppercase version of the string.
+- If you want to match the beginning or the end of the string, you can use the `hasPrefix(_:)` or `the hasSuffix(_:)` method. Just like ==, these matches are case-sensitive.
+
+  - ```swift
+      let name = “Johnny Appleseed”
+      if name.lowercased() == “joHnnY aPPleseeD”.lowercased() {
+        print(”The two names are equal.”)
+      }
+      Console Output:
+      The two names are equal.
+
+      let greeting = “Hello, world!”
+      print(greeting.hasPrefix(”Hello”))
+      print(greeting.hasSuffix(”world!”))
+      print(greeting.hasSuffix(”World!”))
+      Console Output:
+      true
+      true
+      false
+    ```
+
+- Maybe you want to check if one string is somewhere within another string. You can use the `contains(_:)` method to return a Boolean value that indicates whether or not the substring was found.
+
+
+
+  - ```swift
+      let greeting = “Hi Rick, my name is Amy.”
+      if greeting.contains(”my name is”) {
+        print(”Making an introduction”)
+      }
+    ```
+
+- Since a string is a collection of characters, its length is equal to the total number of characters. The size of any collection can be determined using its `count` property. You can use this property to compare strings or to evaluate whether strings meet a certain requirement.
+
+
+
+  - ```swift
+      let name = “Ryan Mears”
+      let count = name.count // 10
+       
+      let newPassword = “1234”
+       
+      if newPassword.count < 8 {
+          print(”This password is too short. Passwords should have at
+          least eight characters.”)
+      }
+      Console Output:
+      This password is too short. Passwords should have at least
+      eight characters.
+    ```
+
+- In the last unit, you learned that you can use switch statements to perform specific blocks of code based on a particular case. You can also use the switch statement to pattern-match multiple values of strings or characters and to respond accordingly.
+
+  - ```swift
+      let someCharacter: Character = “e”
+      switch someCharacter {
+        case “a”, “e”, “i”, “o”, “u”:
+          print(”\(someCharacter) is a vowel.”)
+        default:
+          print(”\(someCharacter) is not a vowel.”)
+      }
+      Console Output:
+      e is a vowel.
     ```
