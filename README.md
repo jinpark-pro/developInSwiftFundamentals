@@ -986,3 +986,51 @@
       let a = “a” //’a’ is a String
       let b: Character = “b” //’b’ is a Character
     ```
+
+#### Concatenation And Interpolation
+
+- Sometimes you need to combine strings. The + operator isn’t just for numbers; it can add strings together too. You can use + to create a new String value from multiple String values. This is called concatenation.
+- If the existing String is a variable, you can use the += operator to add to it or modify it.
+
+  - ```swift
+      let string1 = “Hello”
+      let string2 = “, world!”
+      let myString = string1 + string2 // “Hello, world!”
+
+      var myString = “Hello”
+      myString = myString + “, world!” // “Hello, world!”
+      myString += “ Hello!” // “Hello, world! Hello!”
+    ```
+
+- As strings grow in complexity, the use of the + operator can make your code tricky to handle. In the code above, for example, you might forget to add a space before “Hello!”
+- Swift provides a syntax, known as string interpolation, that makes the inclusion of constants, variables, literals, and expressions easier. String interpolation allows you to easily combine many values into a single String constant or variable.
+- You can insert the raw value of a constant or variable into a String by preceding the name with a backslash \ and wrapping the name in parentheses (). In the example below, the printed String will contain the raw values of the name and age constants.
+- You can place entire expressions within the parentheses. These expressions will always be evaluated first, before being printed or stored.
+
+  - ```swift
+      let name = “Rick”
+      let age = 30
+      print(”\(name) is \(age) years old”) // Rick is 30 years old
+
+      let a = 4
+      let b = 5
+      print(”If a is \(a) and b is \(b), then a + b equals \(a+b)”)
+      Console Output:
+      If a is 4 and b is 5, then a + b equals 9
+    ```
+
+- Using string interpolation, the raw values of the a and b constants are inserted into the printed String value.
+- It was hinted at above, but since the result of string interpolation is a String, you can also use it anywhere you'd use a String or string literal:
+
+  - ```swift
+      let listName = "Shopping"
+      var items = 14
+      myLabel.text = "There are \(items) items on your \(listName) list"
+      // The label displays "There are 14 items on your Shopping list"
+       
+      func setLabel(_ label: UILabel, to text: String) {
+        label.text = text
+      }
+       
+      setLabel(myLabel, to: "There are \(items) items on your \(listName) list")
+    ```
