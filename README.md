@@ -1124,3 +1124,155 @@
 - Every Swift String adheres to an international computing standard called Unicode. Unicode compliance allows Swift to go beyond the short list of letters and symbols in the English language. Instead, Unicode encompasses over 128,000 different characters used across multiple languages. This includes accents on characters (é), emoji (🐮), symbols (∞), Kanji (七), and other specialized characters. In addition, Unicode supports text that reads right to left, as well as left to right.
   Swift ensures that you can work with Unicode characters conveniently, so that “e,” “é,” and “🐮” are treated as single characters with a length of 1.
 - In reality, a character is a Unicode “extended grapheme cluster” which is a fancy way of saying that some characters are actually comprised of multiple (often invisible) characters although they appear to the user as a single character. For example, “ü” comprises two characters and “👩🏽‍🎓” comprises four characters! Swift makes working with these much easier.
+
+### Lesson 2.3 Functions
+
+- When someone gives you the task “get dressed,” it seems like such a simple instruction. But the details of what you'll wear, how you'll put the clothes on, and where you'll get the clothes from are all wrapped up within the “get dressed” phrase. The idea of taking something that is complex and defining a simpler way to refer to it is an abstraction, and a function is one of the fundamental ways to create an abstraction in code.
+- A function is made up of a name, a set of inputs, and a set of outputs. Both inputs and outputs are optional. You call or invoke a function to cause your program to do something such as print text to the console.
+- In Swift, a function can take zero, one, or many parameters, and likewise return zero, one, or many values. When a function does return values, you can choose to ignore them.
+- Similar to the declaration of a constant with let or a variable with var, the func keyword tells the Swift compiler that you're declaring a function. Immediately following func, you add the name of the function followed by parentheses (), which may or may not include a list of parameters within them. If the function has a return value, you'll write an arrow (->), followed by the type of data the function will return, such as Int, String, Person, and so on.
+- **Defining A Function**
+
+  - `func functionName (parameters) -> ReturnType { // body of the function }`
+  - Here’s an example of a function that will display the first ten digits of pi (π). Since printing pi requires no additional input, there are no parameters. And since printing pi doesn’t need to return anything relevant to the function caller, no return value is specified.
+  - Once a function has been properly declared, you can call it, or execute it, from anywhere just by writing its name.
+
+    - ```swift
+        func displayPi() {
+            print(”3.1415926535”)
+        }
+
+        displayPi()
+        Console Output:
+        3.1415926535
+      ```
+
+- **Parameters**
+
+  - To specify a function with a parameter, insert a name for the value, a colon (:), and the value’s type—all inside the parentheses. For example, say you wanted to write a function called triple that takes in an Int, triples the value, and then prints it.
+  - The parameter value is a constant you can use within the function. When you call a function, you pass values for its parameters as arguments. In the code below, the argument for value in the call to the function triple(value:) is 10.
+
+    - ```swift
+        func triple(value: Int) {
+          let result = value * 3
+          print(”If you multiply \(value) by 3, you’ll get \(result).”)
+        }
+
+        triple(value: 10)
+        Console Output:
+        If you multiply 10 by 3, you’ll get 30.
+      ```
+
+  - To give a function multiple parameters, separate each parameter with a comma (,). Here’s an example of a function that takes in two Int parameters, multiplies them together, and then prints the result. The function is then called with one argument per parameter
+
+    - ```swift
+        func multiply(firstNumber: Int, secondNumber: Int) {
+          let result = firstNumber * secondNumber
+          print(”The result is \(result).”)
+        }
+         
+        multiply(firstNumber: 10, secondNumber: 5)
+        Console Output:
+        The result is 50.
+      ```
+
+- **Argument Labels**
+
+  - So far, the labels for the arguments passed to a function are the same as the names for the parameters it uses internally. In the next example, firstName is used both within the function and when the function is called:
+
+    - ```swift
+        func sayHello(firstName: String) {
+          print(”Hello, \(firstName)!”)
+        }
+         
+        sayHello(firstName: “Aidyn”)
+      ```
+
+  - But imagine that you want your function to read a little more cleanly: `sayHello(to: “Miles”, and: “Riley”)`
+  - The argument labels to and and make the function read very clearly: "Say hello to Miles and Riley." However, check out the implementation of this function:
+
+    - ```swift
+        func sayHello(to: String, and: String) {
+          print(”Hello \(to) and \(and)”)
+        }
+      ```
+
+  - Within the body of the function, to and and are poor names for parameters. To make the name of the parameter within the function different from the label used to call the function, specify a separate argument label before the parameter name. In the code below, to is the argument label for the parameter person, while and is the argument label for the parameter anotherPerson:
+
+    - ```swift
+        func sayHello(to person: String, and anotherPerson: String) {
+          print(”Hello \(person) and \(anotherPerson)”)
+        }
+         
+        sayHello(to: “Miles”, and: “Riley”)
+      ```
+
+  - If the function is clearer without an argument label, you can go ahead and omit it. For example, take the print function: `print(”Hello, world!”)`
+  - The name of the function already makes it very clear what should be passed in as a parameter. It would feel extraneous if you had to call the function in the following way: `print(message: “Hello, world!”)`
+  - To omit the argument label, use `_`. In the next example, the label for the firstNumber parameter is omitted, while the to label adds meaning and makes the function call more readable:
+
+    - ```swift
+        func add(_ firstNumber: Int, to secondNumber: Int) -> Int {
+            return firstNumber + secondNumber
+        }
+
+        let total = add(14, to: 6)
+      ```
+
+- **Default Parameter Values**
+
+  - Parameters allow a function to remain flexible, but often there’s a value you want to use most of the time. For example, you might drink water with nearly all of your meals, but every now and then you have a glass of orange juice instead.
+  - As part of the function definition, you can provide a default value for any parameter. This way, you can call the function with or without the parameter. If the parameter is unspecified, the function simply uses the default value.
+
+    - ```swift
+        func display(teamName: String, score: Int = 0) {
+          print(”\(teamName): \(score)”)
+        }
+         
+        display(teamName: “Wombats”, score: 100) // ”Wombats: 100”
+        display(teamName: “Wombats”) // ”Wombats: 0”
+      ```
+
+  - A certain level of thought needs to go into defining a function with default parameter values and argument labels. The compiler can do only so much when inferring what you're calling. If you mix default values and parameters without argument labels, you need to validate that every variation of the function call can be inferred.
+
+    - For example, the compiler can't infer which variant of your function to call when defined like the following:
+
+      - ```swift
+          func displayTeam(_ teamName: String, _ teamCaptain: String = "TBA", _ hometown: String, score: Int = 0) {
+            // ...
+          }
+           
+          displayTeam("Dodgers", "LA") // ERROR: Missing argument for parameter #3 in call
+        ```
+
+    - You may find it obvious that you want the function to use the default value of “TBA” for teamCaptain and assign “Dodgers” to teamName and “LA” to hometown. But the compiler recognizes only three String parameters without argument labels, and only two values to assign. It can't assume that you intended to use the default value for teamCaptain.
+    - It's best to leave arguments with default values at the end of the function signature and always provide an argument label. In the above example, the compiler would be satisfied if teamCaptain had an argument label: `func displayTeam(_ teamName: String, _ hometown: String, teamCaptain: String = "TBA", score: Int = 0)`
+
+- **Return Values**
+
+  - It’s unlikely that you’ll always want to print “The result is” before the result from multiply. Instead, it might make more sense if the function simply returned the new value. To do so, you’ll need to adjust the function declaration to have a return value and to specify the value’s type. You’ve learned that multiplying two Int types will always result in an Int, so that’s the return type you’ll use.
+  - Within the function’s body, you’ll use the return keyword to specify what the return function will return.
+
+    - ```swift
+        func multiply(firstNumber: Int, secondNumber: Int) -> Int {
+          let result = firstNumber * secondNumber
+          return result
+        }
+      ```
+
+  - Rather than multiplying the values, storing the new value in result, and immediately returning it, the function could also be written without the constant.
+  - Starting with Swift 5.1, you can even omit the return keyword for functions that have a single line implementation. Because multiply(firstNumber:secondNumber:) has a return type and only one line of code in its body, the result of that expression is used as its return value.
+  - To call this function and use the return value, you can assign the return value to a constant.
+  - If you don’t need to use constant value ever again in the future, you could use the function inside the print statement and skip assigning the value to a constant
+
+    - ```swift
+        func multiply(firstNumber: Int, secondNumber: Int) -> Int {
+          firstNumber * secondNumber
+        }
+
+        let myResult = multiply(firstNumber: 10, secondNumber: 5)
+        //myResult = 50
+        print(”10 * 5 is \(myResult)”)
+
+        print(”10 * 5 is \(multiply(firstNumber: 10, secondNumber: 5))”)
+      ```
