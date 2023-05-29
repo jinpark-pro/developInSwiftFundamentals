@@ -1064,8 +1064,6 @@
 
 - Maybe you want to check if one string is somewhere within another string. You can use the `contains(_:)` method to return a Boolean value that indicates whether or not the substring was found.
 
-
-
   - ```swift
       let greeting = “Hi Rick, my name is Amy.”
       if greeting.contains(”my name is”) {
@@ -1074,8 +1072,6 @@
     ```
 
 - Since a string is a collection of characters, its length is equal to the total number of characters. The size of any collection can be determined using its `count` property. You can use this property to compare strings or to evaluate whether strings meet a certain requirement.
-
-
 
   - ```swift
       let name = “Ryan Mears”
@@ -1105,3 +1101,26 @@
       Console Output:
       e is a vowel.
     ```
+
+#### More Advanced String Topics
+
+- Similar to the lowercased(), hasPrefix(_:), hasSuffix(_:), and contains(\_:) methods mentioned previously, strings come with a variety of properties and methods that can be useful for tracking locations of characters within strings, creating new strings from “substrings,” inserting characters or strings into existing strings, and much more. Much of this functionality is shared among all Swift collections. For now you don’t need to worry about these more advanced string topics, but keep in mind that you can always turn to documentation to learn more should you wish to do more advanced string manipulation with Swift. For reference, here are a few useful String properties and methods that you could look up:
+
+  - startIndex
+  - endIndex
+  - index(before:)
+  - index(after:)
+  - index(\_:offsetBy:)
+  - insert(\_:at:)
+  - insert(contentsOf:at:)
+  - remove(at:)
+  - removeSubrange(\_:)
+  - replaceSubrange(\_:with:)
+
+- For a full list of methods and more information you can review the [String documentation](https://developer.apple.com/documentation/swift/string).
+
+#### Unicode
+
+- Every Swift String adheres to an international computing standard called Unicode. Unicode compliance allows Swift to go beyond the short list of letters and symbols in the English language. Instead, Unicode encompasses over 128,000 different characters used across multiple languages. This includes accents on characters (é), emoji (🐮), symbols (∞), Kanji (七), and other specialized characters. In addition, Unicode supports text that reads right to left, as well as left to right.
+  Swift ensures that you can work with Unicode characters conveniently, so that “e,” “é,” and “🐮” are treated as single characters with a length of 1.
+- In reality, a character is a Unicode “extended grapheme cluster” which is a fancy way of saying that some characters are actually comprised of multiple (often invisible) characters although they appear to the user as a single character. For example, “ü” comprises two characters and “👩🏽‍🎓” comprises four characters! Swift makes working with these much easier.
