@@ -1276,3 +1276,297 @@
 
         print(”10 * 5 is \(multiply(firstNumber: 10, secondNumber: 5))”)
       ```
+
+### Lesson 2.4 Structures
+
+- Swift comes with predefined structures for representing common types of data. You can define your own structures when you want a type that fits the specific needs of your program or app.
+- In its simplest form, a structure is a named group of one or more properties that make up a type. Properties represent the information about an instance of the structure.
+- You define a structure using the struct keyword along with a unique name. You can then define properties as part of the struct by listing the constant or variable declarations with the appropriate type annotation. The convention is to capitalize the names of types and to use camel case for the names of properties.
+- Consider the simple declaration of a Person structure with a name property:
+
+  - ```swift
+      struct Person {
+        var name: String
+      }
+    ```
+
+- The above declaration simply defines the properties of a Person type. It doesn’t have a value in itself. For that, you have to create an instance of the Person type. Then you can access the data stored in its properties, such as the person’s name, using dot syntax.
+
+  - ```swift
+      let firstPerson = Person(name: “Jasmine”)
+      print(firstPerson.name)
+      Console Output:
+      Jasmine
+    ```
+
+- As the name in the example implies, more than one Person might get created throughout the lifetime of your program. The next instance you create could be called secondPerson, or you could create a collection called people that holds multiple Person objects. You’ll learn about collections in an upcoming lesson.
+- You can add functionality to a structure by adding a method. A method is a function that’s assigned to a specific type. In this example, our Person instances can now sayHello.
+
+  - ```swift
+      struct Person {
+        var name: String
+        func sayHello() {
+          print(”Hello, there! My name is \(name)!”)
+        }
+      }
+    ```
+
+- You can now call the instance method directly using dot syntax.
+
+  - ```swift
+      let person = Person(name: “Jasmine”)
+      person.sayHello()
+      Console Output:
+      Hello, there! My name is Jasmine!
+    ```
+
+- **Instances**
+
+  - You’ve just learned that a structure defines a new type. To use that type, you must create an instance of it, a process called initialization. After initialization, each instance inherits all the properties and features of the structure.
+  - In the following example, both myShirt and yourShirt are Shirt objects with size and color properties. But each one is a separate shirt with distinct values for each property, and therefore a separate instance of the Shirt type. The Size and Color types define a group of available options, called an enumeration, which you’ll learn about in a future lesson. For now, since you haven’t defined Size and Color, this example won’t compile if you copy it into a playground. Instead, just look at the code and try to understand conceptually what is happening.
+
+    - ```swift
+        struct Shirt {
+          var size: Size
+          var color: Color
+        }
+        // Defines the attributes of a shirt.
+         
+        let myShirt = Shirt(size: .xl, color: .blue)
+        // Creates an instance of an individual shirt.
+        let yourShirt = Shirt(size: .m, color: .red)
+        // Creates a separate instance of an individual shirt.
+      ```
+
+  - Here’s another example of a structure definition, this time with functionality added. The structure defines the attributes and functionality of a Car object and describes firstCar and secondCar as two instances.
+
+    - ```swift
+        struct Car {
+          var make: String
+          var model: String
+          var year: Int
+          var topSpeed: Int
+         
+          func startEngine() {
+            print(”The \(year) \(make) \(model)’s engine has started.”)
+        }
+         
+          func drive() {
+            print(”The \(year) \(make) \(model) is moving.”)
+          }
+         
+          func park() {
+            print(”The \(year) \(make) \(model) is parked.”)
+          }
+        }
+         
+        let firstCar = Car(make: “Honda”, model: “Civic”, year: 2010,
+        topSpeed: 120)
+        let secondCar = Car(make: “Ford”, model: “Fusion”, year: 2013,
+        topSpeed: 125)
+         
+        firstCar.startEngine()
+        firstCar.drive()
+        Console Output:
+        The 2010 Honda Civic’s engine has started.
+        The 2010 Honda Civic is moving.
+      ```
+
+  - What did the cars in this code do? If you imagine firstCar and secondCar facing out of the same driveway, only firstCar has moved after executing this code, while secondCar hasn’t even started the engine.
+
+- **Initializers**
+
+  - All structures come with at least one initializer. An initializer is similar to a function that returns a new instance of the type. Many common types have a default initializer with no arguments, init().
+  - Instances created from this initializer have a default value. The default String is “”, the default Int is 0, and the default Bool is false:
+
+    - ```swift
+        var string = String.init() // “”
+        var integer = Int.init() // 0
+        var bool = Bool.init() // false
+      ```
+
+  - But there's a shorthand syntax for initializers that's much more common. The code in the following snippet is more concise, but works the same as the example above:
+
+    - ```swift
+        var string = String() // “”
+        var integer = Int() // 0
+        var bool = Bool() // false
+      ```
+
+  - Whenever you define a new type, you must consider how you’ll create new instances. This lesson covers different approaches to initializing property values.
+
+  - **Default Values**
+
+    - During initialization of new instances, Swift requires you to set values for all instance properties.
+    - One approach is to provide default property values in your type definition. Each instance is initialized with those values. This is useful when defining objects that have a consistent default state, such as a zero reading on an odometer.
+    - If you provide default values for all instance properties of a structure, the Swift compiler will generate a default initializer for you.
+    - In the previous section you saw default values for String, Int, and Bool. Using default property values, you can create a default state for each new instance of your custom types.
+
+      - ```swift
+          struct Odometer {
+            var count: Int = 0
+          }
+           
+          let odometer = Odometer()
+          print(odometer.count)
+          Console Output:
+          0
+        ```
+
+    - Note that count is set to a default value of 0 when declaring the property. All new instances of Odometer will be created with that default value.
+
+  - **Memberwise Initializers**
+
+    - When you define a new structure and don't declare your own initializers, Swift creates special initializers, called memberwise initializers, that allow you to set initial values for each property of the new instance.
+
+      - ```swift
+          let odometer = Odometer(count: 27000)
+          print(odometer.count)
+          Console Output:
+          27000
+        ```
+
+    - Memberwise initializers are the correct approach when there’s not a default state for new instances of your type.
+    - Consider a Person structure with a name property. What would you assign as the default value for name?
+
+      - ```swift
+          struct Person {
+            var name: String
+          }
+        ```
+
+    - At first glance, you may say that the default value for name could be “”. But an empty String is not a name, and you don’t want to accidentally initialize a Person with an empty name.
+    - To call a memberwise initializer, use the type name followed by parentheses containing parameters that match each property. In fact, you’ve seen memberwise initializers in the various code snippets throughout this lesson:
+
+      - ```swift
+          struct Person {
+            var name: String
+           
+            func sayHello() {
+              print(”Hello, there!”)
+            }
+          }
+           
+          let person = Person(name: “Jasmine”) // Memberwise initializer
+           
+          struct Shirt {
+            var size: Size
+            var color: Color
+          }
+           
+          let myShirt = Shirt(size: .xl, color: .blue) // Memberwise
+          Initializer
+           
+          struct Car {
+            var make: String
+            var model: String
+            var year: Int
+            var topSpeed: Int
+          }
+           
+          let firstCar = Car(make: “Honda”, model: “Civic”, year: 2010,
+          topSpeed: 120) // Memberwise initializer
+        ```
+
+    - You might define a structure for which some properties have reasonable default values, but others don't. For example, a bank account might start with a default zero balance, but require a unique account number.
+
+      - ```swift
+          struct BankAccount {
+              var accountNumber: Int
+              var balance: Double = 0
+          }
+        ```
+
+    - In this case, you'll get two memberwise initializers: One that provides parameters for each property, and another that provides parameters only for the properties without default values.
+
+      - ```swift
+          var newAccount = BankAccount(accountNumber: 123)
+          var transferredAccount = BankAccount(accountNumber: 456, balance: 1200)
+        ```
+
+    - Memberwise initializers are the most common way to create new instances of your custom structures. But there may be times when you want to define an initializer that completes some custom logic before assigning all of the properties. In those cases, you can define a custom initializer.
+
+  - **Custom Initializers**
+
+    - You can customize the initialization process by defining your own initializer. Custom initializers have the same requirement as default and memberwise initializers: All properties must be set to initial values before completing initialization.
+    - Consider a Temperature struct with a celsius property. If you have access to a temperature in Celsius, you could initialize it using a memberwise initializer.
+    - But if you have access to a temperature in Fahrenheit, you would need to convert that value to Celsius before using the memberwise initializer.
+
+      - ```swift
+          struct Temperature {
+            var celsius: Double
+          }
+           
+          let temperature = Temperature(celsius: 30.0)
+
+          let fahrenheitValue = 98.6
+          let celsiusValue = (fahrenheitValue - 32) / 1.8
+           
+          let temperature = Temperature(celsius: celsiusValue)
+        ```
+
+    - But the memberwise initializer required you to calculate the Celsius value before initializing a new Temperature object. Instead, you could create a custom initializer that takes a Fahrenheit value as a parameter, performs the calculation, and assigns the value to the celsius property.
+
+      - ```swift
+          struct Temperature {
+            var celsius: Double
+           
+            init(celsius: Double) {
+              self.celsius = celsius
+            }
+           
+            init(fahrenheit: Double) {
+              celsius = (fahrenheit - 32) / 1.8
+            }
+          }
+           
+          let currentTemperature = Temperature(celsius: 18.5)
+          let boiling = Temperature(fahrenheit: 212.0)
+           
+          print(currentTemperature.celsius)
+          print(boiling.celsius)
+          Console Output:
+          18.5
+          100.0
+        ```
+
+    - You might notice that there's a memberwise initializer in the example above. When you add a custom initializer to a type definition, you must define your own memberwise initializers and default initializers; Swift no longer provides them for you.
+    - You can add multiple custom initializers. The code below redefines Temperature to add a Kelvin initializer and a default initializer.
+
+      - ```swift
+          struct Temperature {
+            var celsius: Double
+           
+            init(celsius: Double) {
+              self.celsius = celsius
+            }
+           
+            init(fahrenheit: Double) {
+              celsius = (fahrenheit - 32) / 1.8
+            }
+           
+            init(kelvin: Double) {
+              celsius = kelvin - 273.15
+            }
+            init() {
+              celsius = 0
+            }
+          }
+           
+          let currentTemperature = Temperature(celsius: 18.5)
+          let boiling = Temperature(fahrenheit: 212.0)
+          let absoluteZero = Temperature(kelvin: 0.0)
+          let freezing = Temperature()
+           
+          print(currentTemperature.celsius)
+          print(boiling.celsius)
+          print(absoluteZero.celsius)
+          print(freezing.celsius)
+          Console Output:
+          18.5
+          100.0
+          -273.15
+          0
+        ```
+
+    - Each instance of Temperature is created using a different initializer and a different value, but each ends as a Temperature object with the required celsius property.
