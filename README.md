@@ -1570,3 +1570,187 @@
         ```
 
     - Each instance of Temperature is created using a different initializer and a different value, but each ends as a Temperature object with the required celsius property.
+
+- **Instance Methods**
+
+  - Instance methods are functions that can be called on specific instances of a type. They provide ways to access and modify properties of the structure, and they add functionality that relates to the instance’s purpose.
+  - As you learned earlier, you add an instance method by adding a function within a type definition. You can then call that function on instances of the type. You may have noticed this syntax in the Person or Car structures earlier.
+  - Consider a Size struct with an instance method area() that calculates the area of a specific instance by multiplying its width and height:
+
+    - ```swift
+        struct Size {
+          var width: Double
+          var height: Double
+         
+          func area() -> Double {
+            width * height
+          }
+        }
+         
+        let someSize = Size(width: 10.0, height: 5.5)
+        let area = someSize.area() // Area is assigned a value of 55.0
+      ```
+
+  - The `someSize` instance is of the `Size` type, and `width` and `height` are its properties. The `area()` is an instance method that can be called on all instances of the Size type.
+
+- **Mutating Methods**
+
+  - Occasionally you’ll want to update the property values of a structure within an instance method. To do so you’ll need to add the `mutating` keyword before the function.
+  - In the following example, a simple structure stores mileage data about a specific Car object. Before looking at the code, consider what data the mileage counter needs to store and what actions it needs to perform.
+
+    - Store the mileage count to be displayed on an odometer
+    - Increment the mileage count to update the mileage when the car drives
+    - Potentially reset the mileage count if the car drives beyond the number of miles that can be displayed on the odometer.
+
+      - ```swift
+          struct Odometer {
+            var count: Int = 0 // Assigns a default value to the `count` property.
+
+            mutating func increment() {
+              count += 1
+            }
+           
+            mutating func increment(by amount: Int) {
+              count += amount
+            }
+           
+            mutating func reset() {
+              count = 0
+            }
+          }
+           
+          var odometer = Odometer() // odometer.count defaults to 0
+          odometer.increment() // odometer.count is incremented to 1
+          odometer.increment(by: 15) // odometer.count is incremented to 16
+          odometer.reset() // odometer.count is reset to 0
+        ```
+
+    - The `odometer` instance is of the `Odometer` type, and `increment()` and `increment(by:)` are instance methods that add miles to the instance. The `reset()` instance method resets the mileage count to zero.
+
+- **Computed Properties**
+
+  - Swift has a feature that allows a property to perform logic that returns a calculated value.
+  - Consider the Temperature example. While most of the world uses the Celsius scale of measurement for temperature, some places (such as the U.S.) use Fahrenheit, and certain professions use Kelvin. So it might be useful for the Temperature structure to support all three measurement systems.
+
+    - ```swift
+        struct Temperature {
+          var celsius: Double
+          var fahrenheit: Double
+          var kelvin: Double
+        }
+      ```
+
+  - Imagine that you’d used the memberwise initializer for this structure: `let temperature = Temperature(celsius: 0, fahrenheit: 32.0, kelvin: 273.15)`
+  - Any time you would write code to initialize a Temperature object, you would need to calculate each temperature and pass all those values as parameters.
+  - An alternative would be to add multiple initializers that handle the calculations.
+
+    - ```swift
+        struct Temperature {
+          var celsius: Double
+          var fahrenheit: Double
+          var kelvin: Double
+         
+          init(celsius: Double) {
+            self.celsius = celsius
+            fahrenheit = celsius * 1.8 + 32
+            kelvin = celsius + 273.15
+          }
+         
+          init(fahrenheit: Double) {
+            self.fahrenheit = fahrenheit
+            celsius = (fahrenheit - 32) / 1.8
+            kelvin = celsius + 273.15
+          }
+         
+          init(kelvin: Double) {
+            self.kelvin = kelvin
+            celsius = kelvin - 273.15
+            fahrenheit = celsius * 1.8 + 32
+          }
+        }
+         
+        let currentTemperature = Temperature(celsius: 18.5)
+        let boiling = Temperature(fahrenheit: 212.0)
+        let freezing = Temperature(kelvin: 273.15)
+      ```
+
+  - The approach above, using multiple initializers, involves managing a lot of state, or information. Any time the temperature changes, you would be required to update all three properties. This approach is error-prone, and would be frustrating for any programmer.
+  - Swift provides a safer approach. With computed properties, you can create properties that can compute their value based on other instance properties or logic.
+
+    - ```swift
+        struct Temperature {
+          var celsius: Double
+         
+          var fahrenheit: Double {
+            celsius * 1.8 + 32
+          }
+         
+          var kelvin: Double {
+            celsius + 273.15
+          }
+        }
+      ```
+
+  - To add a computed property, you declare the property as a variable (because its value can change). You must also explicitly declare the type. Then you use an open curly brace ({) and closing curly brace (}) to define the logic that calculates the value to return.
+  - You can access computed properties using dot syntax, just as you would with any other property.
+
+    - ```swift
+        let currentTemperature = Temperature(celsius: 0.0)
+        print(currentTemperature.fahrenheit)
+        print(currentTemperature.kelvin)
+        Console Output:
+        32.0
+        273.15
+      ```
+
+  - The logic contained in a computed property will be executed each time the property is accessed, so the returned value will always be up to date.
+
+- **Property Observers**
+
+  - Swift allows you to observe any property and respond to the changes in the property’s value. These property observers are called every time a property’s value is set, even if the new value is the same as the property’s current value. There are two observer closures, or blocks of code, that you can define on any given property: `willSet`, and `didSet`.
+  - In the following example, a `StepCounter` has been defined with a `totalSteps` property. Both the `willSet` and `didSet` observers have been defined. Whenever `totalSteps` is modified, `willSet` will be called first, and you’ll have access to the new value that will be set to the property value in a constant named `newValue`. After the property’s value has been updated, `didSet` will be called, and you can access the previous property value using `oldValue`.
+
+    - ```swift
+        struct StepCounter {
+            var totalSteps: Int = 0 {
+                willSet {
+                    print(”About to set totalSteps to \(newValue)”)
+                }
+                didSet {
+                    if totalSteps > oldValue  {
+                        print(”Added \(totalSteps - oldValue) steps”)
+                    }
+                }
+            }
+        }
+      ```
+
+  - Here’s the output when modifying the totalSteps property of a new StepCounter:
+
+    - ```swift
+        var stepCounter = StepCounter()
+        stepCounter.totalSteps = 40
+        stepCounter.totalSteps = 100
+        Console Output:
+        About to set totalSteps to 40
+        Added 40 steps
+        About to set totalSteps to 100
+        Added 60 steps
+      ```
+
+- **Type Properties and Methods**
+
+  - You learned that instance properties are data about the individual instance of a type, and instance methods are functions that can be called on individual instances of a type.
+  - Swift also supports adding type properties and methods, which can be accessed or called on the type itself. Use the static keyword to add a property or method to a type.
+  - Type properties are useful when a property is related to the type, but not a characteristic of an instance itself.
+  - The following sample defines a Temperature structure that has a static property named boilingPoint, which is a constant value for all Temperature instances.
+
+    - ```swift
+        struct Temperature {
+          static var boilingPoint = 100
+        }
+      ```
+
+  - You access type properties using dot syntax on the type name: `let boilingPoint = Temperature.boilingPoint`.
+  - Type methods are similar to type properties. Use a type method when the action is related to the type, but not something that a specific instance of the type should perform.
+  - The `Double` structure, defined in the Swift Standard Library, contains a static method named `minimum` that returns the lesser of its two parameters: `let smallerNumber = Double.minimum(100.0, -1000.0)`.
