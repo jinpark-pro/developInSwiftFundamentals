@@ -1846,3 +1846,279 @@
       ```
 
   - Even if the properties are declared using var, the values of a constant cannot be changed. As a general rule, you should use let whenever possible to define an instance of a structure, use var if the instance needs to be mutated, and use var when defining the properties of a structure.
+
+### Lesson 2.5 Classes and Inheritance
+
+- Classes are very similar to structures. Among other similarities, both can define properties to store values, define methods to provide functionality, and define initializers to set up their initial state. The syntax for doing these things is almost always identical.
+- You define a class using the class keyword along with a unique name. You then define properties as part of the class by listing the constant or variable declarations with the appropriate type annotation. As with structures, it’s best practice to capitalize the names of types and to use lowercase for the names of properties:
+- You can add functionality to a class by adding functions to the class definition:
+
+  - ```swift
+      class Person {
+        let name: String
+       
+        init(name: String) {
+          self.name = name
+        }
+
+        func sayHello() {
+          print(”Hello, there!”)
+        }
+      }
+       
+      let person = Person(name: “Jasmine”)
+      print(person.name)
+      person.sayHello()
+      Console Output:
+      Jasmine
+      Hello, there!
+    ```
+
+- You’ve seen an almost-identical example in the previous lesson on structures. But how do classes differ from structures?
+
+- **Inheritance**
+
+  - The biggest difference between structures and classes is that classes can have hierarchical relationships. Any class can have parent and child classes. A parent class is called a superclass, and a child class is called a subclass.
+  - Just as in family relationships, subclasses inherit properties and methods from superclasses. However, subclasses can augment or replace the implementation of superclass properties and methods.
+  - In the sections below, you’ll read how to define a base class, which is a class that has no parent classes, how to define subclasses, and how to override properties or methods from the base class.
+
+  - **Defining a Base Class**
+
+    - A class that doesn’t inherit from a superclass is known as a base class. All the classes that you’ve seen so far are base classes.
+    - Here’s an example of a base class for a Vehicle object:
+
+      - ```swift
+          class Vehicle {
+              var currentSpeed = 0.0
+           
+              var description: String {
+                  “traveling at \(currentSpeed) miles per hour”
+              }
+           
+              func makeNoise() {
+                  // do nothing - an arbitrary vehicle doesn’t necessarily make a noise
+              }
+          }
+
+          let someVehicle = Vehicle()
+          print(”Vehicle: \(someVehicle.description)”)
+          Console Output:
+          Vehicle: traveling at 0.0 miles per hour
+        ```
+
+    - The Vehicle class has a property called currentSpeed with a default value of 0.0. The currentSpeed property is used in the computed description variable that returns a human readable description of the vehicle. The class also has a method called makeNoise(). This method does not actually do anything for a base Vehicle instance, but will be customized by subclasses later.
+    - The Vehicle class defines common characteristics, like properties and methods, for any type of vehicle – like cars, bicycles, or airplanes. It is not very useful on it’s own, but it will make it easier to define other more specific types.
+
+  - **Create a Subclass**
+
+    - Subclassing is the act of basing a new class on an existing class. The subclass inherits properties and methods from the superclass, which you can then refine and make more specific. You can also add new properties or methods to the subclass.
+    - To define a new type that inherits from a superclass, write the type name before the superclass name, separated by a colon: `class SomeSubclass: SomeSuperclass { // subclass definition goes here }`
+      - The following example defines a subclass called Bicycle, with a superclass of Vehicle: `class Bicycle: Vehicle { var hasBasket = false }`
+      - The new Bicycle class automatically inherits all of the properties and methods of Vehicle, such as its currentSpeed and description properties and its makeNoise() method.
+    - In addition to the inherited properties and methods, the Bicycle class defines a new boolean property hasBasket. By default, new instance of Bicycle will not have a basket. You can set the hasBasket property to true for a particular Bicycle instance after it has been created, or within a custom initializer for the type.
+    - As you’d expect, you can also update the currentSpeed property, which will impact the description of the instance.
+
+      - ```swift
+          let bicycle = Bicycle()
+          bicycle.hasBasket = true
+          bicycle.currentSpeed = 15.0
+          print(”Bicycle: \(bicycle.description)”)
+          Console Output:
+          Bicycle: traveling at 15.0 miles per hour
+        ```
+
+    - Subclasses can themselves be subclassed. For example, you can create a class that represents a two-seater TandemBike.
+
+      - ```swift
+          class Tandem: Bicycle {
+              var currentNumberOfPassengers = 0
+          }
+        ```
+
+    - Tandem inherits all of the properties and methods from Bicycle, which in turn inherits all of the properties and methods from Vehicle. The Tandom subclass also adds a new property called currentNumberOfPassengers, with a default value of 0.
+    - If you create a new instance of Tandem, you’ll have access to all of the inherited properties and methods.
+
+      - ```swift
+          let tandem = Tandem()
+          tandem.hasBasket = true
+          tandem.currentNumberOfPassengers = 2
+          tandem.currentSpeed = 22.0
+          print(”Tandem: \(tandem.description)”)
+          Console Output:
+          Tandem: traveling at 22.0 miles per hour
+        ```
+
+  - **Override Methods and Properties**
+
+    - One advantage of subclassing is that each subclass can provide its own custom implementation of a property or method. To override a characteristic that would otherwise be inherited, like writing a new implementation for a function, you prefix your new definition with the override keyword.
+    - The following example defines a new Train class, which overrides the makeNoise() method that Train inherits from Vehicle:
+
+      - ```swift
+          class Train: Vehicle {
+              override func makeNoise() {
+                  print(”Choo Choo!”)
+              }
+          }
+
+          let train = Train()
+          train.makeNoise()
+          Console Output:
+          Choo Choo!
+        ```
+
+    - You can also override properties by providing a getter, or a block of code that returns the value, like a computed property. The following example defines a new class called Car, which is a subclass of Vehicle. The new class has a new gear property, with a default value of 1. The Car class also overrides the description property to provide a custom description that includes the current gear:
+
+      - ```swift
+          class Car: Vehicle {
+              var gear = 1
+              override var description: String {
+                  super.description + “ in gear \(gear)”
+              }
+          }
+        ```
+
+    - Notice that the new implementation accesses the description from the superclass by calling super.description. The new implementation then adds some extra text onto the end of the description to provide information about the gear.
+
+      - ```swift
+          let car = Car()
+          car.currentSpeed = 25.0
+          car.gear = 3
+          print(”Car: \(car.description)”)
+          Console Output:
+          Car: traveling at 25.0 miles per hour in gear 3
+        ```
+
+  - **Override Initializer**
+
+    - Suppose you have a Person class with a name property. The initializer sets the name to the parameter specified.
+
+      - ```swift
+          class Person {
+            let name: String
+           
+            init(name: String) {
+              self.name = name
+            }
+          }
+        ```
+
+    - Now imagine you want to create a Student, which is a subclass of Person. Each Student includes an additional property, favoriteSubject.
+
+      - ```swift
+          class Student: Person {
+            var favoriteSubject: String
+          }
+        ```
+
+    - If you try to compile this code, Student will fail, because you haven’t provided an initializer that sets the favoriteSubject property to an initial value. Since the Person superclass already does the work of initializing the name property, the Student initializer can call the superclass's initializer using super.init(). You should call this initializer after you’ve provided values for any properties added within your subclass.
+
+      - ```swift
+          class Student: Person {
+            var favoriteSubject: String
+           
+            init(name: String, favoriteSubject: String) {
+              self.favoriteSubject = favoriteSubject
+              super.init(name: name)
+            }
+          }
+        ```
+
+    - By calling the superclass's initializer, the Student class doesn’t have to duplicate the work that was already written in the Person initializer.
+
+- **References**
+
+  - A special feature of classes is their ability to reference values assigned to a constant or variable. When you create an instance of a class, Swift picks out a region in the device's memory to store that instance. That region in memory has an address. Constants or variables that are assigned the instance store that address to refer to the instance.
+  - So the constant or variable does not contain the value itself, it points to the value in memory.
+  - When you assign a class to multiple variables, each variable will reference, or point to, the same address in memory. So if you update one of the variables, both variables will be updated.
+
+    - ```swift
+        class Person {
+          let name: String
+          var age: Int
+         
+          init(name: String, age: Int) {
+            self.name = name
+            self.age = age
+          }
+        }
+         
+        var jack = Person(name: “Jack”, age: 24)
+        var myFriend = jack
+         
+        jack.age += 1
+         
+        print(jack.age)
+        print(myFriend.age)
+        Console Output:
+        25
+        25
+      ```
+
+  - In contrast, when you create an instance of a structure, you’re assigning a literal value to that variable. If you create a variable that’s equal to another structure variable, the value is copied. Any operations you perform on either variable will be reflected only on the modified variable.
+
+    - ```swift
+        struct Person {
+          var name: String
+          var age: Int
+        }
+         
+        var jack = Person(name: “Jack”, age: 24)
+        var myFriend = jack
+         
+        jack.age += 1
+         
+        print(jack.age)
+        print(myFriend.age)
+        Console Output:
+        25
+        24
+      ```
+
+- **Memberwise Initializers**
+  - You’ve learned that all property values must be set when you create an instance of a class. Unlike for structures, Swift does not create a memberwise initializer for classes. However, it’s common practice for developers to create their own memberwise initializer for classes they define, ensuring that all initial values are set for each instance of any object.
+- **Class or Structure?**
+
+  - Because classes and structures are so similar, it can be hard to know when to use classes and when to use structures for the building blocks of your program.
+  - As a basic rule, you should start new types as structures until you need one of the features that classes provide.
+  - Start with a class when you’re working with a framework that uses classes or when you want to refer to the same instance of a type in multiple places.
+  - **Working with Frameworks That Use Classes**
+    - You’ll often work with resources that you didn’t write, such as frameworks like Foundation or UIKit. In these situations, you may start with a base class, then create a subclass to add your own specific functionality. For example, when you’re working with UIKit and want to create a custom view, you create a subclass of UIView.
+    - When working with frameworks, it’s often an expectation that you’ll pass around class instances. Many frameworks have method calls that expect certain things to be classes. So in these cases, you’ll always choose to use a class over a structure.
+  - **Stable Identity**
+
+    - There are times when you want to use a single instance of an object in multiple places, but it doesn’t make sense to copy the instance. Because each class constant or variable is an address that points to the same data, the data has a stable identity.
+    - Consider a UITableViewCell subclass MessageCell that represents a row in a table view. The cell is designed to display information about an email message. Each instance of a MessageCell will be accessed in many places in code, as you will see.
+
+      - ```swift
+          class MessageCell: UITableViewCell {
+           
+            func update(message: Message) {
+              // Update `UITableViewCell` properties with information about the message
+
+              textLabel.text = message.subject
+              detailTextLabel.text = message.previewText
+            }
+          }
+        ```
+
+    - When a table view is preparing to display cells, it calls a function cellForRow(at: IndexPath) to request the cell it should display at each position in the list. All cells for a table view are initialized (and put into memory) during this function call.
+
+      - ```swift
+          override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let cell = MessageCell(style: .default, reuseIdentifier: “MessageCell”)
+            cell.update(message: message)
+            return cell  // Returns the cell to the table view that called this method to request it
+          }
+        ```
+
+    - When the user scrolls through the list of messages in the table view, a method is called that allows your program to set up, update, or modify the cell as it is about to be displayed. The function passes a reference to the cell as a parameter.
+
+      - ```swift
+          override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+            // Perform any operations you want to take on the cell here
+          }
+        ```
+
+    - There’s some unfamiliar syntax here, which you’ll learn more about later. For now, focus on the fact that the function is called for each cell that’s about to appear on the table view. Also notice that the function passes three parameters: a reference to the tableView, which already exists; the cell that already exists but is about to be displayed; and something called indexPath.
+    - Because tableView and cell are both classes, the parameters are references to the tableView and cell in memory. If you update the cell parameter, you’re updating the same cell that was initialized in the cellForRow function, the same cell that’s about to be displayed.
+    - Consider how a class works differently from a structure. If cell were a structure, or a value type, the parameter would be a new copy of the cell that’s about to be displayed. So if you updated cell, you wouldn’t see your changes, because you updated the copy and not the cell that’s about to be displayed.
