@@ -1754,3 +1754,95 @@
   - You access type properties using dot syntax on the type name: `let boilingPoint = Temperature.boilingPoint`.
   - Type methods are similar to type properties. Use a type method when the action is related to the type, but not something that a specific instance of the type should perform.
   - The `Double` structure, defined in the Swift Standard Library, contains a static method named `minimum` that returns the lesser of its two parameters: `let smallerNumber = Double.minimum(100.0, -1000.0)`.
+
+- **Copying**
+
+  - If you assign a structure to a variable or pass an instance as a parameter into a function, the values are copied. Separate variables are therefore separate instances of the value, which means that changing one value doesn’t change the other.
+
+    - ```swift
+        var someSize = Size(width: 250, height: 1000)
+        var anotherSize = someSize
+         
+        someSize.width = 500
+         
+        print(someSize.width)
+        print(anotherSize.width)
+        Console Output:
+        500
+        250
+      ```
+
+  - Note that the width property of someSize changed to have a value of 500, but the width property of anotherSize did not, because although we set anotherSize equal to someSize, this created a copy of someSize, and the copy’s width did not change when the original width was changed.
+
+- **Self**
+
+  - You may have noticed the word self in this section. In Swift, self refers to the current instance of the type. It can be used within an instance method or computed property to refer to its own instance.
+
+    - ```swift
+        struct Car {
+          var color: Color
+         
+          var description: String {
+            return “This is a \(self.color) car.”
+          }
+        }
+      ```
+
+  - Many languages require the use of self to refer to instance properties or methods within the type definition. The Swift compiler recognizes when property or method names exist on the current object, and makes using self optional.
+  - This example is functionally the same as the previous example.
+
+    - ```swift
+        struct Car {
+          var color: Color
+         
+          var description: String {
+            return “This is a \(color) car.”
+          }
+        }
+      ```
+
+  - The use of self is required within initializers that have parameter names that match property names.
+
+    - ```swift
+        struct Temperature {
+          var celsius: Double
+         
+          init(celsius: Double) {
+            self.celsius = celsius
+          }
+        }
+      ```
+
+  - This concept is called shadowing, and you will learn more about it in a future lesson.
+
+- **Variable Properties**
+
+  - Did you notice that all of the structure examples in this lesson used variable properties instead of constants? Consider the Car definition used at the beginning of the lesson.
+
+    - ```swift
+        struct Car {
+          var make: String
+          var year: Int
+          var color: Color
+          var topSpeed: Int
+        }
+      ```
+
+  - A car’s color could easily be changed with a paint job, and the top speed might get updated if the owner upgrades the engine. But the make and year of a car will never change, so why not define the properties using let?
+  - Variable properties provide a convenient way to create new data from old data. In the following code, making a blue, 2010 Ford is as simple as making a copy of the 2010 Honda and modifying the make property. If the make property were constant, the second car would need to be created using the memberwise initializer.
+
+    - ```swift
+        var firstCar = Car(make: “Honda”, year: 2010, color: .blue, topSpeed: 120)
+        var secondCar = firstCar
+        secondCar.make = “Ford”
+      ```
+
+  - Earlier in this lesson, you learned that whenever an instance of a struct is assigned to a new variable, the values are copied. In the previous example, firstCar is still a Honda. If you want to explicitly prevent firstCar’s properties from ever changing, simply declare the instance using a let.
+
+    - ```swift
+        let firstCar = Car(make: “Honda”, year: 2010, color: .blue,
+        topSpeed: 120)
+        firstCar.color = .red // Compiler error!
+      ```
+
+  - Even if the properties are declared using var, the values of a constant cannot be changed. As a general rule, you should use let whenever possible to define an instance of a structure, use var if the instance needs to be mutated, and use var when defining the properties of a structure.
