@@ -2122,3 +2122,146 @@
     - There’s some unfamiliar syntax here, which you’ll learn more about later. For now, focus on the fact that the function is called for each cell that’s about to appear on the table view. Also notice that the function passes three parameters: a reference to the tableView, which already exists; the cell that already exists but is about to be displayed; and something called indexPath.
     - Because tableView and cell are both classes, the parameters are references to the tableView and cell in memory. If you update the cell parameter, you’re updating the same cell that was initialized in the cellForRow function, the same cell that’s about to be displayed.
     - Consider how a class works differently from a structure. If cell were a structure, or a value type, the parameter would be a new copy of the cell that’s about to be displayed. So if you updated cell, you wouldn’t see your changes, because you updated the copy and not the cell that’s about to be displayed.
+
+### Lesson 2.6 Collections
+
+- Swift defines two collection types you will frequently work with: arrays and dictionaries. Each type provides a unique method for interacting with multiple objects. As you progress through learning the different types, you’ll notice that they share certain functionality: adding/removing items, accessing individual items, and providing type information about the data within the collection.
+
+- **Arrays**
+
+  - The most common collection type in Swift is an array, which stores an ordered list of same-typed values. When you declare an array, you can specify what type of values will be held in the collection, or you can let the type inference system discover the type.
+  - An array is often initialized using a literal, similar to an Int or String literal. To declare an array literal, surround the collection of values with brackets, with commas separating the values: `[value1, value2, value3]`
+  - You’ll use similar syntax to declare an array that stores strings. Notice in the following example that the variable’s type, String, is surrounded by brackets: `var names: [String] = [”Anne”, “Gary”, “Keith”]`
+  - Since type inference can determine that “Anne”, “Gary”, and “Keith” are strings, you could actually skip a step and declare the array without specifying the array’s type: `var names = [”Anne“, “Gary”, “Keith”]`
+  - But there might be situations when you want to specify the array’s type even though type inference can discover it. Imagine, for example, you want a collection of 8-bit integers (numbers between -127 and 128). You begin by assigning a variable to the following collection of numbers: `var numbers = [1, -3, 50, 72, -95, 115]`
+  - Swift will infer all the values to be of type Int and set numbers to be an array of integers, or [Int]. While this inference is certainly correct, there’s a problem: An Int can hold positive and negative numbers that exceed beyond the range from -127 to 128. To help Swift understand that you want to restrict the array to smaller integers, you can specify the type as [Int8], an array of 8-bit integers whose values are restricted to the aforementioned range: `var numbers: [Int8] = [1, -3, 50, 72, -95, 115]`
+  - What if you tried to include a larger number, such as 300, in an array literal of type [Int8]? Swift will return an error because 300 is greater than the maximum number for an Int8. You should specify the type if the inferred type is not specific enough, and it will help to restrict the values that you don’t want to allow.
+  - It’s often useful to check if a certain value exists in an array. To do so, you can use the `contains(_:)` method, passing in the desired value. If the array contains the value, the expression is true; otherwise, it’s false:
+
+    - ```swift
+        let numbers = [4, 5, 6]
+        if numbers.contains(5) {
+          print(”There is a 5”)
+        }
+      ```
+
+  - Early in this course, you learned that constants can’t be modified once they’re declared. It’s the same when you assign a collection to a constant using `let`: You can’t add, remove, or modify any items within the collection. However, if you store the collection within a variable using `var`, you’ll be able to add to, remove from, or modify items in the collection. In addition, you’ll be able to empty the collection or set the variable to a different collection entirely.
+
+- **Array Types**
+
+  - An array is like a basket: It can start out empty and you can fill it with values at a later time. But if an array literal doesn’t contain any values, how can its type be inferred?
+  - You can declare the type of an array using type annotation, collection type annotation, or an array initializer.
+  - This example defines an array with traditional type annotation: `var myArray: [Int] = []`
+  - This example defines an array using a special collection type annotation. This is a less common practice you should be familiar with in case you run across it in code you’re working with: `var myArray: Array<Int> = []`
+  - Just like all objects can be initialized by adding a () after the type name, you can add a () after [Int] to initialize an empty array of Int objects. You should also be familiar with this code in case you run across it in the future: `var myArray = [Int]()`
+
+- **Working With Arrays**
+
+  - You may find some situations when it’s tedious or error-prone to use array literals. For example, say you want an array filled with 100 zeros. In array literal form, you’d have to enter all 100 zeros, and it would be easy to miscount them.
+  - That’s OK. Swift has a solution. Instead of counting out the 100 zeros, you can use the following initializer to create an array of count 100 with repeating default values: `var myArray = [Int](repeating: 0, count: 100)`
+  - To find out the number of items within an array, you can use its `count` property. What if you wanted to check if the array is empty? Rather than comparing count to 0, you can check the array’s isEmpty property, which returns a Bool:
+
+    - ```swift
+        let count = myArray.count
+        if myArray.isEmpty { }
+      ```
+
+  - Once you’ve defined an array, you can use various methods and properties to access or modify it. You can also use an array’s subscript syntax. Subscript syntax uses square brackets after a collection to refer to a specific element or range inside the collection. To retrieve a particular value from a collection, specify inside square brackets the index of the value you wish to access. An array’s values are always zero-indexed, meaning that the first element of an array has an index of zero. The following example will retrieve the first value in a collection of first names: `let firstName = names[0]`
+  - You can also use subscript syntax to change a value at a given index. By putting the subscript on the left side of the = sign, you can set a particular value rather than access the current one. In the example, you’re changing the second name in the collection to “Paul”.\: `names[1] = “Paul”`
+  - When subscripting an array, you need to be sure that the index you specify exists in the array. For example, if you specify 3 as the index, the array must have at least four elements. If it doesn’t, your program will crash when that line of code is executed.
+  - After defining an array and setting some values, you’ll often want to append new values. You can use a variable array’s append function to add a new element at the end of the array. To append multiple elements at once, use the += operator.
+
+    - ```swift
+        var names = [”Amy”]
+        names.append(”Joe”)
+        names += [”Keith”, “Jane”]
+        print(names) // [”Amy”, “Joe”, “Keith”, “Jane”]
+      ```
+
+  - What if you didn’t want the new element to show up at the end of the array? A variable array also has an `insert(_:at:)` function that allows you to specify the value and the index. In this scenario, as with subscripting, you’ll need to be sure that you supply a valid index.
+  - Because an array is zero-indexed, the first element always has an index of 0, and the last element’s index is equal to count – 1. In the following example, “Bob” is inserted at the beginning of the array: `names.insert(”Bob”, at: 0)`
+  - Similarly, the `remove(at:)` function works to remove an item at a specified index. Unlike `insert(_:at:)`, you don’t need to enter the value; the function returns the removed item by default, as in the example below. Another method is `removeLast()`, which removes the last item from the array, eliminating the need to calculate the index. Finally, the `removeAll()` method will remove all elements from the array.
+
+    - ```swift
+        var names = [”Amy”, “Brad”, “Chelsea”, “Dan”]
+        let chelsea = names.remove(at: 2)
+        let dan = names.removeLast()
+        names.removeAll()
+      ```
+
+  - Swift also allows you to create a new array by adding together two existing arrays of the same type. You can specify which array comes first within the resulting array: `var myNewArray = firstArray + secondArray`
+  - What about arrays within an array? Use the array literal syntax to place two arrays inside another containing array. You can then use subscript syntax on the container array to access one of the nested arrays. To access a particular element within one of the nested arrays, you can use two sets of subscripts.
+
+    - ```swift
+        let array1 = [1,2,3]
+        let array2 = [4,5,6]
+        let containerArray = [array1, array2] // [ [1,2,3], [4,5,6] ]
+        let firstArray = containerArray[0]  // [1,2,3]
+        let firstElement = containerArray[0][0] // 1
+      ```
+
+- **Dictionaries**
+
+  - The second type of collection in Swift is a dictionary. Like a real-world dictionary that contains a list of words and their definitions, a Swift dictionary is a list of keys, each with an associated value. Each key must be unique, just like each word in the dictionary is unique. And just as an English dictionary is in alphabetical order to make the words easy to look up, a Swift dictionary is optimized to make key lookups very fast.
+  - You can set up a dictionary using a dictionary literal: a list of comma-separated key/value pairs surrounded by square brackets. A colon separates each key and its resulting value: `[key1: value1, key2: value2, key3: value3]`
+  - Just as with an array, the dictionary’s type can be inferred based on the types used in the dictionary literal. Say you want to store a list of high scores in a game. You’ll use the player’s name as the key and the player’s score as the corresponding value. The dictionary’s type will be inferred as a dictionary where the keys are of type String and the values are of type Int. This can be represented as either `[String: Int]` or `Dictionary<String, Int>`: `var scores = [”Richard”: 500, “Luke”: 400, “Cheryl”: 800]`
+  - As with other collection types, a dictionary has a count property to determine the number of key-value pairs and an isEmpty property to determine whether the dictionary has no key-value pairs. The syntax for creating an empty dictionary is probably familiar by now:
+
+    - ```swift
+        var myDictionary = [String: Int]()
+         
+        var myDictionary = Dictionary<String, Int>()
+         
+        var myDictionary: [String: Int] = [:]
+      ```
+
+  - All of these examples result in the same type of empty dictionary. You'll likely have a preferred method you use regularly, but you should be familiar with all of them. Take note of the syntax for an empty dictionary literal in the last example.
+
+- **Add/Remove/Modify a Dictionary**
+
+  - Subscript syntax is particularly handy with a dictionary. Since the order in a Swift dictionary doesn’t matter, there’s no index and there’s no risk of subscripting errors associated with indices.
+  - The following example adds a new score to the dictionary of high scores. If the key “Oli” already exists in the dictionary, this code will replace the old value with the new one: `scores[”Oli”] = 399`
+  - But what if you want to know if there’s an old value in the dictionary before replacing it? You can use `updateValue(_:, forKey:)` to update the dictionary, and the value returned from the method will be equal to the old value, if one existed. In the following example, oldValue will be equal to Richard’s old value before the update. If there was no value, oldValue will be `nil`. You’ll learn more about the `nil` keyword later. It’s a special way of representing the absence of a value: `let oldValue = scores.updateValue(100, forKey: “Richard”)`
+  - Swift uses if-let syntax to let you run code only if a value is returned from the method. If there wasn’t an existing value, the code within the braces wouldn’t be executed:
+
+    - ```swift
+        if let oldValue = scores.updateValue(100, forKey: "Richard") {
+          print("Richard's old value was \(oldValue)")
+        }
+      ```
+
+  - To remove an item from a dictionary, you can use subscript syntax, setting the value to `nil`. Similar to updating a value, dictionaries have a `removeValue(forKey:)` method if you need the old value returned before removing it:
+
+    - ```swift
+        var scores = [”Richard”: 100, “Luke”: 400, “Cheryl”: 800]
+        scores[”Richard”] = nil // [”Luke”: 400, “Cheryl”: 800]
+
+        if let removedValue = scores.removeValue(forKey: “Luke”) {
+          print(”Luke’s score was \(removedValue) before he stopped playing”)
+        }
+      ```
+
+- **Accessing a Dictionary**
+
+  - Swift dictionaries provide two properties not included in other collection types. You can use keys to return a list of all the keys within a dictionary and values to return a list of all the values. If you want to use these collections subsequently, you’ll need to convert them to arrays:
+
+    - ```swift
+        var scores = [”Richard”: 500, “Luke”: 400, “Cheryl”: 800]
+         
+        let players = Array(scores.keys) // [”Richard”, “Luke”, “Cheryl”]
+        let points = Array(scores.values) // [500, 400, 800]
+      ```
+
+  - To look up a particular value within a dictionary, use if-let syntax. If the key you specify is in the dictionary, the result will be the key’s corresponding value. However, if the key isn’t in the dictionary, the code within the brackets won’t be executed.
+
+    - ```swift
+        if let lukesScore = scores[”Luke”] {
+          print(lukesScore)
+        }
+         
+        if let henrysScore = scores[”Henry”] {
+          print(henrysScore) // not executed; “Henry” is not a key in the dictionary
+        }
+        Console Output:
+        400
+      ```
