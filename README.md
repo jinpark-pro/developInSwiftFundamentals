@@ -2265,3 +2265,199 @@
         Console Output:
         400
       ```
+
+### Lesson 2.7 Loops
+
+- Computer programs are great at repeating things. Developers often write code to perform the same work across multiple objects, perform a task many times, or continue to perform work until specific conditions have been met. Swift provides three different ways to loop through, or repeat, blocks of code.
+
+- **For Loops**
+
+  - The first loop you'll learn is the for loop, also known more specifically as a for-in loop. A for loop is useful for repeating something a set number of times or for performing work across a collection of values.
+  - A for-in loop executes a set of statements for each item within a range, sequence, or collection. Suppose you have a range of numbers between 1 and 5, and you want to print each value within the range. Rather than writing out five print statements, you can use for-in over the range and write one print statement. The syntax looks like this:
+
+    - ```swift
+        for index in 1...5 {
+          print(”This is number \(index)”)
+        }
+        Console Output:
+        This is number 1
+        This is number 2
+        This is number 3
+        This is number 4
+        This is number 5
+      ```
+
+  - The `...` is known as the closed range operator, which is how you define a range of values that runs from x up to y and includes both x and y in the range. There's a companion operator (`..<`) known as the half-open range operator. These ranges run from x up to y, but don’t include y.
+  - In the code above, index is a constant that’s available to customize the work performed within the braces (the for-in loop). The first time the statement within the braces is executed, index has a value of 1, the first value in the range. When execution is complete, the value of index is updated to 2, the next value in the range. As index is updated to each of the values, the print statement is executed five times. After the entire range has been exhausted, the loop is complete, and the code moves on to statements after the loop.
+  - But let’s say your result doesn’t need to use the values in the range. If you just need a way to perform a series of steps a certain number of times, you can skip assigning a value to a constant and replace its name with a `_`:
+
+    - ```swift
+        for _ in 1...3 {
+          print(”Hello!”)
+        }
+        Console Output:
+        Hello!
+        Hello!
+        Hello!
+      ```
+
+  - You can use the same for-in syntax to iterate over each item in an array.
+
+    - ```swift
+        let names = [”Joseph”, “Cathy”, “Winston”]
+        for name in names {
+          print(”Hello \(name)”)
+        }
+        Console Output:
+        Hello Joseph
+        Hello Cathy
+        Hello Winston
+      ```
+
+  - Because String is a collection type, it has similar functionality to an array. You can use a for-in loop to iterate over each character in a String:
+
+    - ```swift
+        for letter in “ABCD” {
+          print(”The letter is \(letter)”)
+        }
+        Console Output:
+        The letter is A
+        The letter is B
+        The letter is C
+        The letter is D
+      ```
+
+  - What if you need the index of each element in addition to its value? You can use the `enumerated()` method of an array or string to return a tuple — a special type that can hold an ordered list of values wrapped in parentheses — containing both the index and the value of each item:
+
+    - ```swift
+        for (index, letter) in “ABCD”.enumerated() {
+          print(”\(index): \(letter)”)
+        }
+        Console Output:
+        0: A
+        1: B
+        2: C
+        3: D
+      ```
+
+  - Alternatively, you could use the half-open range operator to do the same thing:
+
+    - ```swift
+        let animals = ["Lion", "Tiger", "Bear"]
+        for index in 0..<animals.count {
+          print("\(index): \(animals[index])")
+        }
+        Console Output:
+        0: Lion
+        1: Tiger
+        2: Bear
+      ```
+
+  - If you use a for-in loop with a dictionary, the loop generates a tuple that holds the key and value of each entry. Because a dictionary is typically accessed by specifying a key, the loop doesn't guarantee any particular order of the items as it works through the dictionary:
+
+    - ```swift
+        let vehicles = [”unicycle”: 1, “bicycle”: 2, “tricycle”: 3, “quad bike”: 4]
+        for (vehicleName, wheelCount) in vehicles {
+          print(”A \(vehicleName) has \(wheelCount) wheels”)
+        }
+        Console Output:
+        A unicycle has 1 wheels
+        A bicycle has 2 wheels
+        A tricycle has 3 wheels
+        A quad bike has 4 wheels
+      ```
+
+- **While Loops**
+
+  - A while loop will continue to loop until its specified condition is no longer true. Imagine you want to keep playing a game until you run out of “lives.” The condition under which you continue looping is that the number of lives is greater than 0:
+
+    - ```swift
+        var numberOfLives = 3
+         
+        while numberOfLives > 0 {
+          playMove()
+          updateLivesCount()
+        }
+      ```
+
+  - Swift checks the condition before each loop is executed, which means it’s possible to skip the loop entirely if the condition is never satisfied. If numberOfLives had been initialized to 0 in the above example, the while loop would determine that 0 > 0 is false and would never proceed to the body of the loop.
+  - For this reason, the body of the while loop should perform work that will eventually change the condition. In the example below, nothing is updating the value of numberOfLives, so the condition always resolves to true and continues forever.
+
+    - ```swift
+        var numberOfLives = 3
+         
+        while numberOfLives > 0 {
+          print(”I still have \(numberOfLives) lives.”)
+        }
+      ```
+
+  - Instead, the body should execute statements that will, at some point, result in a false condition:
+
+    - ```swift
+        var numberOfLives = 3
+        var stillAlive = true
+        while stillAlive {
+          numberOfLives -= 1
+          if numberOfLives == 0 {
+            stillAlive = false
+          }
+        }
+      ```
+
+- **Repeat-While Loops**
+
+  - A repeat-while loop is similar to the while loop, but this syntax executes the block once before checking the condition.
+
+    - ```swift
+        var steps = 0
+        let wall = 2 // there's a wall after two steps
+
+        repeat {
+          print("Step")
+         
+          steps += 1
+         
+          if steps == wall {
+            print("You've hit a wall!")
+            break
+          }
+        } while steps < 10 // maximum in this direction
+        Console Output:
+        Step
+        Step
+        You've hit a wall!
+      ```
+
+- **Control Transfer Statements**
+
+  - You may have situations when you want to stop execution of a loop from within the loop's body. The Swift keyword break will break the code execution within the loop and start executing any code defined after the loop (you may recognize this from the switch statement).
+  - In the code below, the loop breaks if the counter reaches 0:
+
+    - ```swift
+        // Prints -3 through 0
+        for counter in -3...3 {
+          print(counter)
+          if counter == 0 {
+            break
+          }
+        }
+        Console Output:
+        -3
+        -2
+        -1
+        0
+      ```
+
+  - There may also be situations in which you want to skip to the next iteration in a loop. While the `break` keyword will end the loop entirely, `continue` will move onto the next iteration. For example, you may have an array where each element is of type Person, and you want to loop through the array and send an email to everyone 18 years of age and older:
+
+    - ```swift
+        for person in people {
+          if person.age < 18 {
+            continue
+          }
+         
+          sendEmail(to: person)
+        }
+      ```
+
+  - Computers are incredibly good at performing tasks as many times as requested. Whether you need to iterate through a collection or repeat a series of steps until a condition is met, loops are an important concept to understand well. You’ll use them frequently throughout your programming career.
