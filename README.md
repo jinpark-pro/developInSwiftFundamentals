@@ -2461,3 +2461,132 @@
       ```
 
   - Computers are incredibly good at performing tasks as many times as requested. Whether you need to iterate through a collection or repeat a series of steps until a condition is met, loops are an important concept to understand well. You’ll use them frequently throughout your programming career.
+
+### Lesson 2.8 Introduction to UIKit
+
+- The UIKit framework provides the crucial pieces you need to build and manage iOS apps. It includes definitions for all user interface objects, the event-handling system that responds to user input, and the entire model that allows apps to run in iOS.
+
+- **Common System Views**
+
+  - The foundational class for all visual elements defined in UIKit is the UIView, or view. A view defines a rectangular shape that can be customized to display anything on the screen. Text, images, lines, and graphics all depend on UIView as the base.
+  - UIKit defines dozens of special UIView subclasses that perform specific tasks. For example, UILabel displays text, UIImageView displays an image, and UIScrollView allows you to put scrollable content onto the screen.
+  - Almost all screens in an app consist of many views, which together make up a view hierarchy.
+
+    - <img src="./resources/view_hierarchy.png" alt="View Hierarchy" width="500" />
+
+    - Views are often nested, as in the the previous view hierarchy diagram. A view that’s contained in another view is called a child view. A view that contains one or more views is called a parent view. In this example, each cell in the list is a child view of a table view, and each cell is a parent to three views: a label that displays a city name, another label that displays how the time zones are related, and an image view that displays an image of a clock.
+
+  - To display a view onscreen, you need to give it a frame — which consists of a size and a position — and add it to the view hierarchy. The area within the view is its bounds. When adding a view in Interface Builder, its background color is white by default. When creating a view in code, the background is transparent by default. You can set a new background color in either scenario.
+
+    - Here are some of the attributes you can change when working with views:
+
+      - <img src="./resources/attributes_1.png" alt="View Attributes" width="400" />
+
+        - Tag: Integer that you can use to identify view objects
+        - Alpha: Transparency of the view
+        - Background Color: Background color that will be displayed
+
+  - Next, take a look at some of the most common views defined in UIKit.
+  - This section covers some common views you’ll work with using UIView. As you learn about the different views, think about apps you use and which views might be used to create their interfaces.
+  - **Label (UILabel)**
+
+    - Labels use static text to relay information to the user.
+    - Configuration
+
+      - <img src="./resources/attributes_2.png" alt="Label Attributes" width="400" />
+
+        - Text: Text displayed on the label
+        - Color: Color of the text
+        - Font: Font of the text
+        - Alignment: Technique to use for aligning the text
+        - Number of Lines: Maximum number of lines to use for rendering text
+
+    - [UILabel Developer Documentation](https://developer.apple.com/documentation/uikit/uilabel)
+
+  - **Image View (UIImageView)**
+
+    - An image view displays an image or an animated sequence of images. Some people confuse the image view with the image itself. Think of it this way: Just like a label displays text, an image view displays an image.
+    - Configuration
+
+      - <img src="./resources/attributes_3.png" alt="Image View Attributes" width="400" />
+
+        - Image: Image displayed by the image view
+        - Highlighted Image: Optional image to display when the image view is being tapped by the user
+
+    - [UIImageView Developer Documentation](https://developer.apple.com/documentation/uikit/uiimageview)
+
+  - **TextView (UITextView)**
+
+    - A text view allows the user to input text in your app. Text views accept and display multiple lines of text, with support for scrolling and editing. You’ll typically use a text view to display a large amount of text, such as the body of an email message.
+    - Configuration
+
+      - <img src="./resources/attributes_4.png" alt="Text View Attributes" width="400" />
+
+        - Text: Starting text displayed by the text view
+        - Color: Color of the text
+        - Font: Font of the text
+        - Alignment: Technique to use for aligning the text
+        - Editable: Whether the user can edit the text
+
+    - [UITextView Developer Documentation](https://developer.apple.com/documentation/uikit/uitextview)
+
+  - **Scroll View (UIScrollView)**
+
+    - A scroll view allows the user to see content that runs beyond the boundaries of the view. You’ll typically use a scroll view when the information you want to display is larger than the device’s screen.
+    - When the user interacts with a scroll view, a vertical or horizontal scroll indicator briefly appears to indicate there’s more content to view.
+    - Configuration
+
+      - <img src="./resources/attributes_5.png" alt="Scroll View Attributes" width="400" />
+
+        - Indicators(style): Style of the scroll indicator - Default style, black, or white
+        - Show Indicator: Whether to display a horizontal or vertical scroll indicator
+        - Scrolling Enabled: Whether the user can scroll the content in the view
+        - Paging Enabled: Whether the scrolling is fluid or jumps to the next page
+        - Bounces: Whether the content bounces (horizontally and/or vertically) upon reaching the limits of the scrollable or zoomable area
+
+    - [UIScrollView Developer Documentation](https://developer.apple.com/documentation/uikit/uiscrollview)
+
+  - **Table View (UITableView)**
+
+    - A table view presents data in a single scrollable column of rows and sections, allowing users to navigate easily through groups of information. Table views are an excellent format for displaying and editing hierarchical lists of information.
+    - For example, the Mail app uses a table view to display email messages in the user’s inbox, and the Messages app uses a table view to display message threads organized by contacts.
+    - Configuration
+
+      - Table views are interesting because you can customize the look and feel of the table view itself, as well as the look and feel of the rows (or cells) that it displays.
+
+      - <img src="./resources/attributes_6.png" alt="Table View Attributes" width="400" />
+
+    - [UITableView Developer Documentation](https://developer.apple.com/documentation/uikit/uitableview)
+
+  - **Toolbars (UIToolbar)**
+
+    - A toolbar usually appears at the bottom of a screen and displays one or more buttons, called bar button items. Users can select a button, or tool, to perform an action within a given view.
+    - Configuration
+
+      - You can configure the toolbar itself, or the bar items it displays. Each bar item consists of a title and an image, and can be enabled or disabled programmatically.
+
+      - <img src="./resources/attributes_7.png" alt="Toolbars Attributes" width="200" />
+
+    - [UIToolBar Developer Documentation](https://developer.apple.com/documentation/uikit/uitoolbar)
+
+  - **Navigation Bars (UINavigationBar)**
+
+    - You’ll use the navigation bar to present your app’s primary content in an organized way, one that you hope will be intuitive to the user. Navigation bars are typically displayed at the top of the screen, with bar buttons for navigating through a hierarchy of screens. They’ll most likely include a title and a back button.
+    - Configuration
+
+      - <img src="./resources/attributes_8.png" alt="Toolbars Attributes" width="400" />
+
+        - Style: Default (gray) or Black
+        - Translucent: Whether the navigation bar should be slightly translucent
+        - Bar Tint: The tine color to apply to the navigation bar background
+        - Title Font: The font of the title displayed by the navigation bar
+        - Title Color: The color of the title displayed by the navigation bar
+
+    - [UINavigationBar Developer Documentation](https://developer.apple.com/documentation/uikit/uinavigationbar)
+
+  - **Tab Bars (UITabBar)**
+    - A tab bar provides easy access to different views in an app. It displays multiple tab bar items, each made up of an icon image and text. You’ll use tab bars in your app to organize information by a specific feature or task. The most common way to use a tab bar is with a tab bar controller, which holds a property of each view controller that represents each scene you want presented in the tab bar. When the user taps an item, a new view related to the new task is displayed.
+    - Tab bars are frequently used in apps that present multiple workflows or courses of action. For example, the App Store app has separate tabs to browse featured apps, search for a specific app, or check for available updates.
+    - Configuration
+      - Because you’ll most often use the tab bar in conjunction with a tab bar controller, you’ll add scenes to be displayed to the controller. The view controller for each scene has a UITabBarItem property that defines the text and optional image that will be displayed by the tab bar. To add a scene to a tab bar controller, and the tab bar view, you link it to the tab bar controller's viewControllers property in a storyboard.
+    - [UITabBar Developer Documentation](https://developer.apple.com/documentation/uikit/uitabbar)
