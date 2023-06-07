@@ -2680,3 +2680,91 @@
 
 - You’ve just learned about the most common views and controls in UIKit. But where would you go to find out more about these and other UIKit tools? As you learned earlier, Apple has large teams dedicated to writing documentation to help developers like you learn more about the system tools for building apps.
 - Most of the information for this section is from a set of guidelines called the [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/designing-for-ios), which was written and maintained by one of those teams. When you want to learn more about UIKit, you can go to developer.apple.com and search for more information about the topics in this lesson.
+
+### 2.9 Displaying Data
+
+- In this lesson, you’ll plan out and build a simple app called Hello, an app that you could use to introduce yourself. As you work, you’ll apply what you’ve learned about some of the common views in UIKit.
+
+#### Planning the App
+
+- Most apps start with a simple idea, which can usually be summed up in one short sentence. Think of apps that you use every day. They may have started with the following straightforward ideas:
+  - “Send and receive messages.”
+  - “Share photos with my friends and family.”
+  - “Post short messages, and see the short messages that others have written.”
+- As an app developer, you’ll learn how to take a one-sentence overview of an app or a feature and plan out how to make it a reality.
+- In this project, your task is to build an app for introducing yourself. This guide will give you a framework for what to include, but the app will introduce you. Bring in your own ideas, and make it yours.
+- Think about how you would introduce yourself to someone you haven’t met before. What information would you want to make sure someone knew about you? Start by writing down your name, then take a few minutes to write down what you might share about yourself. Use the following prompts to help you come up with enough information for your app.
+  - Who are you? What is your life all about?
+  - What does a day in your life look like?
+  - If you had all the time and money you needed, what would you do with your life?
+  - What are some of your favorite things or activities?
+- Include any other information you think other people would want to know.
+- Sometimes the information you want to display in an app is consistent and never changes. In programming, this information is called static data. As you plan your app, you’re brainstorming static data about yourself. In future apps, you’ll work with data that changes, which is called dynamic data.
+- Example
+  - About Me
+    - My name is Cynthia Yao. I’m a dedicated student, I play lacrosse,
+    - I love animals, and I’m looking for an internship in Marine Biology.
+    - Location: Half Moon Bay, California
+    - Website: www.example.com
+  - Day in the Life
+    - Eat breakfast
+    - Go to school
+    - Go to lacrosse practice
+    - Eat dinner
+    - Hang out with friends
+    - Watch TV
+  - When I Grow Up
+    - I want to sail around the world, spend time in new countries, learn new languages, and meet awesome people everywhere I go.
+  - Favorites
+    - Food: Ice cream
+    - Sport: Lacrosse
+    - Book: A Tale of Two Cities
+- As you come up with information that’s unique to you, you can probably imagine many ways to display it and share it with others. For this project, try to think about how you might display this information on a single screen.
+- Since you’re still in the planning phase, you might find it helpful to open Pages or Keynote and create a rough outline of the data you want your app to display.
+- You’ll probably discover that all the information you want to include won’t fit on a single iOS device screen — which means you’ll need to enable scrolling. In this lesson, you’ll create part one of the project, adding your name, a profile image, and a few sentences about yourself. In a future lesson, you’ll complete part two, using more advanced layout features in Interface Builder to add images and labels in a scroll view.
+
+#### Create the Project and Enter Your Information
+
+- Create a new Xcode project using the iOS App template. When creating the project, make sure the interface option is set to Storyboard. Name the project "Hello" and save it to your project folder.
+- Open the Main storyboard. You’ll use the initial scene to add your information. Because your app will always display the same data, you can build your static data directly into your screens using labels or images in Interface Builder. In future lessons, you’ll learn to write code for displaying dynamic data.
+- As you choose fonts, colors, and other display settings, do your best to keep a clean-looking presentation that fits on an iOS device. Avoid unreadable fonts, conflicting color schemes, and confusing text layouts.
+- As you place views, take advantage of the layout guides to center your content and be careful to observe margins and allow sufficient spacing between objects. You’ll also want to avoid putting content in the status bar at the top of the screen.
+- **Add Labels for Displaying Text**
+  - For each of the text items you want to include, drag a Label object from the Library to the scene. At a minimum, add labels for your name and one or two sentences about yourself. You can add the rest when you finish this project in a future lesson.
+  - Selecting one label at a time in the storyboard, use the Attributes inspector to set the label’s text and choose an appropriate font. If you want a label to display as a header, make the font bigger or bolder than the default text. Do you want to use a custom font? Open the Font pop-up menu and choose Custom to select from all the fonts installed on your Mac.
+  - Experiment with different attributes in the inspector to see how each of them modifies the appearance of your labels. For example, you can change the alignment of the text or the number of lines you want the label to display. By default, labels display only one line of text, which may cut off any remaining text at the end of the line.
+  - When working with static information, you can keep increasing the number of lines until you see that the label can display all your text. But there’s a better way that allows the text to flow to as many lines as it needs to display the entire text you provide.
+  - Look at the documentation for UILabel and find the numberOfLines symbol. In the Description section, you’ll see the following text:
+    - This property controls the maximum number of lines to use in order to fit the label’s text into its bounding rectangle. The default value for this property is 1. To remove any maximum limit, and use as many lines as needed, set the value of this property to 0.
+  - The numberOfLines property is useful when you want a label to display text that flows beyond a single line. Feel free to explore the documentation for UILabel to discover other strategies for fitting text into a label.
+  - Finish up adding text to all the labels you want to include in your Hello app.
+- **Add an Image**
+
+  - Your introduction wouldn’t be complete without a photograph of yourself. If you don’t already have an image you like, you can use the Photo Booth app to take a selfie. Make sure you have the image file handy on the desktop or in the Finder. If you have more images, you’ll have a chance to add them to the app in a future lesson.
+  - Now go ahead and add the image file to your scene so that the app will display it.
+  - Here's how to add an image to your Xcode project:
+    1. Open the Navigator area. Make sure the Navigator area on the left is open and that the Project navigator shows a list of your files. If you’re working on a small screen, you may want to close the Inspector area on the right.
+    2. Select Assets. Xcode has automatically added this Asset Catalog to your project. This is the best place to keep the images you’ll use in your app.
+    3. Drag in the image file. Add the image to your storyboard and give it a name in the Document Outline. The image is now part of your app.
+  - Now that you’ve added an image of yourself, you can set up an image view in Interface Builder. Go back to the Main storyboard. From the Library, drag an Image View object to the scene.
+  - Using the Attributes inspector, choose the name of your image from the Image pop-up menu. This will assign that image to the image view you just created.
+  - In the previous lesson, you learned that an image view is like a frame around the image it will display. The size of the image view determines the total potential display size of the image. By setting the content mode of the image view, you can control if the image will display within the frame, potentially leaving empty white space, if it will stretch to fit within the frame, potentially distorting the image, or if it will stretch to fill the entire frame, potentially cropping some of the image.
+  - In the table below, you can see the most common contentMode options for a square UIImageView displaying a non-square image.
+
+    - <img src="./resources/contentMode.png" alt="Content Mode" width="600" />
+
+  - Choose the correct content mode for the image you added to your project.
+
+#### Address Layout Issues
+
+- **Unexpected Clipping**
+  - It’s possible you’ve encountered occasional warnings or bugs with your layout. Don’t worry about these right now. In a later lesson, you’ll learn how to resolve them and how to use more advanced layout options, including Auto Layout, in Interface Builder.
+  - However, if you've run into unexpected clipping (a common issue), you can resolve it now. Just as an image view frames the image it's displaying, a label frames the text it displays. If a label's content is larger than the label itself, it results in clipped text.
+    - To fix clipped text, you have two choices: decrease the font size or increase the label size.
+  - Images can also have clipping issues. For example, if you have an image view with a different aspect ratio than the image it displays and you choose the Aspect Fill content mode, some of the image will overflow the bounds of the image view.
+    - Interface Builder allows you to modify this behavior, or choose whether or not content outside the bounds of the view will be visible.
+    - To fix overflowed issue, check Clips to Bounds on Drawing section of Attribute inspector.
+- **Placement Errors with Different Screen Sizes**
+  - When you learn about Auto Layout, you’ll learn how to make your interface scale across various device sizes. But for now, make sure you set up your interface for the same device size that you’re using in Simulator. This will ensure that you see a consistent view across your projects.
+- **Showing More Content**
+  - You've now built a simple app with a few labels and one image in a single view. In the "Auto Layout and Stack Views" lesson, you'll learn how to use advanced layout tools to position views, and how to use a scroll view to add more content.
