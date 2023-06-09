@@ -2768,3 +2768,143 @@
   - When you learn about Auto Layout, you’ll learn how to make your interface scale across various device sizes. But for now, make sure you set up your interface for the same device size that you’re using in Simulator. This will ensure that you see a consistent view across your projects.
 - **Showing More Content**
   - You've now built a simple app with a few labels and one image in a single view. In the "Auto Layout and Stack Views" lesson, you'll learn how to use advanced layout tools to position views, and how to use a scroll view to add more content.
+
+### Lesson 2.10 Controls In Action
+
+- When you first learned about Interface Builder, you added a button to the screen and printed when the button was tapped. In this lesson, you’ll review that exercise with your new knowledge of views and controls, and you’ll repeat it with switches and sliders.
+- **Buttons**
+  - As you know from your own direct experience with apps, buttons are the most common type of input control. Add a button to your main scene and have it print a statement to the console when it’s tapped.
+    1. Create a new project called “CommonInputControls” using the iOS "App" ​template.
+    2. Open the Main storyboard. Then find a Button object in the Object library.
+    3. Drag the button to the scene, placing it about a third of the way from the top of the screen. Open an assistant editor to see the corresponding ViewController file.
+    4. Using the Control-drag shortcut, add an @IBAction from the button to the view controller code. Remember to add the action within the curly braces that define the ViewController class. On fresh view controller files, like this one, most developers add new actions below the viewDidLoad() block of code.
+       - Use a descriptive name for your action, such as `buttonTapped`. Later on, when you look at the code in the ViewController file, you’ll be glad that the name of the action gives you a clue as to what will trigger it.
+       - The most natural time for a button to execute code is when the user taps it and releases the touch from within the bounds of the button. That’s why “Touch Up Inside” is the default control event when you create an @IBAction from a button. You can also use the "Primary Action Triggered" control event, which will be triggered at the same time as "Touch Up Inside." If you want code to execute in response to a different control event, you can choose from the options in the pop-up menu.
+       - Remember that when you create an @IBAction the function is passed to the sender as a parameter. The sender refers to the specific control that triggered the action. In this case, the sender is the tapped button.
+         - `@IBAction func buttonTapped(_ sender: Any) { }`
+       - When you know that the sender will always be the same type of object (like the button in this example), you can change Any to the specific control type (UIButton in this example). To make this change, you’ll access properties on sender within the @IBAction.
+    5. Use the print() function to print a line of text to the console when the user taps the button.
+       - `print(”Button was tapped!”)`
+       - You can put any code or logic inside the control’s action using this same workflow.
+    6. Run the app in Simulator, and try clicking the button you just created. You should see the printed text in the console area.
+       - Right now, the text on the button doesn’t relate to the action it will trigger. Use Interface Builder to update the button’s text to something more descriptive of the code it will execute.
+       - You can also set other button attributes, including its font, alignment, and shadow. To get a feel for the things you can adjust, take a moment to play around with the various options in the Attributes inspector.
+- **Switches**
+
+  - Switches are used to toggle a single option. You can use an @IBAction to execute code when a switch is toggled one way or another. Or you can check if the switch is currently toggled to the on or off position by accessing the `isOn` value from the sender parameter or from an @IBOutlet.
+  - Add a switch to your CommonInputControls project, and print whether the switch is on or off when the user toggles the control.
+
+    1. Find a Switch object in the Object library, and drag it to your scene.
+    2. Using the assistant editor, add an @IBAction from the switch to the ViewController file. As with button actions, use a descriptive name, such as `switchToggled`, and set the sender type to `UISwitch`. Add code that will print to the console whether the switch was turned on or off.
+
+       - ```swift
+          @IBAction func switchToggled(_ sender: UISwitch) {
+              if sender.isOn {
+                  print(”The switch is on!”)
+              } else {
+                  print(”The switch is off.”)
+              }
+          }
+         ```
+
+    3. Run the app in Simulator, and toggle the switch. You should see the printed text in the console area.
+
+- **Sliders**
+
+  - Sliders allow the user to have smooth control over a value, such as adjusting volume or setting a numeric value with a large number of potential contiguous values. For example, in Display & Brightness settings, you use a slider to adjust the brightness of your device’s display.
+  - Add a slider to your CommonInputControls project, and print the slider’s value as it changes.
+
+    1. Find a Slider object in the Object library, and drag it to your scene.
+    2. Using the assistant editor, add an @IBAction from the slider to ViewController. Use a descriptive name, such as sliderValueChanged, and set the sender type to UISlider. Add some code that will print the value of the slider to the console.
+
+       - ```swift
+          @IBAction func sliderValueChanged(_ sender: UISlider) {
+              print(sender.value)
+          }
+         ```
+
+    3. Run the app in Simulator, and move the slider. You should see the printed value in the console.
+
+- **Text Fields**
+
+  - Text fields allow the user to enter a small amount of text, such as entering a username or password. For example, you use a text field when entering a subject on a new email draft.
+  - Add a label and a text field to your "CommonInputControls" project, and set the label's text to the current text in the text field when the user taps the Enter or Done key on the keyboard.
+
+    1. Find a Text Field object in the Object library, and drag it to your scene.
+    2. Using the assistant editor, add an @IBAction using the `Primary Action Triggered` event from the text field to ViewController. Use a descriptive name, such as `keyboardReturnKeyTapped`, and set the sender type to `UITextField`. Use the action to print the current text of the field.
+
+       - ```swift
+          @IBAction func keyboardReturnKeyTapped(_ sender: UITextField) {
+              if let text = sender.text {
+                  print(text)
+              }
+          }
+         ```
+
+    3. Remember that text fields can also trigger code when the user edits the contents of the field. Using the assistant editor, add an @IBAction using the `Editing Changed` control event from the text field to ViewController. Use a descriptive name, such as `textChanged`, and set the sender type to `UITextField`. Use the action to print the current text of the field.
+
+       - ```swift
+          @IBAction func textChanged(_ sender: UITextField) { 
+              if let text = sender.text {
+                  print(text)
+              }
+          }
+         ```
+
+  - Text fields are very flexible and should be configured to best fit the situation they are used in. For example, you can set the keyboard to display different keys based on whether the user is entering an email address or a URL. You can also turn autocorrect on or off, or set the text field to a secure input field to hide the characters as the user types them. Take some time to explore the options and use them appropriately when building your app.
+
+- **Actions and Outlets**
+
+  - You can create outlets that allow actions to access properties on your views and controls — even if the view or control isn’t the sender.
+  - For example, you may have an outlet for a label that gets updated by a button’s action.
+  - In the steps below, you’ll change the `buttonTapped` function triggered by the tapped button to access the current isOn state of the switch and the current value of the slider.
+
+    1. Using the same Control-drag technique in the assistant editor, add @IBOutlet references for the switch and slider. Developers usually place @IBOutlet references above the viewDidLoad() function in a view controller file. Just as when naming an @IBAction, you should choose a descriptive name for your @IBOutlet. You might think to choose switch and slider for this @IBOutlet, but there’s a problem with switch. It turns out that “switch” is a reserved keyword in Swift, so the best practice is to use toggle to name an @IBOutlet for a switch: `@IBOutlet var toggle: UISwitch!`, `@IBOutlet var slider: UISlider!`
+    2. Update the `buttonTapped` function in the @IBAction from the button to print the current isOn state and the value of slider.
+
+       - ```swift
+          @IBAction func buttonTapped(_ sender: UIButton) {
+              print(”Button was tapped!”)
+           
+              if toggle.isOn {
+                  print(”The switch is on!”)
+              } else {
+                  print(”The switch is off.”)
+              }
+           
+              print(”The slider is set to \(slider.value)”)
+          }
+         ```
+
+    3. Run the app in Simulator and click the button. You should see the printed text in the console.
+
+- **Gesture Recognizers**
+
+  - Each of the controls interact with gestures: buttons and switches ares configured to work with taps, sliders work with swipes, etc. A gesture is tied to a single view, but a view can have multiple gestures. For example, a switch responds to a tap, but the user can also swipe a switch left and right to turn it on and off. You can add your own gesture recognizers on top of any view you wish, from simple taps to complex pinches, long-presses, and rotations.
+  - In this example, you’ll add a tap gesture recognizer on top of your view controller’s view. To begin, search the Object library for “gesture” to see the full list of available gesture recognizers.
+  - Grab the `Tap Gesture Recognizer`, and drag it on top of the view that should respond to the tap event. In this case, drag it on top of the view controller’s view.
+  - You will see the recognizer added to the Document Outline. Select the recognizer from the Document Outline and open the Attributes inspector. Different gestures will contain a different list of properties. You can adjust the number of taps that the recognizer requires, such as a single or double-tap, as well as the number of touches (or fingers) required to trigger any actions connected to the recognizer. In this example, you want to recognize a single tap using a single finger, so leave both values at 1.
+  - Using the assistant editor, add an @IBAction from the recognizer to ViewController. Use a descriptive name, such as `respondToTapGesture`, and set the sender type to `UITapGestureRecognizer`. The following implementation of respondToTapGesture will determine where the user tapped when the recognizer’s action was called, and will print out the x/y value to the console.
+
+    - ```swift
+        @IBAction func respondToTapGesture(_ sender:
+        UITapGestureRecognizer) {
+            let location = sender.location(in: view)
+            print(location)
+        }
+      ```
+
+  - Build and run your application, then try tapping on the screen. The coordinates of your tap will be printed. Notice how the action does not trigger when you interact with the other controls on-screen, because the gesture is only tied to the view controller’s view.
+
+- **Programmatic Actions**
+
+  - How does Interface Builder connect controls to actions? It is helpful to understand how to connect controls to actions through code. At the very least, it will help you understand the work that Interface Builder is doing on your behalf.
+  - To demonstrate connecting a control to a method programmatically, you will disconnect the existing button from the `buttonTapped(_:)` action and re-connect the two in code. Highlight the button in your storyboard, then open the Connections inspector. In the list of control events, you can see that the button executes the `buttonTapped(_:)` method when your finger presses down, then up, inside the control.
+  - Tap the ‘x’ next to the method name, breaking the connection between the button and the action. Touch Up Inside will no longer be connected to any methods.
+  - In order to connect the button to a method programmatically, you’ll need a reference to the button in code. Use Interface Builder to create an @IBOutlet for the button; `@IBOutlet var button: UIButton!`
+  - The best place to connect the button to the action is right after the view has finished loading. Add the following code to the bottom of viewDidLoad(): `button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)`
+  - The `addTarget(_:action:for:)` method will connect the control to a particular action, and it requires three arguments.
+    - The first argument is the the owner of the function you want to execute. The owner of the `buttonTapped(_:)` method is the ViewController, or self.
+    - The second argument is a “selector”: the name used to select a method to execute for an object. Swift uses `#selector` as its syntax to locate a particular method.
+    - The last argument is the event that should trigger the action. Just like you saw earlier in the Connections inspector, you should tie your actions to the Touch Up Inside event. (Other controls, such as switches and sliders, should utilize the Value Changed event.)
+  - Build and run your application, and verify that when you tap the button the method still executes. Save your CommonInputControls project to your project folder.
