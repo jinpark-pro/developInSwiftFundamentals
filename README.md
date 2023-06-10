@@ -2908,3 +2908,10 @@
     - The second argument is a “selector”: the name used to select a method to execute for an object. Swift uses `#selector` as its syntax to locate a particular method.
     - The last argument is the event that should trigger the action. Just like you saw earlier in the Connections inspector, you should tie your actions to the Touch Up Inside event. (Other controls, such as switches and sliders, should utilize the Value Changed event.)
   - Build and run your application, and verify that when you tap the button the method still executes. Save your CommonInputControls project to your project folder.
+
+### Lesson 2.11 Auto Layout and Stack Views
+
+- As you begin developing apps for iOS, it’s important to think of the different devices that your apps will run on. You’ve learned that every user interface element has a size and a position on the screen. How might the size and position of those elements change in relation to the size and orientation of the device?
+- Create a new Xcode project using the iOS App template. When creating the project, make sure the interface option is set to Storyboard. Name the project "AutoLayoutPractice." Open the Main storyboard and use the layout guides to add a Button from the Object library to the top-left corner of the screen.
+- Interface Builder provides a quick way to check what your interface will look like on different screen sizes. Click the "Devices" button at the bottom of the canvas (the current selection is shown next to the button) to reveal a menu that lists multiple iOS devices. To the left of the "Devices" button are buttons for adjusting how the interface style, orientations, appearance and accessibility setting will be viewed.
+- Go ahead and play around with the list. As you choose different screen sizes, styles, and orientations, the canvas redraws your user interface accordingly. If you've positioned a button in the top left of the canvas, it remains in that same position — no matter which device or orientation you've selected.
