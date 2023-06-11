@@ -2921,26 +2921,34 @@
 - Now return the canvas to the iPhone 13 / iPhone 13 Pro screen size in portrait orientation, then move the button to the center of the screen. Use the blue alignment guides to ensure that the button is exactly in the center of the view.
 - Now switch the orientation to landscape mode. You’ll see that the button is no longer centered. In fact, it isn’t even on the screen!
 - What’s going on? The button has stayed in the same X/Y position, based on the portrait orientation when you created the button. If you want the button to stay in the exact center, regardless of screen size or orientation, you’ll need to create a set of constraints, or rules, that can be used to determine the size and position of your button. This system of using constraints to make adaptive interfaces is called Auto Layout.
+
 - **Create Alignment Constraints**
+
   - At the right of the bottom button bar is a set of tools for creating and managing constraints. To lock the button in the center of the screen, you’ll create two constraints that define the position of the button:
     - The horizontal center of the button is equal to the horizontal center of the view.
     - The vertical center of the button is equal to the vertical center of the view.
   - Start by returning to the portrait orientation and ensuring that the button is centered in the view. With the button selected, click the Align button, the second button in the bottom bar of constraint tools.
     - A popover displays a list of alignment constraints, which define the relationship between the selected object and the parent view. Select the bottom two options, “Horizontally in Container” and “Vertically in Container,” then click “Add 2 Constraints.” Once you’ve created these constraints, you should see crossing blue lines over the top of your button, indicating horizontal and vertical alignment with the parent view.
   - Use the “View as” button to select different devices and orientations. You’ll see that the alignment constraints you added are keeping the button centered in all views.
+
 - **Create Size Constraints**
+
   - What about the width and height of the button? Since there aren’t currently any size constraints on the button, its size is dictated by the button text and font. But Interface Builder provides multiple ways to use constraints to set the width and height of interface elements.
   - Start by using the Attributes inspector to change the background color of the button to something other than clear. This will make the button’s size easier to see.
   - Now assume you want the height of the button to always be 60, no matter the screen size or orientation of the device. Click the Add New Constraints button , the button immediately to the right of the Align tool.
     - The popover displays a list of text fields and checkboxes to help you add constraints. Select the Height checkbox and adjust the value to 60. Click “Add 1 Constraint” to create the height constraint.
   - Note again that if you use the “View as” button to select different devices and orientations, you’ll see that the size constraints added are keeping the button size identical in all views.
+
 - **Constraints Relative to the Screen**
+
   - You’ve fixed the height of the button, but what if you want the button’s width to vary based on the screen size? Assume you want the button’s left and right edges to always be 20 pixels from the left and right edges of the view, respectively.
     - Click the Add New Constraints button again, and notice the four fields at the top of the popover. These values define the distances from the top, leading, bottom, and trailing edges of the button to the nearest view. In this case, since there are no other views on the screen, they’re dictating the distances from the button edges to the view’s edges.
     - Leading refers to the left edge of the screen, while trailing refers to the right edge. These are labeled “leading” and “trailing” instead of “left” and “right” since not all languages read in the same direction. For certain users, you’ll want your app flipped. Leading and trailing constraints make this process easier.
     - Adjust the left and right-edge values to 20. The red indicators will illuminate to show which edges are being constrained. Click “Add 2 Constraints.”
   - Notice that the button has now expanded to be 20 pixels from each edge of the screen. Use the “View as” button to select different devices and orientations. You’ll see that the width of the button varies such that it always maintains the same distance from the edges of the screen. If for some reason the button didn’t update, update the button’s frame using the Update Frames tool at the left of Align button.
+
 - **Safe Area Layout Guide**
+
   - Remove the button from the screen by selecting it and pressing the Delete key. Add a label from the Object library to the top-left corner of the screen. Using the Add New Constraints tool, create constraints with values of 0 on the top, left, and right of the label to the view.
   - Now select the label and open the Size inspector. You can view the three constraints that you just added.
   - Notice that the constraints are between the label (which you have selected) and the Superview. This means the edges of the label are constrained to the edges of the main view controller’s view. You can see in Interface Builder that this places the label under the status bar and obscures some of the label’s text. You may be tempted to simply change the value of the top constraint so that the distance from the top is equal to the height of the status bar. However, what if later that view controller is embedded in a navigation controller? The label would no longer be covered by the status bar, but it would then be covered by a navigation bar.
@@ -2948,7 +2956,9 @@
   - If you select the Safe Area, the entire view controller is selected except for portions of the screen that are taken up by system views like the status bar and home indicator. Interface Builder anticipates the existence of these common system views. However, other system bars can turn up at runtime, and the Safe Area will adjust for those as needed. This allows your content to adapt to system overlays such that it won't be hidden.
   - Delete your current constraints by selecting them one at a time in the Size inspector and pressing the Delete key.
   - Drag your label a bit lower on the screen so it is below the status bar, and create a constraint between the label’s top edge and the top edge of the Safe Area using the Add New Constraints tool. Also add constraints for the leading and trailing edges of the label. Since the Add New Constraints tool constrains your view to the nearest view, creating these constraints with the tool will constrain the top, leading, and trailing edges of the label relative to the Safe Area.
+
 - **Resolve Constraint Issues**
+
   - Now delete the label that you added. Add a button to the center of the view controller and give it two alignment constraints - one to center it vertically on the screen, and one to center it horizontally on the screen. Now use the Add New Constraints tool to constrain its left edge 20 pixels from the left edge of the screen, and to constrain its right edge 30 pixels from the right edge of the screen.
   - The red lines on the canvas indicate that there's a problem. You've now created two conflicting constraints, each of which is trying to dictate the X position of the button. To see a list of constraint conflicts, click the red indicator in the top-right corner of the Document Outline.
   - One of the constraints says, "Set the horizontal center of the button equal to the horizontal center of the view"; and the other says, "The left edge of the button is 20 pixels away from the left edge of the view." Since these two constraints can't coexist, you'll need to remove one.
@@ -2958,11 +2968,15 @@
   - Add Missing Constraints will attempt to add new constraints that match what is currently displayed in the storyboard scene.
   - Reset to Suggested Constraints will clear all constraints and attempt to accurately assign new constraints that match what is currently displayed in the storyboard scene.
   - Clear Constraints will remove any rules associated with the position and size of the selected view or all views.
+
 - **Resolve Constraint Warnings**
+
   - Move the button you've been working with to a different position in the scene. You should see an Auto Layout warning.
   - To understand what's happening, click the yellow indicator in the top-right corner of the Document Outline. The warning informs you that the position of the button is no longer in sync with the position defined by the constraints.
   - To adjust the button’s position to fit the constraints, select the button on the canvas, then click the Update Frames button.
+
 - **Constraints Between Siblings**
+
   - So far in this lesson, you’ve learned how to create constraints that define relationships between a view and its parent view. But there may also be times you want to create constraints between sibling views. In the following exercise, you’ll work with multiple labels that display text information about yourself.
   - Delete the button you've been working with, and add a label to the scene. Double-click the label and type in your name. Drag the label near the top of the view, using the guides to center it horizontally.
   - With the label selected, use the Add New Constraints tool to constrain it to be 0 pixels from the top of the Safe Area. To enable the constraint, you may need to select the red indicator line below the top field in the popover.
@@ -2973,11 +2987,14 @@
   - Select both labels in the scene by Command-clicking each of them, and click the Align button. In the popover, select the Horizontal Centers checkbox, set its value to 0, and click “Add 1 Constraint.” This tells Interface Builder that you want the selected views to have the same center position, with 0 pixels of offset.
   - If Interface Builder still displays a warning, click the Update Frames button to update the labels’ frames to match the constraints you just specified.
   - To practice what you just learned, add three new labels and repeat the above steps three more times to position them on the scene. When you’re done, each label should be 20 pixels below the previous one, and they all should be centered horizontally.
+
 - **Stack Views**
+
   - Did you find that last exercise a bit repetitive? Managing the constraints of multiple objects can be tedious, especially when the position of each element is the same distance from the previous one. What if you decide later to have 30 pixels of separation between labels instead of 20? Or what if you want all of the labels to be positioned on the left side of the parent instead of in the center? You would have to spend a lot of time updating each and every constraint.
   - UIKit provides a smarter approach. Rather than create and update lots of individual constraints, you can use a stack view to automatically manage the constraints of its child views.
   - A single stack view manages either a row or a column of interface elements, and arranges those elements based on the properties set on the stack view. Start by selecting all the labels you just created, then click the Embed In Stack button to the right of the Resolve Auto Layout Issues tool and choose Stack View from the list that appears. This organizes the selected views into a single stack and removes any constraints on the individual labels.
   - At the moment, your new stack view doesn’t have any constraints that define its size or position. To change that, select the stack view, then click the Add New Constraints button. Set the top, leading, and trailing edges of the stack view to 0 pixels from the parent view’s edges. (You’ll need to select the red indicators associated with each text field to enable the constraints.) Give the stack view a constraint height of 300. Click “Add 4 Constraints,” and click the Update Frames button, if necessary.
+
 - **Stack View Attributes**
 
   - <img src="./resources/stack_view_attributes.png" alt="Stack View Attributes" width="300" />
@@ -3000,3 +3017,42 @@
   - Use the Size inspector to remove the height constraint on the stack view. If a stack view doesn’t have a specified height, it will resize based on its subviews.
   - Now that you’ve defined some attributes, try adding new labels to the stack. Or rearrange the existing labels and adjust the stack’s spacing and alignment. Imagine if you hadn’t used a stack view and you wanted to adjust the interface. How many constraints would you have needed to add, remove, or adjust?
   - Whenever possible, it’s a good practice to use stack views before trying to manage constraints individually. Stack views allow you to create nice-looking interfaces quickly — and also make it easy to modify or customize them in the future.
+
+#### Size Classes
+
+- With so many different combinations of screen sizes and orientations, it's important to build an interface that works well on all iOS devices. In the case of iPad devices, the split-screen feature adds an additional layer of complexity because an app may run in a smaller amount of space than you originally expected. To help simplify user interface development for many different situations, iOS includes size classes.
+- Each iOS device has a default set of size classes that you can use as a guide when designing your interface. Each dimension, the width and the height, is either the Compact or Regular size class, and the two dimensions form a trait collection. The iPhone 13 Pro that you have been using has a trait collection that is Compact Width, Regular Height in portrait orientation but in Landscape orientation is Compact Width, Compact Height.
+- Though an iPad has a Regular Width, Regular Height size class in both portrait and landscape, an app does not always run full-screen. Using the split-screen feature, an app can consume one third, one half, or two thirds of the screen real estate, and different-sized iPads will have unique trait collections when multi-tasking. It sounds like a lot to handle, but don’t think about the wide array of devices you need to support. Instead, focus on supporting the four different width/height trait collections, and your interface will be correct.
+- The Layout button <img src="./resources/layout_button.png" alt="layout button" width="20" /> will be enabled for devices that support split-screen operation. The layout options include full screen along with split views at one half, one third and two thirds of the screen to help layout an interface that will work well in all situations.
+
+- **Vary Traits**
+
+  - Constraints and properties can be set to different values depending on the trait collection. Suppose you want a stack view's Spacing property to be 0 most of the time. However, when run on a Regular Width, Regular Height device, it should be set to 20. With Interface Builder, you can easily add varying traits for a particular property or constraint. Using the stack view that you previously created with colored labels, select the stack and open the Attributes inspector. Set its Spacing to 0, and then click the '+' button, which opens a popover for introducing variations.
+
+    - <img src="./resources/vary_traits_1.png" alt="Add Variation" width="300" />
+
+  - Since you want to add a new variation for the Regular Width, Regular Height trait collection, set the appropriate controls to these values, then select “Add Variation.” This will add a new Spacing property that is unique for this particular trait collection. Change this new Spacing to 20.
+
+    - <img src="./resources/vary_traits_2.png" alt="Add Variation" width="150" />
+
+  - To verify that this trait variation is working properly, click the "Devices" button and change the device to an iPad (which is Regular Width, Regular Height). You should notice additional spacing between each label. When you return to an iPhone 13 Pro, the label spacing diminishes.
+
+#### Installed
+
+- Sometimes you’ll want to disable particular views or constraints depending on the trait collection. For example, maybe in order to save space, your app’s interface should not include the red label when the trait collection’s height is set to Compact. To begin implementing this design decision, select the red label and open the Attributes inspector. Near the bottom, you’ll find an “Installed” checkbox. This determines whether the particular view or constraint exists within the view hierarchy. Click the ‘+’ button next to the checkbox, and you’ll be presented with the same popover to introduce a variation. Set the Width to Any and the Height to Compact, then click “Add Variation.” This will add a new Installed property that spans any trait collection that includes a Compact Height.
+
+  - <img src="./resources/installed.png" alt="Installed" width="150" />
+
+- Deselect the checkbox for this new property, and build and run your application using the iPhone 12 Pro or iPhone 13 Pro Simulator. When the device is in Portrait mode (Compact Width, Regular Height), the red label displays within the stack view. When you rotate the device to landscape, the trait collection updates to Regular Width, Compact Height and the red label disappears to save space.
+
+#### Debug View Hierarchy
+
+- The view hierarchy can become very complex, with numerous stack views and an assortment of buttons, labels, and images. If you have issues at runtime where one view is covering another, or constraints are not working as you’d expect, Xcode includes a tool that can help you solve the problem.
+- Build and run the app you just built that includes the colored labels. After the view has loaded, press the Debug View Hierarchy button <img src="./resources/debug_view_hierarchy.png" alt="Debug View Hierarchy" width="20" /> at the top of the Debug area that extends from the bottom of Xcode. The view will appear in a 3D environment that you can swivel around to see how the view hierarchy was constructed.
+- Here’s a breakdown of what you’re seeing in the editor area. As you move back to front, the proceeding view is layered on top of the previous.
+  - The black view is your application’s UIWindow
+  - The white view is your view controller’s view
+  - The small clear rectangle is the UIStackView that contains the colored labels
+  - The red, green, blue, orange, and purple labels are added subsequently
+- Using the Debug navigator <img src="./resources/debug_navigator.png" alt="Debug Navigator" width="20" /> on the left, you can see a tree view of your hierarchy, along with the values of each of the constraints. This is a much quicker way to get the value of each constraint instead of printing them to the console.
+- The Debug View Hierarchy tool also includes an assortment of buttons at the top of the Debug area that you can use to enable/disable the content of each view, hide/show constraints, and more. If you find yourself struggling to resolve an issue with a view, you should consider using this tool.
