@@ -3092,3 +3092,45 @@
   - Finally, update the top three buttons to use a dark gray color, and update the button titles to match those on a traditional calculator.
 
 - Congratulations! You’ve used both constraints and stack views to create a simple calculator. Be sure to build and run your application on multiple iOS devices to verify that the constraints you’ve defined make sense on all screen sizes. Save your work to your project folder.
+
+### Guided Project: Apple Pie
+
+- So far in this unit, you’ve learned a lot about the fundamentals of Swift. Now it’s time to put your knowledge to work.
+  Your project is to write a game called Apple Pie. In this simple word-guessing game, each player has a limited number of turns to guess the letters in a word. Each incorrect guess results in an apple falling off the tree. The player wins by guessing the word correctly before all the apples are gone.
+  As a new programmer, you may find this larger project a bit intimidating. Remember, building a working app happens one step at a time. If you get stuck on a particular step, go back and review that lesson. You can do it!
+
+  - <img src="./resources/apple_pie_result.png" alt="Apple Pie Result" width="400" />
+
+- In this particular version of Apple Pie, whenever a round is won or lost, a new game is immediately started. If there are no more words left to guess, all buttons are disabled, and the app needs to be restarted.
+
+#### Part One - Build the Interface
+
+- Create a new project using the iOS App template. Name the project "Apple Pie." This game is meant to be played on the iPad, and the interface that you'll be building doesn't accommodate a small iOS device.
+  - To make the app iPad only, select the project file in the Project navigator, then under Deployment Info, uncheck the checkbox under Device for iPhone.
+- **Layout in Storyboard**
+  - Open the Main storyboard and use the "Devices" button to change the device to an iPad and change the orientation to Landscape mode using the "Orientation" button. Since you'll be using Auto Layout to build the interface, it will work in Portrait mode as well. Look back at the image of the finished app. Using the Interface Builder tools that you've learned so far, how might you construct this interface? There is an image at the top, followed by a grid of buttons, and then two rows of labels containing text. Perhaps the simplest way to build this interface is by using a vertical stack view.
+    - Find the vertical stack view in the Object library, and drag it onto the iPad canvas.
+  - As you've learned in earlier lessons, you can determine the position, width, and height of a stack view by adding constraints between the stack and its superview. Where does the stack start, and where does it end? The image view is near the top, and the last label goes along the bottom of the screen. The grid of buttons begins near the left edge and ends near the right edge. Therefore, the stack view can be constrained to cover the entire screen.
+    - Select the stack view, then use the Add New Constraints tool to add four constraints. Set all four fields at the top of the popover to 0. The red indicators illuminate to show the edges that are being constrained. When you're done, click "Add 4 Constraints."
+  - Now you're ready to add views and controls to the stack.
+    - Search the Object library for an image view, and drag one into the stack view. Since it's the only item within the stack, it will take up the entire space of the stack.
+    - Change the "Content Mode" of the image view to "Aspect Fit" in the Attributes inspector.
+      - This will ensure the width and height of the image is not distorted by the proportions of the image view.
+  - Add the apple tree images (Tree 0.pdf...Tree 7.pdf) from the student resources folder into your Assets folder. After they've been added, select all of them and choose "Single Scale" from the Scales menu in the Attributes inspector.
+    - These assets are vector art, which means they can dynamically scale to any size without losing quality. When possible, use PDF files with vector art so that you don’t need to supply multiple scales for various devices.
+  - Now, you can go back to the image view in the storyboard and update the image property to use one of the tree images.
+    - Even though you’re updating the image view's image in code, this can help you visualize your interface from within the storyboard.
+  - The button grid is more complex. You’re emulating the layout of a standard QWERTY keyboard, which has a unique number of keys in each row. You can imagine each row as its own horizontal stack view, and you can contain these rows in a vertical stack view.
+    - Use the Object library to add a vertical stack view below the image view. You can reorder the items within the stack by dragging them around in the Document Outline.
+  - Each of the horizontal stack views (or rows) that you add will be equal in size and centered.
+    - Select the newly added vertical stack view, then open the Attributes inspector and change Alignment to Center and Distribution to Fill Equally. Also provide some spacing between rows by setting the Spacing to 5.
+    - Now add a horizontal stack view within the vertical stack. You want the same spacing between columns as rows, so set the Spacing to 5. Set both the Alignment and Distribution to Fill.
+  - Each row has a unique number of buttons with the first being 10, the second 9, and the third 7.
+  - Use the Object library to add a button to the horizontal stack view. The letter keys on a keyboard are typically square. To achieve this appearance, select the button and use the Add New Constraints button to add an Aspect Ratio constraint. The constraint will be added but with an unwanted ratio.
+    - Use the Size inspector for the button to edit the Aspect Ratio constraint, setting the multiplier to 1. This ensures that the button is square.
+    - Use the Attributes Inspector to set the button's font to System and set the font size to 30 to make the button easier to read.
+    - Change the button's text to the letter Q, then select and copy it to your clipboard (Command-C). Paste (Command-V) a new copy of the button into the stack view, and repeat this step until the stack view contains 10 buttons. Use the Attributes inspector to update the text of each button to a single capital letter using your own keyboard as a reference.
+  - Now select the horizontal stack view, and copy it to your clipboard. Paste two new copies of the stack view. Update each button with the appropriate letters once again using your keyboard as reference — deleting any extra button to match. You can quickly edit a button's text by double-clicking it within Interface Builder.
+  - Below the grid of buttons within the second vertical stack view, add two labels from the Object library.
+    - Use the Attributes inspector to change the font size of the first label to 30.0 and the second to 20.0. The buttons and labels all have what is referred to as intrinsic size, which the text within them determines. Auto Layout uses their intrinsic size along with the stack view attributes to appropriately size the button grid while the tree image view can shrink and expand as necessary.
+  - Before you move on, verify that you don't have any warnings or errors in Interface Builder. You can build and run your app to ensure that the layout looks correct on different iPad simulators or by using the View As feature in Interface Builder.
