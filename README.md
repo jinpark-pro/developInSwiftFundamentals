@@ -3106,8 +3106,11 @@
 #### Part One - Build the Interface
 
 - Create a new project using the iOS App template. Name the project "Apple Pie." This game is meant to be played on the iPad, and the interface that you'll be building doesn't accommodate a small iOS device.
+
   - To make the app iPad only, select the project file in the Project navigator, then under Deployment Info, uncheck the checkbox under Device for iPhone.
+
 - **Layout in Storyboard**
+
   - Open the Main storyboard and use the "Devices" button to change the device to an iPad and change the orientation to Landscape mode using the "Orientation" button. Since you'll be using Auto Layout to build the interface, it will work in Portrait mode as well. Look back at the image of the finished app. Using the Interface Builder tools that you've learned so far, how might you construct this interface? There is an image at the top, followed by a grid of buttons, and then two rows of labels containing text. Perhaps the simplest way to build this interface is by using a vertical stack view.
     - Find the vertical stack view in the Object library, and drag it onto the iPad canvas.
   - As you've learned in earlier lessons, you can determine the position, width, and height of a stack view by adding constraints between the stack and its superview. Where does the stack start, and where does it end? The image view is near the top, and the last label goes along the bottom of the screen. The grid of buttons begins near the left edge and ends near the right edge. Therefore, the stack view can be constrained to cover the entire screen.
@@ -3134,3 +3137,24 @@
   - Below the grid of buttons within the second vertical stack view, add two labels from the Object library.
     - Use the Attributes inspector to change the font size of the first label to 30.0 and the second to 20.0. The buttons and labels all have what is referred to as intrinsic size, which the text within them determines. Auto Layout uses their intrinsic size along with the stack view attributes to appropriately size the button grid while the tree image view can shrink and expand as necessary.
   - Before you move on, verify that you don't have any warnings or errors in Interface Builder. You can build and run your app to ensure that the layout looks correct on different iPad simulators or by using the View As feature in Interface Builder.
+
+- **Create Outlets and Actions**
+
+  - During gameplay, the text of the labels change whenever a letter is guessed correctly or whenever a new round begins. The image needs to change whenever an incorrect letter is guessed, and the letter buttons need to be disabled whenever they're pressed and re-enabled before each round. To update these views, create outlets so that you can reference the views in code.
+    - Open the assistant editor so that the ViewController class definition appears to the right of the storyboard. Next, select the image view on the left, Control-drag to an area within the class definition, and release the mouse button. In the pop-up menu that appears, name the outlet `treeImageView`. When you press the Connect button, the code for the outlet is created: `@IBOutlet var treeImageView: UIImageView!`
+    - Repeat this process for the two labels. Name the top label `correctWordLabel`, and the bottom label `scoreLabel`: `@IBOutlet var correctWordLabel: UILabel!`, `@IBOutlet var scoreLabel: UILabel!`
+  - It's tedious to create a separate outlet for each UIButton. Instead, create one outlet that holds the collection of buttons.
+    - Begin by selecting the first button with the letter Q as the title. Control-drag to the class definition to create an outlet, then release the mouse button. In the pop-up menu that appears, change the Connection type from Outlet to Outlet Collection. Then set the name of the outlet collection to `letterButtons`. When you press Connect, an outlet is created that references a collection of buttons.
+    - Now click and drag from the circle next to the outlet collection to another button. A blue rectangle will appear, indicating a valid connection. Release the mouse button, then repeat this step for each button in the scene.
+  - Each button also needs to be tied to an action. Again, it’s tedious to create a separate action for each button. Instead, create one action that all the buttons call when pressed. - Begin by selecting the first button with the letter Q as the title. Control-drag to the class definition, and release the mouse button. In the pop-up menu that appears, change the Connection type to Action. Set the name of the action to `letterButtonPressed`, and change the type of the argument to UIButton. When you press Connect, the method is created. Whenever a letter button is tapped, it should be disabled (a player can't select a letter more than once in the same round).
+
+          - ```swift
+              @IBAction func letterButtonPressed(_ sender: UIButton) {
+                sender.isEnabled = false
+              }
+            ```
+
+          - Why change the argument type from Any to UIButton in the popup? Since there are twenty-six buttons connected to the same action, you’ll need to use the sender to determine which button, specifically, triggered the method. **If sender has the Any type, you can’t access the title property** (and we'll need that later).
+        - Control-drag the rest of the buttons to the existing action. You’ll know the connection is valid because a blue rectangle will appear as you hover the mouse near the method.
+
+    - Build and run your application to verify that tapping each button disables it. It’ll become more apparent what else to do inside this method after you build other portions of the app.
