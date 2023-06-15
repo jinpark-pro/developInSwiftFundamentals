@@ -3158,3 +3158,68 @@
         - Control-drag the rest of the buttons to the existing action. You’ll know the connection is valid because a blue rectangle will appear as you hover the mouse near the method.
 
     - Build and run your application to verify that tapping each button disables it. It’ll become more apparent what else to do inside this method after you build other portions of the app.
+
+#### Part Two - Beginning A Game
+
+- **Define Words and Turns**
+  - Your first task is to supply a list of words for players to guess. At the top of ViewController, define a variable called `listOfWords`. Fill this array with words: food names, hobbies, animals, household objects, or whatever else. To keep things simple, use only lowercase letters: `var listOfWords = [”buccaneer”, “swift”, “glorious”, “incandescent”, “bug”, “program”]`
+  - Below listOfWords, define a constant called `incorrectMovesAllowed` which establishes how many incorrect guesses are allowed per round. The lower the number, the harder it will be for the player to win. There are seven different images of apple trees provided, so you’ll want this value to be between 1 and 7: `let incorrectMovesAllowed = 7`
+- **Define Number of Wins and Losses**
+  - After each round, the bottom label will display an updated count of the number of wins and losses. Create two variables to hold each of these values, and set the initial values ​to 0: `var totalWins = 0`, `var totalLosses = 0`
+- **Begin First Round**
+
+  - When the application launches, the viewDidLoad() method of ViewController is called. This is a great place to start a new round. Define a method called newRound.
+
+    - ```swift
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            newRound()
+        }
+
+        func newRound() {
+         
+        }
+      ```
+
+  - What does it mean to start a new round? Each round begins with the selection of a new word, and resetting the number of moves the player can make to incorrectMovesAllowed. It would be helpful to hold the state of the game inside of a Game struct. Create a new file in your project by selecting File -> New -> File (Command-N) from the Xcode menubar. Select “Swift File” as your template, then select Next. Name the file “`Game`.”
+  - Inside of Game, define a struct called Game. For now, you know that an instance of a Game has two properties: the word, and the number of turns you have left to properly guess the word.
+
+    - ```swift
+        import Foundation
+         
+        struct Game {
+            var word: String
+            var incorrectMovesRemaining: Int
+        }
+      ```
+
+  - Back in the `newRound()` method, you can create a new instance of a Game. You should create a property that holds the current game’s value so that it can be updated throughout the view controller code. You can give the Game a new word in the initializer by removing the first value from the listOfWords collection, and set incorrectMovesRemaining to the number of moves you allow, stored in incorrectMovesAllowed.
+
+    - ```swift
+        var currentGame: Game!
+         
+        func newRound() {
+          let newWord = listOfWords.removeFirst()
+          currentGame = Game(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed)
+        }
+      ```
+
+    - Why does the currentGame variable have an exclamation mark at the end? For a brief moment between the app launch and the beginning of the first round, currentGame doesn’t have a value. This is a concept you’ll learn in the next unit. For now, know that **the exclamation mark means that it's OK for this property not to have a value for a short period**.
+
+  - Now that you’ve started a new round, you need to update the interface to reflect the new game. Create a separate method called `updateUI()` that will handle the interface updates, then call it at the end of newRound.
+  - Inside of this method, there are two pieces of the interface that you can update with the code you’ve written thus far: the score label, and the image view. The score label uses simple string interpolation to combine totalWins and totalLosses into a single string. Since each of the tree images are named “Tree X,” where X is the number of moves remaining, you can use string interpolation once more to construct the image name.
+
+    - ```swift
+        func newRound() {
+            let newWord = listOfWords.removeFirst()
+            currentGame = Game(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed)
+            updateUI()
+        }
+         
+        func updateUI() {
+            scoreLabel.text = “Wins: \(totalWins), Losses: \(totalLosses)”
+            treeImageView.image = UIImage(named: “Tree \(currentGame.incorrectMovesRemaining)”)
+        }
+      ```
+
+  - Build and run your application. The score label and the image view should update to reflect the beginning of a new round. Great job!
