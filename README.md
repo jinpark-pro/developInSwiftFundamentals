@@ -3223,3 +3223,51 @@
       ```
 
   - Build and run your application. The score label and the image view should update to reflect the beginning of a new round. Great job!
+
+#### Part Three - Update Game State
+
+- So far, you’ve built a working interface, and you’ve successfully started a new round. Now you need to add some code that progresses the game further towards a win or a loss.
+
+- **Extract Button Title**
+
+  - Currently, the letterButtonPressed(\_:) method disables whichever button the player used to guess, but it doesn’t update the game state. Whenever a button is clicked, you should read the button's title, and determine if that letter is in the word the player is trying to guess. Begin by reading the title from the button's configuration property. Not all buttons have configurations or titles, so you'll need to add exclamation marks to tell the Swift compiler that your button does have a configuration that has a title. (You’ll learn more about the exclamation mark in the next unit.) You should lowercase the letter because it's be much easier to compare everything in lowercase, and then convert it from a String to a Character.
+
+    - ```swift
+        @IBAction func letterButtonPressed(_ sender: UIButton) {
+            sender.isEnabled = false
+            let letterString = sender.configuration!.title!
+            let letter = Character(letterString.lowercased())
+        }
+      ```
+
+- **Guess Letter**
+
+  - Now that you have the letter that the player guessed, what should you do with it? A Game manages how many more moves are remaining, but it doesn’t know which letters have been selected during the round. Add a collection of characters to Game that keeps track of the selected letters, named `guessedLetters`. Then add a method in Game that receives a Character, adds it to the collection, and updates incorrectMovesRemaining, if necessary. (By adding the guessedLetters property, you’ll need to update the initialization for currentGame.)
+
+    - ```swift
+        struct Game {
+            ...
+            var guessedLetters: [Character]
+         
+            mutating func playerGuessed(letter: Character) {
+              guessedLetters.append(letter)
+              if !word.contains(letter) {
+                incorrectMovesRemaining -= 1
+              }
+            }
+        }
+         
+        func newRound() {
+            ...
+            currentGame = Game(..., guessedLetters: [])
+            updateUI()
+        }
+         
+        @IBAction func letterButtonPressed(_ sender: UIButton) {
+            ...
+            currentGame.playerGuessed(letter: letter)
+            updateUI()
+        }
+      ```
+
+  - Build and run your application. As you press each button, the character gets added to the list of letters the player has guessed, and incorrectMovesRemaining decreases by 1 for each incorrect letter.
