@@ -3330,3 +3330,82 @@
     ```
 
 - Build and run your application to see a clear break between the letters and the underscores.
+
+#### Part Five - Handle A Win Or Loss
+
+- Apple Pie is starting to feel like a real game. The round is progressing along with each button pressed, but there are two obvious issues. The first is that incorrectMovesRemaining can go below 0, and the second is that the player can’t win a game, even if they guess all letters correctly.
+- When incorrectMovesRemaining reaches 0, totalLosses should be incremented, and a new round should begin. It would be nice to have a single method that checks the game state to see if a win or loss has occurred, and if so, update totalWins and totalLosses. Create a method called `updateGameState` that will perform this work, and call it after each button press instead of calling updateUI().
+- You can determine that a game has been won if the player has not yet lost, and if the current game’s word property is equal to the formattedWord (formattedWord won’t have any underscore if every letter has been successfully guessed). When that happens, increment totalWins. If a game has not been won or lost yet, then the player should be allowed to continue guessing, and the interface should be updated.
+
+  - ```swift
+      @IBAction func letterButtonPressed(_ sender: UIButton) {
+          ...
+          // updateUI()
+          updateGameState()
+      }
+
+      func updateGameState() {
+          if currentGame.incorrectMovesRemaining == 0 {
+              totalLosses += 1
+              newRound()
+          } else if currentGame.word == currentGame.formattedWord {
+              totalWins += 1
+              newRound()
+          } else {
+              updateUI()
+          }
+      }
+    ```
+
+- Whenever totalWins or totalLosses changes, a new round can be started, so this is a great time to add `didSet` property observers to totalWins and totalLosses instead adding newRound() to the conditions.
+
+  - ```swift
+      var totalWins = 0 {
+          didSet {
+              newRound()
+          }
+      }
+      var totalLosses = 0 {
+          didSet {
+              newRound()
+          }
+      }
+    ```
+
+- Now try running your application, verifying that both wins and losses are tallied up accordingly, and that a new round begins.
+
+- **Re-enable Buttons and Fix Crash**
+
+  - It looks like you’re approaching the finish line! You’re successfully able to complete a round of Apple Pie, but a new round doesn’t re-enable the letter buttons. Also, if you try to start a new round and there’s no more words to choose from, the game will crash.
+
+    - The newRound logic needs to be a little smarter. If listOfWords isn’t empty, then you should perform the same work that you did previously, but also re-enable all of the buttons. If there are no more words to play with, disable all of the buttons so that the player cannot continue playing the game.
+
+      - ```swift
+          func newRound() {
+              if !listOfWords.isEmpty  {
+                  let newWord = listOfWords.removeFirst()
+                  currentGame = Game(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed, guessedLetters: [])
+                  enableLetterButtons(true)
+              } else {
+                  print("Game End!!")
+                  enableLetterButtons(false)
+              }
+              updateUI()
+          }
+          func enableLetterButtons(_ enable: Bool) {
+              for button in letterButtons {
+                  button.isEnabled = enable
+              }
+          }
+        ```
+
+#### Stretch Goals
+
+- If you’d like to continue working on Apple Pie, go ahead and try adding some features to the game. Here are a few ideas to play with. You can build most of these features using your existing knowledge of Swift, but a few may require you to use the Xcode documentation. Good luck!
+- Challenge yourself by adding these features to Apple Pie:
+  - Learn about the map method, and use it in place of the loop that converts the array of characters to an array of strings in updateUI().
+  - Add a scoring feature that awards points for each correct guess and additional points for each successful word completion.
+  - Allow multiple players to play, switching turns after each incorrect guess.
+  - Allow the player to guess the full word using the keyboard instead of guessing one letter at a time using the interface buttons.
+  - Support letters with special characters. For example, the E button could check for “e” and “é” within a word.
+  - The keyboard layout doesn’t work well when the app is in one-third Split View mode on iPad—the buttons get flattened. To resolve this issue, use trait variations to adjust the layout when in compact width.
