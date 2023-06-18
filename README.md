@@ -3271,3 +3271,62 @@
       ```
 
   - Build and run your application. As you press each button, the character gets added to the list of letters the player has guessed, and incorrectMovesRemaining decreases by 1 for each incorrect letter.
+
+#### Part Four - Create Revealed Word
+
+- Using word and guessedLetters, you can now compute a version of the word that hides the missing letters. For example, if the word for the round is “buccaneer” and the user has guessed the letters “c,” “e,” “b,” and “j,” the player should see “b*cc\_\_ee*” at the bottom of the screen.
+- To begin, create a computed property called `formattedWord` within the definition of Game. Here’s one way to compute formattedWord:
+
+  - Begin with an empty string variable.
+  - Loop through each character of word.
+  - If the character is in guessedLetters, convert it to a string, then append the letter onto the variable.
+  - Otherwise, append \_ onto the variable.
+
+    - ```swift
+        var formattedWord: String {
+            var guessedWord = “”
+            for letter in word {
+                if guessedLetters.contains(letter) {
+                    guessedWord += “\(letter)”
+                } else {
+                    guessedWord += “_”
+                }
+            }
+            return guessedWord
+        }
+      ```
+
+- Now that formattedWord is a property that your UI can display, try using it for the text of currentWordLabel inside of updateUI().
+
+  - ```swift
+      func updateUI() {
+          correctWordLabel.text = currentGame.formattedWord
+          ...
+      }
+    ```
+
+- Build and run your application. Letters will be added to the guessedLetters collection as they’re selected, and formattedWord will be re-calculated whenever it’s accessed in updateUI().
+  You may notice a new issue: Because multiple underscores appear as a solid line in the interface, it can be difficult to tell how many letters are in the word. A solution could be to add spaces during your computation of formattedWord. But this issue is purely about improving the interface, not meddling with the computed data. A better solution is to add the spaces when you update the text of correctWordLabel.
+- To properly set the text of correctWordLabel, you can use a Swift method named joined(separator:) that operates on an array of strings. This function concatenates the collection of strings into one string, separated by a given value. Here's an example:
+
+  - ```swift
+      let cast = [”Vivien”, “Marlon”, “Kim”, “Karl”]
+      let list = cast.joined(separator: “, “)
+      print(list) // “Vivien, Marlon, Kim, Karl”
+    ```
+
+- How can you imagine using the joined(separator:) method to set correctWordLabel? Start by converting the array of characters in formattedWord into an array of strings. Use a for loop to store each of the newly created strings into a [String] array. Then you can call the joined(separator:) method to join the new collection together, separated by blank spaces.
+
+  - ```swift
+      func updateUI() {
+          var letters = [String]()
+          for letter in currentGame.formattedWord {
+              letters.append(String(letter))
+          }
+          let wordWithSpacing = letters.joined(separator: “ “)
+          correctWordLabel.text = wordWithSpacing
+          ...
+      }
+    ```
+
+- Build and run your application to see a clear break between the letters and the underscores.
