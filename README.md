@@ -3409,3 +3409,26 @@
   - Allow the player to guess the full word using the keyboard instead of guessing one letter at a time using the interface buttons.
   - Support letters with special characters. For example, the E button could check for “e” and “é” within a word.
   - The keyboard layout doesn’t work well when the app is in one-third Split View mode on iPad—the buttons get flattened. To resolve this issue, use trait variations to adjust the layout when in compact width.
+
+### Lesson 2.12 Finish Your App Prototype
+
+#### Guide
+
+- **Wireframe**
+
+  - Now that you have a skeleton for your prototype, it’s time to make it more formal. Continue to ask yourself what the key interactions and UI elements for the goals of your app are. These are the elements you want to build into your prototype.
+  - Work through the Wireframe section of the App Design Workbook. You’ll build a wireframe from your app’s architecture map by converting screen outlines into a sketch of the interface. By the end of this stage, you’ll have a functioning Keynote prototype that simulates the behavior of your app.
+
+- **Refine**
+
+  - After developing a basic wireframe, it’s time to mimic the experience of an iOS app by considering how users will expect it to look and feel.
+  - Use the Refine section of the App Design Workbook to apply important interface design guidelines to your functioning prototype. By the end of this stage, your prototype will feel at home on iOS and in the hands of your users.
+
+- **Style**
+
+  - From your icon to the fonts and colors you use, each design element is an opportunity to influence the user’s experience. Now it’s time to define the personality of your app to set it apart from its peers. Use your imagination to create a cohesive identity for your app.
+  - Complete the Style section of the App Design Workbook. By the end of this stage, you’ll have a Keynote prototype that feels like a real app, which will enable your testers to provide good feedback.
+
+#### Summary
+
+- You've learned the basics of UIKit, the foundation of iOS development. You've learned how to display simple information with views, and respond to user input with a variety of controls. You also learned about the powerful tools in Xcode that enable you to build slick-looking interfaces that fit within the iOS environment.
