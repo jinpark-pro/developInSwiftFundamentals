@@ -3676,3 +3676,92 @@
 - What about using a regular optional, UILabel?, for the type? The standard optional will require the if-let syntax to constantly unwrap the value, providing a safety mechanism for data that may not exist. But you know that label will have a value after the storyboard connects the outlets, so unwrapping an optional that isn’t really “optional” feels cumbersome.
 - To get around this issue, Swift provides syntax for an implicitly unwrapped optional, using the exclamation mark `!` instead of the question mark ?. As the name suggests, this type of optional unwraps automatically, whenever it’s used in code. This allows you to use label as though it weren’t an optional, while allowing the ViewController to be initialized without it.
 - **Implicitly unwrapped optionals should be used in one special case: when you need to initialize an object without supplying the value, but you know you'll be giving the object a value before any other code tries to access it**. It might seem convenient to overuse implicitly unwrapped optionals to save yourself from using if let syntax, but by doing so you'd remove an important safety feature from the language. Thus, many Swift developers consider too many !'s in code a red flag. If you try to access the value of an implicitly unwrapped optional and the value is nil, your program crashes.
+
+### Lesson 3.3 Type Casting and Inspection
+
+- Whenever you work with data, the type plays a crucial role. For example, if a function returns an Int, you know you can use its value in a mathematical expression. But what if the type information isn’t very specific and you need to inspect the data more closely to determine how to use it?
+  In this lesson, you’ll learn why some data can only be expressed using a broader type and how you can test for specific kinds of data before using it.
+
+#### Type Casting
+
+- Suppose Brad’s job is to visit the homes of his clients and to take care of their pets. When he arrives at each location, he performs different tasks depending on the type of animal. If the pet’s a dog, he takes it for a walk. If it’s a cat, he changes the litter box. And if it’s a bird, he cleans the cage.
+- In Swift, a function’s declaration determines the type of data to be returned. Since the function can’t return a Dog, a Cat, and a Bird, the best it can do is return the parent type of all three, Animal.
+
+  - ```swift
+      func getClientPet() -> Animal {
+        // returns the pet
+      }
+       
+      let pet = getClientPet() // pet is of type Animal
+    ```
+
+- Unfortunately, this type is too broad to be useful to Brad. Without knowing the specific animal type, he could accidentally try to walk the bird, clean the dog’s litter box, or clean the cat’s cage. Consider the following valid functions with Dog, Cat, and Bird parameters.
+
+  - ```swift
+      func walk(dog: Dog) {
+        print(”Walking \(dog.name)”)
+      }
+      func cleanLitterBox(cat: Cat) {
+        print(”Cleaning the \(cat.boxSize) litter box’”)
+      }
+      func cleanCage(bird: Bird) {
+        print(”Removing the \(bird.featherColor) feathers at the bottom of the cage’”)
+      }
+    ```
+
+- Brad needs to be able to access a version of pet that's one of the subclasses of Animal. You can use the `as?` operator to try and downcast the value to a more specific type and store it in a new constant. This operation is known as a `conditional cast`, because it casts the instance to the specified type if it's possible to do so. Use if-let syntax to check the conditions before converting the type:
+
+  - ```swift
+      let pets = allClientAnimals()
+       
+      for pet in pets {
+        if let dog = pet as? Dog {
+          walk(dog: dog)
+        } else if let cat = pet as? Cat {
+          cleanLitterBox(cat: cat)
+        } else if let bird = pet as? Bird {
+          cleanCage(bird: bird)
+        }
+      }
+    ```
+
+- Now Brad can be sure he’s walking dogs, cleaning kitty litter boxes, and cleaning birdcages.
+- There’s also a forced form of the type cast operator: `as!`. This version will force the downcast to the specified type. But if you specify an incorrect type, it will crash your program, just as it does with force-unwrapping an optional.
+  - Imagine Alan has one pet, a dog, and he goes to pick it up from the pet store. A fetchPet(for customer: String) function may return an Animal type.
+    - `let alansDog = fetchPet(for: "Alan") // alansDog is inferred as the Animal type`
+  - When you know that the returned object will be a more specific type, you can use the as! operator to cast the value immediately.
+    - `let alansDog = fetchPet(for: “Alan”) as! Dog // alansDog is inferred as the Dog type`
+- When you begin to build apps, you'll discover that when you work with UIKit, the APIs can return very generic objects such as UIViewController. But as the developer of your application, you know what the specific type should be. For example, if pressing a button on the view of FirstViewController always presents a SecondViewController, you can force the downcast of destination to SecondViewController within the prepare(for:sender:) function. This function is called whenever you present a new view controller using storyboard segues.
+
+  - ```swift
+      class SecondViewController: UIViewController {
+        var names: [String]?
+      }
+       
+      func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let secondVC = segue.destination as! SecondViewController
+        secondVC.names = [”Peter”, “Jamie”, “Tricia”]
+      }
+    ```
+
+- Use `as!` only when you are certain that the specific type is correct.
+
+#### Any
+
+- You’ve learned that arrays, by default, are set to handle a specific type, such as an Int, String, or Animal. Homogenous collections are simpler to work with because you know the type of every instance within them.
+- But what if you want to work with nonspecific types? Swift provides two special types: `Any` and `AnyObject`. As the name implies,
+  - `Any` can represent an instance of any type: strings, doubles, functions, or whatever.
+  - `AnyObject` can represent an instance of any class in Swift but not a structure.
+- Here’s an example of an array that can hold any type of instance, or [Any]:
+
+  - `var items: [Any] = [5, “Bill”, 6.7, Dog()]`
+  - Because the array above can include anything, there’s no way to guarantee the type of any item. For example, if you used items[0] to access the first item in the following array, it will return the value 5 with the nonspecific Any type. To go ahead and use the value of firstItem as an Int, you’d use the as? operator:
+
+    - ```swift
+        var items: [Any] = [5, “Bill”, 6.7, true]
+        if let firstItem = items[0] as? Int {
+          print(firstItem + 4) // 9
+        }
+      ```
+
+  - Although Any can be used just like any other type, it’s always better to be specific about the types you expect to work with. Before using Any or AnyObject in your code, make sure you need the behavior and capabilities these special types provide.
