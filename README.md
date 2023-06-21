@@ -3432,3 +3432,247 @@
 #### Summary
 
 - You've learned the basics of UIKit, the foundation of iOS development. You've learned how to display simple information with views, and respond to user input with a variety of controls. You also learned about the powerful tools in Xcode that enable you to build slick-looking interfaces that fit within the iOS environment.
+
+## Unit 3 Navigation And Workflows
+
+- In this unit, you'll learn about an important Swift feature for working with optional data. You'll also learn how to use multiple scenes, views, and controls to build simple workflows.
+  By the end of this unit, you should feel comfortable using Interface Builder and storyboards to build the user interface for apps with multiple views. You'll also test, validate, and plan how you can iterate on your app idea.
+
+- **What You'll Design**
+  - The App Design Workbook will guide you through testing, validating, and iterating on your app prototype.
+- **What You’ll Build**
+  - Quiz is a simple app that guides the user through a personality quiz and displays the results.
+
+### Lesson 3.1 Prepare to Test Your App
+
+- You have been working hard to get the look and feel of your app just right. But that’s just one part of a much longer process. It often takes a lot of time to design an app that hits home for a user, and you may find that your first idea or design doesn’t pan out as expected. Good design is about learning from users, reflecting on feedback, and iterating on your ideas. Testing your prototype will help you understand whether your ideas and assumptions are correct.
+- In this lesson, you’ll architect your tests and create a plan to execute them.
+- Guide
+  - **Architect Your Testing**
+    - You’ve defined your app’s goals; how will you determine whether you’ve achieved them? You’ve implemented a prototype; how do you expect it to be used? You’ll define tests that answer those questions, and you’ll also take a step back to think about setting expectations — yours and your users'.
+    - Work through the Architect section of the App Design Workbook. By the end of this stage, you’ll have a plan that you can use to write your test scripts.
+  - **Script Your Tests**
+    - Now that you’ve planned your testing, it’s time to focus on the details.
+    - Use the Script section of the App Design Workbook to complete a set of test scripts. You’ll define the flow of your tests to keep the user engaged and oriented, dig into the kinds of questions each test can answer, and prepare for the unexpected.
+
+### Lesson 3.2 Optionals
+
+- One of the greatest strengths of Swift is its ability to read code and quickly understand data. When a function may or may not return data, Swift forces you to deal properly with both possible scenarios.
+- Swift uses unique syntax, called optionals, to handle this sort of case. In this lesson, you’ll learn to use optionals to properly handle situations when data may or may not exist.
+
+#### Nil
+
+- Optionals are useful in situations when a value may or may not be present. An optional represents two possibilities: Either there is a value and you can use it, or there isn’t a value at all.
+- Imagine you’re building an app for a bookstore that lists books for sale. You have a model object Book type that has properties for name and publicationYear.
+
+  - ```swift
+      struct Book {
+        var name: String
+        var publicationYear: Int
+      }
+       
+      let firstDickens = Book(name: "A Christmas Carol",​ publicationYear: 1843)
+      let secondDickens = Book(name: "David Copperfield",​ publicationYear: 1849)
+      let thirdDickens = Book(name: "A Tale of Two Cities",​ publicationYear: 1859)
+       
+      let books = [firstDickens, secondDickens, thirdDickens]
+    ```
+
+- So far, so good. Now imagine you’re building a screen that shows a list of books that have been announced but haven’t yet been published.
+- How might you initialize those books without a publish date? What do you assign to publicationYear?
+  - `let unannouncedBook = Book(name: “Rebels and Lions”, publicationYear: 0)`
+    - Zero isn’t accurate, because that would mean the book is over 2,000 years old.
+  - `let unannouncedBook = Book(name: “Rebels and Lions”, publicationYear: 2019)`
+    - The current year or even next year isn’t accurate either, because it may be released two years from now. There’s no known launch date.
+- `nil` represents the absence of a value, or nothing. Because there is no publicationYear yet, publicationYear should be nil.
+  - `let unannouncedBook = Book(name: “Rebels and Lions”, publicationYear: nil)`
+  - That looks better, but the compiler throws an error. All instance properties must be set during initialization, and you can’t pass nil to the publicationYear parameter because it expects an Int value.
+- Optionals solve this problem by providing a wrapper around a value that may exist. You can think of an optional as a box that, when opened, will contain either an instance of the expected type or nothing at all (nil).
+- Every type has a matching optional type, which you declare by adding a `?` after the original type name.
+- In this case, you need to update the type annotation on publicationYear property to Int?, an Int optional.
+
+  - ```swift
+      struct Book {
+        var name: String
+        var publicationYear: Int?
+      }
+       
+      let firstDickens = Book(name: "A Christmas Carol",​ publicationYear: 1843)
+      let secondDickens = Book(name: "David Copperfield",​ publicationYear: 1849)
+      let thirdDickens = Book(name: "A Tale of Two Cities",​ publicationYear: 1859)
+       
+      let books = [firstDickens, secondDickens, thirdDickens]
+       
+      let unannouncedBook = Book(name: “Rebels and Lions”, publicationYear: nil)
+    ```
+
+#### Specifying the Type of an Optional
+
+- Note that you can’t create an optional without specifying the type. Consider what would happen if you tried to let Swift infer the type.
+- In this example, type inference will assume your variable is non-optional:
+  - `var serverResponseCode = 404 // Int, not Int?`
+- In this example, type inference doesn’t have any information to determine the data’s type if the data isn’t nil:
+  - `var serverResponseCode = nil // Error, no type specified when not nil`
+- For these reasons, in most cases you’ll need to use type annotation to specify the type when creating an optional variable or constant. Take a look at the following correct approaches to an Int? optional:
+  - `var serverResponseCode: Int? = 404 // Set to 404, but could be nil later`
+  - `var serverResponseCode: Int? = nil // Set to nil, but could hold an Int later`
+
+#### Working with Optional Values
+
+- How do you determine whether or not an optional contains a value? How do you access the value? You could begin by comparing the optional to nil using an if statement. If the value is not nil, you can unwrap the value using the **force-unwrap operator**, `!`.
+
+  - ```swift
+      if publicationYear != nil {
+        let actualYear = publicationYear!
+        print(actualYear)
+      }
+    ```
+
+- If you skipped the comparison of the optional to nil and you force-unwrapped an optional that doesn’t contain a value, the code will generate an error and crash when you try to run it.
+  - `let unwrappedYear = publicationYear! // runtime error`
+- It seems like good practice to compare an optional to nil before attempting to use the contained value, but it also feels redundant. As you’ll recall, safety and clarity are primary design goals of Swift, so concise syntax is provided for safely using an optional’s value if it has one, and avoiding errors if it doesn’t.
+- Optional binding unwraps the optional and, if it contains a value, assigns the value to a constant as a non-optional type, making it safe to work with. This approach eliminates the need to continue working with the ambiguity of whether or not you are working with a value or with nil. The syntax for optional binding looks like this:
+
+  - ```swift
+      if let constantName = someOptional {
+        // constantName has been safely unwrapped for use within the
+        braces
+      }
+    ```
+
+- If `someOptional` has a value, the value is assigned to constantName and is available only within the braces. Take a look at how optional binding works on the previous Book example:
+
+  - ```swift
+      if let unwrappedPublicationYear = book.publicationYear {
+        print(”The book was published in \(unwrappedPublicationYear)”)
+      } else {
+        print(”The book does not have an official publication date.”)
+      }
+    ```
+
+#### Functions and Optionals
+
+- Swift comes with many functions that return optional values.
+- Consider the example where you have a String whose value is set to “123”. You can see here that string could be converted into an Int.
+
+  - ```swift
+      let string = “123”
+      let possibleNumber = Int(string)
+    ```
+
+- But what if the string can’t be converted?
+
+  - ```swift
+      let string = “Cynthia”
+      let possibleNumber = Int(string)
+    ```
+
+- Swift infers possibleNumber to be an Int? type because the initializer for Int that takes a String as a parameter may or may not be able to successfully convert the String into an Int. If string can be converted into an Int, possibleNumber will hold that value. **If it can’t, possibleNumber will be nil**.
+- If you want to write a function that accepts an optional as an argument, simply update the type in the parameter list. Consider this print function that accepts a firstName, middleName, and lastName, but allows for middleName to be nil since not everyone uses a middle name.
+  - `func printFullName(firstName: String, middleName: String?, lastName: String)`
+- The same is true for a function that returns an optional: Just update the return type. For example, a website URL returns the text from that page. The returned text is optional because the URL may not work or may not return any text.
+  - `func textFromURL(url: URL) -> String?`
+
+#### Failable Initializers
+
+- Any initializer that might return nil is called a failable initializer. Earlier in this lesson, you saw how the Int initializer attempted to create an Int from a String and returned nil if it was unable to convert the String.
+- For greater control and safety, you may want to create your own failable initializers and define the logic for returning an instance, or nil. Consider the following definition for a Toddler:
+
+  - ```swift
+      struct Toddler {
+        var name: String
+        var monthsOld: Int
+      }
+    ```
+
+- In this example, every Toddler must be given a name, as well as an age in months. However, you might not want to create an instance of a toddler if the child is younger than 12 months or older than 36 months. To provide this flexibility, you can use init? to define a failable initializer. The question mark (?) tells Swift that this initializer may return nil and that it should return an instance of type Toddler?.
+- Within the body of the initializer, you can check whether the given age is less than 12 or greater than 36. If either one is true, the initializer returns nil instead of assigning a value to monthsOld:
+
+  - ```swift
+      struct Toddler {
+        var name: String
+        var monthsOld: Int
+       
+        init?(name: String, monthsOld: Int) {
+          if monthsOld < 12 || monthsOld > 36 {
+            return nil
+          } else {
+            self.name = name
+            self.monthsOld = monthsOld
+          }
+        }
+      }
+    ```
+
+- When you use the failable initializer to create Toddler instances, an optional will always be returned. To safely unwrap the value before proceeding to use it, you can use optional binding:
+
+  - ```swift
+      let toddler = Toddler(name: “Joanna”, monthsOld: 14)
+
+      if let myToddler = toddler {
+        print(”\(myToddler.name) is \(myToddler.monthsOld) months old”)
+      } else {
+        print(”The age you specified for the toddler is not between 1
+        and 3 yrs of age”)
+      }
+    ```
+
+#### Optional Chaining
+
+- It’s also possible for an optional value to have optional properties, which you might think of as a box within a box. These are called nested optionals.
+- In the following example, note that every Person has an age and may have a residence. A Residence may have an address, and not every Address has an apartmentNumber.
+
+  - ```swift
+      struct Person {
+        var age: Int
+        var residence: Residence?
+      }
+       
+      struct Residence {
+        var address: Address?
+      }
+       
+      struct Address {
+        var buildingNumber: String
+        var streetName: String
+        var apartmentNumber: String?
+      }
+    ```
+
+- Unwrapping nested optionals can require a lot of code. In the following example, you’re checking an individual’s address to find out if he/she lives in an apartment. To do this for a given Person object, you must unwrap the residence optional, the address optional, and the apartmentNumber optional. Using if-let syntax, you’d have to do quite a bit of conditional unwrapping:
+
+  - ```swift
+      if let theResidence = person.residence {
+        if let theAddress = theResidence.address {
+          if let theApartmentNumber = theAddress.apartmentNumber {
+            print(”He/she lives in apartment number \(theApartmentNumber).”)
+          }
+        }
+      }
+    ```
+
+- But there's a better way to do this. Rather than assign a name to every optional, you can conditionally unwrap each property using a construct known as optional chaining. If the person has a residence, the address has an apartment number, and if that apartment number can be converted to an integer, then you can refer to the number using theApartmentNumber, as seen here:
+
+  - ```swift
+      if let theApartmentNumber = person.residence?.address?.apartmentNumber {
+        print(”He/she lives in apartment number \(theApartmentNumber).”)
+      }
+    ```
+
+- When chaining together optionals, a `?` appears before each optional in the chain.
+- If a nil value breaks the chain at any point, the if let statement fails. As a result, no value is assigned to the constant, and the code inside of the braces never executes. If none of the values are nil, the code inside of the braces executes and the constant has a value.
+
+#### Implicitly Unwrapped Optionals
+
+- An object cannot be initialized until all of its non-optional properties are given a value. But in some cases, particularly with iOS development, some properties are nil for just a moment until the value can be specified after initialization. For example, you’ve used Interface Builder to create outlets so that you can access a particular piece of the interface in code.
+
+  - ```swift
+      class ViewController: UIViewController {
+        @IBOutlet var label: UILabel!
+      }
+    ```
+
+- If you were the developer of this class, you’d know that anytime a ViewController is created and presented to the user, there will always be a label on the screen, because you added it in the storyboard. But in iOS development, the storyboard elements aren’t connected to their corresponding outlets until after initialization takes place. Therefore, label must be allowed to be nil for a brief period.
+- What about using a regular optional, UILabel?, for the type? The standard optional will require the if-let syntax to constantly unwrap the value, providing a safety mechanism for data that may not exist. But you know that label will have a value after the storyboard connects the outlets, so unwrapping an optional that isn’t really “optional” feels cumbersome.
+- To get around this issue, Swift provides syntax for an implicitly unwrapped optional, using the exclamation mark `!` instead of the question mark ?. As the name suggests, this type of optional unwraps automatically, whenever it’s used in code. This allows you to use label as though it weren’t an optional, while allowing the ViewController to be initialized without it.
+- **Implicitly unwrapped optionals should be used in one special case: when you need to initialize an object without supplying the value, but you know you'll be giving the object a value before any other code tries to access it**. It might seem convenient to overuse implicitly unwrapped optionals to save yourself from using if let syntax, but by doing so you'd remove an important safety feature from the language. Thus, many Swift developers consider too many !'s in code a red flag. If you try to access the value of an implicitly unwrapped optional and the value is nil, your program crashes.
