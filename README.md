@@ -3765,3 +3765,159 @@
       ```
 
   - Although Any can be used just like any other type, it’s always better to be specific about the types you expect to work with. Before using Any or AnyObject in your code, make sure you need the behavior and capabilities these special types provide.
+
+### Lesson 3.4 Guard
+
+- Most bugs reside in complex code. The simpler your code is to read, the easier it is to spot potential bugs.
+- In this lesson, you’ll learn to use guard to better manage control flow. You’ll learn to handle invalid and special-case values up front, rather than weaving them throughout your programming logic.
+- As you start to work on more complex apps, you'll need to write functions that depend on a series of true conditions before executing. But the more conditions in your code, the harder it is to read — and debug — especially when the if statement is your only form of control flow.
+- You've learned that each if statement evaluates a Boolean expression. If the result is true, the code defined in the statement is executed; otherwise, it's skipped. But what if you have multiple if statements nested within one another? Your code begins to form what programmers call the “pyramid of doom”:
+
+  - ```swift
+      func singHappyBirthday() {
+        if birthdayIsToday {
+            if !invitedGuests.isEmpty {
+                if cakeCandlesLit {
+                    print(”Happy Birthday to you!”)
+                } else {
+                    print(”The cake’s candles haven’t been lit.”)
+                }
+            } else {
+                print(”It’s just a family party.”)
+          }
+        } else {
+            print(”No one has a birthday today.”)
+        }
+      }
+    ```
+
+- What's so problematic about this example? With each if statement, the code is moving farther and farther from the beginning of each line, making the code hard to read. And each else statement moves farther and farther from its corresponding if statement, so it's difficult to tell how they match up. You can rework this logic to reduce the pyramid effect while still using if statements:
+
+  - ````swift
+      func singHappyBirthday() {
+          if !birthdayIsToday {
+              print("No one has a birthday today.")
+              return
+          }
+       
+          if invitedGuests.isEmpty {
+              print("It's just a family party.")
+              return
+          }
+       
+          if cakeCandlesLit == false {
+              print("The cake's candles haven't been lit.")
+              return
+          }
+       
+          print("Happy Birthday to you!")
+      }
+    ``` 
+    ````
+
+- But you can go a step further using the guard statement to clearly communicate to the person reading this code that specific conditions must be met before proceeding.
+
+  - ```swift
+      func singHappyBirthday() {
+        guard birthdayIsToday else {
+          print(”No one has a birthday today.”)
+          return
+        }
+       
+        guard !invitedGuests.isEmpty else {
+          print(”It’s just a family party.”)
+          return
+        }
+       
+        guard cakeCandlesLit else {
+          print(”The cake’s candles haven’t been lit.”)
+          return
+        }
+       
+        print(”Happy Birthday to you!”)
+      }
+    ```
+
+- **A `guard`'s `else` block is executed only if the expression evaluates to false**. This is the opposite of the if statement that executes the block if the expression evaluates to true.
+
+  - ```swift
+      guard condition else {
+        // false: execute some code
+      }
+       
+      // true: execute some code
+    ```
+
+- With this design, you can write a function that returns early if it can’t complete its task. **A guard statement requires you to exit the scope of the function using the return keyword in the else case**. By eliminating all the unwanted conditions using guard statements and calling return, you can move conditional checks to the top of the function and put the code you expect to run at the bottom. The expected code is no longer surrounded by unexpected conditions. This also clearly communicates to the reader the author's intent and reasoning for the conditional check—as opposed to using if statements, which don’t require a return.
+- Here are two versions of a divide function, one using an if statement and one using a guard statement. Since you can’t divide by zero, each version of the function prints the result if the divisor is not zero.
+
+  - ```swift
+      func divide(_ number: Double, by divisor: Double) {
+        if divisor != 0.0 {
+          let result = number / divisor
+          print(result)
+        }
+      }
+       
+      func divide(_ number: Double, by divisor: Double) {
+        guard divisor != 0.0 else {
+          return
+        }
+        let result = number / divisor
+        print(result)
+      }
+    ```
+
+- The code using guard does an early return if the divisor passed in is 0. By the time it reaches the line that does the actual division, it has already removed any erroneous parameters.
+  The if example above could also be written similarly to the one using guard syntax by reversing the condition in the check. However, it's considered better practice and more readable to use guard in these cases.
+
+  - ```swift
+      func divide(_ number: Double, by divisor: Double) {
+        if divisor == 0.0 { return }
+        let result = number / divisor
+        print(result)
+      }
+    ```
+
+- **Guard with Optionals**
+
+  - In an earlier lesson, you learned about optionals and that a function should perform work if an optional contains a value. When you unwrap an optional using if-let syntax to bind it to a constant, the constant is valid within the braces.
+
+    - ```swift
+        if let eggs = goose.eggs {
+          print(”The goose laid \(eggs.count) eggs.”)
+        }
+        // `eggs` is not accessible here
+      ```
+
+  - Instead, you can **use `guard let` to bind the value within an optional to a constant that's accessible outside the braces**.
+
+    - ```swift
+        guard let eggs = goose.eggs else { return }
+        // `eggs` is accessible hereafter
+        print(”The goose laid \(eggs.count) eggs.”)
+      ```
+
+  - Note the placement of the else statement after the condition. This placement signifies that guard is checking for a true or non-optional condition. When the value you're attempting to unwrap is nil, the code within the else block is executed — otherwise execution continues to the line after the closing brace and the unwrapped value is available to use.
+  - Both `if let` and `guard let` let you unwrap multiple optionals in one statement. However, doing so with a `guard let` makes all unwrapped values available throughout the rest of the function, rather than only within the control flow braces.
+
+    - ```swift
+        func processBook(title: String?, price: Double?, pages: Int?) {
+          if let theTitle = title,
+            let thePrice = price,
+            let thePages = pages {
+            print(”\(theTitle) costs $\(thePrice) and has \(thePages) pages.”)
+          }
+        }
+         
+        func processBook(title: String?, price: Double?, pages: Int?) {
+          guard let theTitle = title,
+            let thePrice = price,
+            let thePages = pages else {
+              return
+            }
+            print(”\(theTitle) costs $\(thePrice) and has \(thePages) pages.”)
+        }
+      ```
+
+  - Using `guard` statements to move conditional code is one way to improve the readability of your programs. Throughout this course, you've looked over plenty of code that others have written. You've probably discovered that it's much easier to understand what's going on if you can quickly locate the core functionality — rather than search for it in a sea of validation code.
