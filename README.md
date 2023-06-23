@@ -3921,3 +3921,205 @@
       ```
 
   - Using `guard` statements to move conditional code is one way to improve the readability of your programs. Throughout this course, you've looked over plenty of code that others have written. You've probably discovered that it's much easier to understand what's going on if you can quickly locate the core functionality — rather than search for it in a sea of validation code.
+
+### Lesson 3.5 Constant and Variable Scope
+
+- As you write larger, more complex programs, you’ll need to pay attention to where you declare your constants and variables. What’s the optimal placement in your code? If you declare every variable at the top, you may find your code is more difficult to read and much more difficult to debug.
+- In this lesson, you'll learn to write well-structured code that's easy to read. You'll do this by properly scoping your constants and variables.
+- Each constant and variable lives within some sort of scope, a place where it’s visible and accessible. There are two different levels of scope: global and local. Any variable declared in global scope is called a global variable, and a variable declared in local scope is a local variable.
+- Global scope refers to code that’s available from anywhere in your program. For example, when you begin declaring variables inside an Xcode playground, you’re declaring them in global scope. After you define a variable on one line, it’s available to each line after it. Whenever you finish typing into a playground, the code is executed line by line, beginning from this global scope.
+- Whenever you add a pair of curly braces ({ }) — whether for a structure, class, function, if statement, for loop, or more — the area within the braces defines a new local scope. Any constant or variable that’s declared within the braces is defined in that local scope and isn’t accessible by any other scope.
+- Consider the following block of code:
+
+  - ```swift
+      var age = 55
+       
+      func printMyAge() {
+        print(”My age: \(age)”)
+      }
+       
+      print(age)
+      printMyAge()
+      Console Output:
+      55
+      My age: 55
+    ```
+
+- Notice that the variable age is defined at the top of the code and not inside a control flow structure or function. This means it’s in global scope and can be accessed throughout the program. The function printMyAge is able to reference age, even though it wasn’t passed in as a parameter. Similarly, the function printMyAge isn’t defined within a structure or class, so it’s in global scope and is therefore accessible by the last line in the code.
+- Now look at another block of code:
+
+  - ```swift
+      func printBottleCount() {
+        let bottleCount = 99
+        print(bottleCount)
+      }
+       
+      printBottleCount()
+      print(bottleCount) // error
+    ```
+
+- The variable bottleCount is defined within a function, printBottleCount, which has its own local scope between the braces. So bottleCount is in local scope and is only accessible by the contents of the function, inside the braces. The last line in the code will throw an error, because it’s unable to find a variable named bottleCount.
+- Consider one more example:
+
+  - ```swift
+      func printTenNames() {
+        var name = “Grey”
+        for index in 1...10 {
+          print(”\(index): \(name)”)
+        }
+        print(index) // error
+        print(name)
+      }
+       
+      printTenNames()
+    ```
+
+- In the code above, name is a local variable and is available to anything defined within the same scope. It's also available within an even smaller local scope: the for loop on the next line. The variable index, while defined inside the function, was defined inside the loop, which can be thought of as a more narrowly defined subsection of the function's scope. index is therefore only accessible inside the loop. Because print(index) occurs just outside the loop, it produces an error.
+
+- **Variable Shadowing**
+
+  - This next example defines a variable called points in two different locations: within the function’s local scope and within the for loop’s local scope. This is called variable shadowing. It’s valid Swift code, but it might not be obvious what will happen when the code is executed.
+
+    - ```swift
+        func printComplexScope() {
+            let points = 100
+            print(points)
+         
+            for index in 1...3 {
+                let points = 200
+                print(”Loop \(index): \(points+index)”)
+            }
+         
+            print(points)
+        }
+         
+        printComplexScope()
+        Console Output:
+        100
+        Loop 1: 201
+        Loop 2: 202
+        Loop 3: 203
+        100
+      ```
+
+  - First, points is declared and set to 100. This value is printed on the next line.
+  - Within the for loop, another points is declared, this one with a value of 200. The second points completely shadows the function - scoped variable, which means that it renders the first points inaccessible. Any reference to points will access the one closest to the same scope. So when the print statement within the loop is called, it will print a value of 200 five times.
+  - After the loop is finished, the print statement will print the only points variable that it can access: the one with a value of 100.
+  - To avoid unnecessary confusion in this particular example, you might advocate changing the name of the inner points variable. And you would probably be correct.
+  - However, there are a few cases when variable shadowing can be useful. Imagine having an optional name string and you want to use if let syntax to do some work with its value. Rather than coming up with a new variable name, like unwrappedName, you can reuse name within the scope of the if let braces:
+
+    - ```swift
+        var name: String? = “Brady”
+         
+        if let name = name {
+          // name is a local `String` that shadows the global `String?` of the same name
+
+          print(”My name is \(name)”)
+        }
+      ```
+
+  - You can also use variable shadowing to simplify naming unwrapped optionals from a guard statement.
+
+    - ```swift
+        func exclaim(name: String?) {
+          if let name = name {
+            // Inside the braces, `name` is the unwrapped `String` Value
+
+            print(”Exclaim function was passed: \(name)”)
+          }
+        }
+         
+        func exclaim(name: String?) {
+          guard let name = name else { return }
+          // name: `String?` is no longer accessible, only name: `String`
+
+          print(”Exclaim function was passed: \(name)”)
+        }
+      ```
+
+  - Shadowing the optional with the unwrapped value is common in Swift code. Be sure that you can read and understand this common pattern.
+
+- **Shadowing and Initializers**
+
+  - You can take advantage of your knowledge of variable shadowing to create clean, easy-to-read initializers. Suppose you want to create an instance of a Person by passing in a name and age as its two parameters. You’ll also assume that every Person instance has both name and age properties:
+
+    - ```swift
+        struct Person {
+          var name: String
+          var age: Int
+        }
+
+        let tim = Person(name: “Tim”, age: 35)
+        print(tim.name)
+        print(tim.age)
+        Console Output:
+        Tim
+        35
+      ```
+
+  - As you’re writing the initializer, you’ll want to keep it as simple and logical as possible: assigning the name parameter to the name property and assigning the age parameter to the age property.
+
+    - ```swift
+        init(name: String, age: Int) {
+          self.name = name
+          self.age = age
+        }
+      ```
+
+  - Since name and age are the names of parameters within the function scope, they shadow the name and age properties defined within the Person scope. You can place the keyword self in front of the property name to reference the property specifically — and to avoid any confusion that variable shadowing may cause to the compiler and the reader. This syntax makes it very clear that the name and age properties are set to the name and age parameters passed into the initializer.
+
+- **Lab - Scope.playground**
+
+  - The function below takes an array of User objects and returns the User object that has taken the most steps. The body of the function first declares a variable that is an optional User, then loops through all of the users in the array. Inside each iteration of the loop, it will check if topCompetitor has a value or not by unwrapping it. If topCompetitor doesn't have a value, then the current user in the iteration is assumed to have the highest score and is assigned to topCompetitor. If topCompetitor has a value, there is code to check whether the current user in the iteration has taken more steps than the user that is assigned to topCompetitor.
+  - At that point, the goal is to assign the user with the higher score to topCompetitor. However, the code generates a compiler error because, due to improper variable shadowing, topCompetitor has a narrower scope than it should if it is going to be reassigned. Fix the compiler error below and call getWinner(competitors:), passing in the array competitors. Print the name property of the returned User object. You'll know that you fixed the function properly if the user returned is activeSitter.
+  - Write a memberwise initializer inside the User struct above that uses variable shadowing for naming the parameters of the initializer.
+  - Now write a failable initializer inside the User struct above that takes parameters name and stepsToday as an optional String and Int, respectively. The initializer should return nil if either of the parameters are nil. Use variable shadowing when unwrapping the two parameters.
+
+    - ```swift
+        struct User {
+            var name: String
+            var stepsToday: Int
+
+            init(name: String, stepsToday: Int) {
+                self.name = name
+                self.stepsToday = stepsToday
+
+            }
+            init?(name: String?, stepsToday: Int?) {
+                guard let name = name else { return nil }
+                guard let stepsToday = stepsToday else { return nil }
+                self.name = name
+                self.stepsToday = stepsToday
+
+            }
+        }
+
+        let stepMaster = User(name: "StepMaster", stepsToday: 8394)
+        let activeSitter = User(name: "ActiveSitter", stepsToday: 9132)
+        let monsterWalker = User(name: "MonsterWalker", stepsToday: 7193)
+
+        let competitors = [stepMaster, activeSitter, monsterWalker]
+
+        func getWinner(competitors: [User]) -> User? {
+            var topCompetitor: User?
+
+            for competitor in competitors {
+                // compiler error because, due to improper variable shadowing
+                // 'topCompetitor' is a 'let' constant
+                // if let topCompetitor = topCompetitor {
+                    // if competitor.stepsToday > topCompetitor.stepsToday {
+                        // topCompetitor = competitor
+
+                if topCompetitor != nil {
+                    if competitor.stepsToday > topCompetitor!.stepsToday {
+                        topCompetitor = competitor
+                    }
+                } else {
+                    topCompetitor = competitor
+                }
+            }
+            return topCompetitor
+        }
+
+        getWinner(competitors: competitors)
+      ```
