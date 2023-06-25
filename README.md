@@ -4123,3 +4123,149 @@
 
         getWinner(competitors: competitors)
       ```
+
+### Lesson 3.6 Enumerations
+
+- Imagine you’re writing a program that allows passengers to select a seat from three options: window, middle, and aisle. In Swift, you’d do this with an enumeration.
+- An enumeration, or `enum`, is a special Swift type that allows you to represent a named set of options. In this lesson, you’ll learn when enumerations are commonly used, how to define an enumeration, and how to work with enumerations using switch statements.
+- Enumerations define a common type for a group of related values.
+- Consider the directions on a compass app: north, east, south, and west. The app can help orient the user toward any of those four directions. The needle on a compass always points to the north, but the heading of the compass moves as the user moves. The heading helps the user determine which direction they’re facing.
+- You define a new enumeration using the keyword `enum`. The code below defines an enum for tracking the direction on a compass:
+
+  - ```swift
+      enum CompassPoint {
+        case north
+        case east
+        case south
+        case west
+      }
+    ```
+
+- The enum defines the type, and the case options define the available values allowed with the type. It’s best practice to capitalize the name of the enumeration and to lowercase the case options.
+- You can also define the available cases, separated by commas, on a single line:
+  - `enum CompassPoint {   case north, east, south, west }`
+- Once you’ve defined the enumeration, you can start using it like any other type in Swift. Just specify the enumeration type along with the value:
+
+  - ```swift
+      var compassHeading = CompassPoint.west
+      // The compiler assigns `compassHeading` as a `CompassPoint` by type inference.
+
+      var compassHeading: CompassPoint = .west
+      // The compiler assigns `compassHeading` as a `CompassPoint` because of the type annotation. The value can then be assigned with dot notation.
+    ```
+
+- Now that the type of compassHeading is set, you can change the value to another compass point using the shorter dot notation:
+
+  - `compassHeading = .north`
+
+- **Control Flow**
+
+  - In the control flow lesson, you learned how to use if statements and switch statements to respond to Bool values. You can use the same control flow logic when working with different cases of an enumeration.
+  - Consider the code below that prints a different sentence based on which CompassPoint is set to the compassHeading constant:
+
+    - ```swift
+        let compassHeading: CompassPoint = .west
+         
+        switch compassHeading {
+          case .north:
+            print(”I am heading north”)
+          case .east:
+            print(”I am heading east”)
+          case .south:
+            print(”I am heading south”)
+          case .west:
+            print(”I am heading west”)
+        }
+         
+        if compassHeading == .west {
+          print(”I am heading west”)
+        }
+      ```
+
+- **Type Safety Benefits**
+
+  - Enumerations are especially important in Swift because they allow you to represent information, such as strings or numbers, in a type-safe way.
+  - Imagine a set of data that represents movies of specific genres. Before learning about enumerations, you may have defined a simple movie structure like this:
+
+    - ```swift
+        struct Movie {
+          var name: String
+          var releaseYear: Int?
+          var genre: String
+        }
+      ```
+
+  - Given that definition, you would use a String when setting the genre:
+    - `let movie = Movie(name: “Wolfwalkers”, releaseYear: 2020, genre: “Aminated”)`
+  - Do you notice a problem in this initializer?
+  - Many Swift developers would say that genre is “stringly typed” instead of “strongly typed.” What they’re referencing is the fact that genre is prone to all the errors that String values face — and one them is incorrect spelling. Imagine you wrote code to fetch all the movies in the “Animated” genre. Wolfwalkers would be missing.
+  - As a better practice, you could assign genre a value from an enumeration called Genre.
+
+    - ```swift
+        enum Genre {
+          case animated, action, romance, documentary, biography, thriller
+        }
+         
+        struct Movie {
+          var name: String
+          var releaseYear: Int?
+          var genre: Genre
+        }
+         
+        let movie = Movie(name: “Wolfwalkers”, releaseYear: 2020, genre: .animated)
+      ```
+
+  - This code is much less error-prone. The compiler enforces safety by requiring you to choose a case from the Genre enumeration when you initialize a new movie.
+  - Enumerations are an extremely powerful tool in Swift. You’ll use them any time you want to add type safety where you might otherwise use strings or numbers. You’ll continue to learn more advanced features of enumerations as you work with more complex data.
+
+- **Lab - Enumerations.playground**
+
+  - Create a SwimmingWorkout struct below with properties for distance, time, and stroke. distance and time should be of type Double and will represent distance in meters and time in seconds, and stroke should be of type String.
+  - Allowing stroke to be of type String isn't very type-safe. Inside the SwimmingWorkout struct, create an enum called Stroke that has cases for freestyle, butterfly, backstroke, and breaststroke. Change the type of stroke from String to Stroke.
+  - Now imagine you want to log swimming workouts separately based on the swimming stroke. You might use arrays as static variables on SwimmingWorkout for this. Add four static variables, freestyleWorkouts, butterflyWorkouts, backstrokeWorkouts, and breaststrokeWorkouts, to SwimmingWorkout above. Each should be of type `[SwimmingWorkout]` and should default to empty arrays.
+  - Now add an instance method to SwimmingWorkout called save that takes no parameters and has no return value. This method will add its instance to the static array on SwimmingWorkout that corresponds to its swimming stroke. Inside save write a switch statement that switches on the instance's stroke property, and appends self to the proper array.
+
+    - ```swift
+        struct SwimmingWorkout {
+            var distance: Double
+            var time: Double
+            var stroke: Stroke
+
+            enum Stroke {
+                case  freestyle, butterfly, backstroke, breaststroke
+            }
+
+            static var freestyleWorkouts = [SwimmingWorkout]()
+            static var butterflyWorkouts = [SwimmingWorkout]()
+            static var backstrokeWorkouts = [SwimmingWorkout]()
+            static var breaststrokeWorkouts = [SwimmingWorkout]()
+
+            func save() {
+                switch stroke {
+                case .backstroke:
+                    SwimmingWorkout.backstrokeWorkouts.append(self)
+                case .freestyle:
+                    SwimmingWorkout.freestyleWorkouts.append(self)
+                case .butterfly:
+                    SwimmingWorkout.butterflyWorkouts.append(self)
+                case .breaststroke:
+                    SwimmingWorkout.breaststrokeWorkouts.append(self)
+                }
+            }
+        }
+      ```
+
+  - Create two instances of SwimmingWorkout objects.
+
+    - ```swift
+        var swimmer1 = SwimmingWorkout(distance: 2.5, time: 64.40, stroke: .backstroke)
+        var swimmer2 = SwimmingWorkout(distance: 5.0, time: 120.02, stroke: .backstroke)
+      ```
+
+  - Call save on the two instances of SwimmingWorkout that you created above, and then print the array(s) to which they should have been added to see if your save() method works properly.
+
+    - ```swift
+        swimmer1.save()
+        swimmer2.save()
+        print("backstroke workouts: \(SwimmingWorkout.backstrokeWorkouts)")
+      ```
