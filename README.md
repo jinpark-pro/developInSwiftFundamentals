@@ -4269,3 +4269,52 @@
         swimmer2.save()
         print("backstroke workouts: \(SwimmingWorkout.backstrokeWorkouts)")
       ```
+
+### Lesson 3.7 Segues and Navigation Controllers
+
+- You’ve already learned that view controllers manage different scenes within an app. But as your apps grow in complexity, you’ll find you need different scenes using different view controllers to display information. You’ll also need to transition between different scenes to allow the user to navigate the app.
+- In this lesson, you’ll learn how to use segues to transition from one view controller to another, how to define relationships between view controllers, and how navigation controllers can help you manage scenes that display related or hierarchical content.
+- Take a look at the most commonly used apps on your phone. Do any of them have one screen that always looks the same? Probably not. Most apps have many scenes for displaying different types of information. Each of these scenes is backed by a separate view controller instance or class.
+- Your job as a developer is to allow users to move easily from one scene to another. You can use Interface Builder to add segues, or transitions, between different scenes. You can also create special relationships between scenes with related content by including them in a navigation controller.
+  After you learn about the different types of segues, you’ll learn how to create segues between different scenes in a navigation controller. Once you’ve mastered working with segues and navigation controllers, you’ll be able to build more complex interfaces and navigation hierarchies — which, in turn, will equip you to build more powerful apps.
+
+#### Segues
+
+- A segue defines a transition from one view controller to another. It often begins when the user taps a button or table row, and it ends when a new view controller is presented. Similar to creating outlets and actions, you define segues in Interface Builder by connecting the start and end points, clicking and dragging from one scene to another. You can also trigger segues programmatically.
+- In addition to the transition, a segue also defines the presentation method of the view controller. One common method is a modal presentation, which places a new view controller on top of the previous one. On smaller screens, a modal presentation will always appear at full screen. To adapt the UI for larger devices, you can customize a modal presentation to appear as a popover, a form sheet, or a full-screen presentation.
+- When learning about navigation controllers later in this lesson, you'll also learn about the push transition, which animates a new view controller from right to left onto the screen.
+- When a new view controller is presented modally, you can use an unwind segue to allow the user to dismiss the new view controller and return to the previous one.
+
+- **Create Triggered Segues**
+
+  - To practice transitioning between view controllers, you'll create a simple app that cycles through the different colors of a traffic light. Start by creating a new Xcode project using the iOS App template. Name the project "TrafficSegues." When creating the project, make sure the interface option is set to Storyboard. Select the Main storyboard in the Project navigator to open your project in Interface Builder.
+  - Add a UIButton to the center of the view, using the alignment guides to help position it. Click the Align button and select “Horizontally in Container” and “Vertically in Container” to create two constraints that center the button for all screen sizes.
+  - Locate View Controller in the Object library, and drag this object onto the canvas, positioning it to the right of the first view controller. Using the Attributes inspector, give the left view controller a red background and the right view controller a yellow background.
+  - Imagine you want to transition to the yellow view controller when the user taps your UIButton in the red view controller. Holding down the Control key, select the button and drag the pointer to the second view controller. This action should highlight the yellow view controller, indicating it's a valid end point for the segue.
+  - When you release the mouse or trackpad button, you'll see a popover that allows you to specify the presentation method of the segue. There are multiple segues to choose from, but focus your attention on "Present Modally" and "Show."
+    - **"Present Modally"** will display the yellow view controller over the red, using a bottom-to-top sliding animation. You'll see this animation in the Mail app when you begin writing a new email, or in Contacts when you choose to create a new contact.
+    - The **Show** segue also presents modally until a navigation controller is added to the storyboard scene. You’ll add one of these later in the lesson. For now, select Show.
+    - An arrow appears from the red view controller to the yellow view controller indicating the segue.
+  - Build and run your app. When you click your UIButton, you should see the yellow view animate, from the bottom up, over the top of the red view.
+  - Now add a third view controller, positioning it to the right of the yellow view. Set its background color to green. As in the previous steps, add a UIButton to the yellow view, create centering constraints, then Control-drag from the button to the green view controller and define a Show segue.
+  - When you build and run your app, tapping the button on the the red view controller will modally present the yellow view controller, and tapping the button on the yellow view controller will modally present the green view controller.
+  - Note that the red view controller is of type ViewController. You didn't assign a class to the yellow and green view controllers, so they'll be generic UIViewController instances. This distinction will be important when you implement the unwind segue.
+
+- **Unwind Segue**
+
+  - You've just created a short sequence of segues. Although the user can swipe down to dismiss these views, it's best practice to always include a button to dismiss modal views as well. To do this, you need to create an unwind segue. Whereas a segue transitions to another scene, an unwind segue transitions from the current scene to return to a previously displayed scene.
+  - To begin, select ViewController in the Project navigator and add the following method just below the viewDidLoad() function:
+
+    - ```swift
+        @IBAction func unwindToRed(unwindSegue: UIStoryboardSegue) {
+         
+        }
+      ```
+
+  - You can name the method anything you like, but it must take UIStoryboardSegue as its only parameter.
+  - Unwind segues can be tricky to understand at first glance. By adding a function that takes a UIStoryboardSegue as a parameter to any scene’s view controller definition, you’re telling Interface Builder that the scene is a valid destination for an unwind segue.
+  - In this lesson, the method you just added doesn’t contain any code, but it can be used to pass information from the end point of the segue back to the source view controller.
+  - Check out how that works.
+    - Back in the Main storyboard, add a button to the center of the green view. Update the button's text to read "Dismiss."
+    - Control-drag the Dismiss button to the Exit object at the top of the view controller scene. When you release the mouse or trackpad button, a popover appears, listing all available destinations for unwinding. In this case, there's only one option: `unwindToRedWithUnwindSegue`, which matches the method signature you placed in the definition of `ViewController`. Go ahead and select it.
+    - Build and run your app. When you click the Dismiss button, it should unwind all the way back to the red view controller.
