@@ -4318,3 +4318,32 @@
     - Back in the Main storyboard, add a button to the center of the green view. Update the button's text to read "Dismiss."
     - Control-drag the Dismiss button to the Exit object at the top of the view controller scene. When you release the mouse or trackpad button, a popover appears, listing all available destinations for unwinding. In this case, there's only one option: `unwindToRedWithUnwindSegue`, which matches the method signature you placed in the definition of `ViewController`. Go ahead and select it.
     - Build and run your app. When you click the Dismiss button, it should unwind all the way back to the red view controller.
+
+#### Navigation Controllers
+
+- Modal segues are the preferred method of transitioning from one context to another within your app.
+  - For example, in the iOS Mail app, tapping the Compose button transitions from reading messages to writing messages. The Cancel button is always available if the user chooses to return to a previous context.
+- However, some situations require a segue from one view controller to a related view controller.
+  - For example, when the user taps a cell in Settings, a new view controller animates from right to left to cover the screen, visually adding to the stack of displayed view controllers. Adding a new view controller to the top of a stack is called pushing onto the stack.
+- Tapping the Back button in the top-left corner or swiping back dismisses the top view and returns to the next highest view controller, animating from left to right. Dismissing a view controller from the top of the stack is known as popping off of the stack.
+- Navigation controllers manage the stack of view controllers and provide the animations when navigating between related views.
+
+  - <img src="./resources/navigation_controllers.png" alt="Navigation Controllers" width="400" />
+
+  - This push-and-pop structure is like washing a stack of dirty plates. After you wash and dry each plate, you place it in the cabinet. The first plate you wash will be at the bottom of the stack, and the last plate will be on the top. Later, when you grab a clean plate from the cabinet, you’ll be grabbing the last plate you washed.
+  - Now imagine that each plate is a view controller being pushed onto the screen. As you continue to push new view controllers, the first one — known as the root — moves farther down in the stack. Multiple taps of the Back button will eventually return to the root view controller, at which point the Back button goes away. Every navigation controller has a root view controller.
+
+- Another way to think about a navigation controller is that it mirrors a hierarchical data structure.
+  - In the case of Mail, the list of accounts (the root) gives you the ability to tap to reveal the account's folders. Tapping on each folder reveals its messages.
+  - Settings is similar. There's a list of setting categories (the root) one of which may be selected to reveal the settings or subcategories within, each time traveling deeper into the hierarchy.
+  - For the example above, from the root, General is selected and then Accessibility within that. Pushing a view controller onto the stack delves deeper into the hierarchy and popping a view controller from the stack travels back up the hierarchy to the root.
+- Back in your TrafficSegues project, you can use a navigation controller to manage the red, yellow, and green screens. Red will push to yellow, and yellow will push to green.
+  - To add a navigation controller into your scene, select the red view controller.
+  - Next, click the `Embed In` button in the bottom toolbar and select `Navigation Controller`.
+    - Alternatively, go to the Xcode menu bar and choose Editor > Embed In > Navigation Controller.
+  - Either of these methods will place a navigation controller at the beginning of the scene and set the red view controller as its root.
+- Build and run your app to see what’s changed. You may notice a few important differences:
+  - The Show segues between the red, yellow, and green view controllers have adapted to Show (Push), rather than Present Modally. (This is a key feature of the Show segue: It adapts the presentation method depending on whether it’s used within a navigation controller or independently.)
+  - The Dismiss button still unwinds back to the red view controller, but it does so by popping off view controllers rather than dismissing them.
+  - At the top of each view is a transparent navigation bar, which provides space for the Back button as well as for a title and additional buttons.
+  - The Document Outline now includes a Navigation Controller Scene, which includes a Navigation Bar.
