@@ -4347,3 +4347,39 @@
   - The Dismiss button still unwinds back to the red view controller, but it does so by popping off view controllers rather than dismissing them.
   - At the top of each view is a transparent navigation bar, which provides space for the Back button as well as for a title and additional buttons.
   - The Document Outline now includes a Navigation Controller Scene, which includes a Navigation Bar.
+
+#### Navigation Bar
+
+- One of the most obvious features of a navigation controller is the navigation bar, which appears at the top of the screen. A navigation bar may display a title and/or button items.
+- Select the navigation bar in the Document Outline, and check out the Attributes inspector to see what properties you can customize, such as the bar’s tint color, title color, and title font. (You might also choose to modify these properties in code.) View the documentation for `UINavigationBar` for a complete list of customizable properties.
+
+- **Navigation Item**
+
+  - Every UIViewController has a navigationItem that you can use to customize its navigation bar. When you added the navigation controller in the earlier step, Interface Builder automatically added a navigation item to the root (red) view controller.
+  - In the Document Outline, select the navigation item for the red view controller, and open the Attributes inspector. Enter “Red” in the Title attribute.
+    - It changes "View Controller Scene" in the Document Outlet to "Red Scene" and "Navigation Item" to "Red."
+  - Build and run the app. When you push to the yellow screen, you’ll notice that the Back button now displays “Red.”
+    - How did that happen? The Back button used the title of the preceding view controller as its text.
+    - However, if the preceding view controller doesn’t have a title, the Back button simply displays “Back.”
+    - If you want the Back button to use other text, like “Go To Red,” you can enter it in the Back Button field in the Attributes inspector of the red view controller’s navigation item.
+  - Under certain circumstances, Interface Builder will add a navigation item to view controllers. In the event it hasn’t, you can add one yourself by finding a Navigation Item in the Object library, and dragging it on top of your view controller.
+    - Set the titles of the yellow and green view controllers by selecting their Navigation Item and using the Attributes inspector to create "Yellow" and "Green" titles.
+  - In addition to titles and Back buttons, navigation items can include a special type of button, known as a bar button, which can appear on either navigation bars or toolbars.
+    - Find the `Bar Button Item` in the Object library, and place one in the top-right corner of the green view controller’s navigation bar.
+    - Click the bar button you just added, and open the Attributes inspector. In the `System Item` popup menu, you’ll see commonly used button choices, such as Add, Save, and Cancel. Choose one or two to see the button text change.
+    - Play with the Style and Tint attributes as well. The Bar Item properties allow you to customize your button further. For example, you can use the Image field to replace a text title with an image or icon.
+    - For now, go ahead and update the Title property of the bar item to “Pop.” (Notice that this update changes the `System Item` option to `Custom`.)
+    - Next, you can wire this new bar button to the unwind segue. Refer to the same steps you used to connect the Dismiss button. Once you’re done, you can delete the Dismiss button.
+  - Your storyboard now has all its segues. Build and run your app to see the titles and the button you just added. Notice that clicking the Pop button returns you to the red view controller.
+
+    - <img src="./resources/navigation_item.png" alt="Navigation Item" width="400" />
+
+- **Large Titles**
+
+  - You may have noticed in system apps like Settings that the navigation bar title on the primary screen appears much larger than in subsequent scenes. This large title can be added to your own apps by selecting the navigation bar in Interface Builder, then checking the “Prefers Large Titles” box in the Attributes inspector.
+  - Note that all of your titles, not just the title of the first view controller, have now adopted a large title.
+  - You can adjust which view controllers use the large title option by selecting the navigation item in question and selecting one of the options from the Large Title dropdown in the Attributes inspector.
+    - The `Always` option will ensure that the title of that navigation item will always be large.
+    - The `Never` option will ensure that the title of that navigation item will never be large.
+    - The `Automatic` option will adopt the behavior of the previous view controller in the navigation stack.
+    - Unless you have a specific reason to do otherwise, a good first practice is to have your root view controller adopt a large title, and subsequent view controllers adopt smaller titles.
