@@ -4383,3 +4383,25 @@
     - The `Never` option will ensure that the title of that navigation item will never be large.
     - The `Automatic` option will adopt the behavior of the previous view controller in the navigation stack.
     - Unless you have a specific reason to do otherwise, a good first practice is to have your root view controller adopt a large title, and subsequent view controllers adopt smaller titles.
+
+#### Pass Information
+
+- In many apps, you’ll need to pass information from one view controller to another before a segue takes place. For example, when you tap a name in the Contacts app, details about the contact need to be relayed to the Information screen before it’s presented.
+- To learn how this works, you’ll update the red view controller to include a text field in addition to the button. When the button is pressed, triggering the segue, Interface Builder will use any text in the text field as the title for the yellow view controller’s navigation item.
+- Begin by dragging a text field from the Object library onto the red view controller, positioning it just above the button. For this example, don't worry about adding constraints.
+- Create an outlet for the text field, naming it “textField.” You’ll need to refer to the text field in code so that you can access the text and update the destination’s title accordingly.
+- Every UIViewController has a method, `prepare(for:sender:)`, **which is called before a segue from the view controller takes place**. Begin typing “prepare” near the bottom of the ViewController definition, but before the closing bracket. Xcode will offer to help you complete the method name. Choose `prepare(for segue: UIStoryboardSegue, sender: Any?)` and press the Return key to add the method.
+- The first argument of this method is the segue itself. A segue contains a few properties that help to pass information across it:
+  - `identifier` — The name of the segue, which differentiates it from other segues. You can set this property in Interface Builder using the Attributes inspector.
+  - `destination` — The view controller that will be displayed once the segue is complete. While the value is a UIViewController, you may need to downcast it to a particular UIViewController subclass in order to access properties accessible only on that subclass.
+- Since there’s only one segue on the red view controller, the identifier isn’t needed. And since your goal is to update the title property of a navigation item and every UIViewController has this property, there’s no need for the downcast. So the code to set the title of the destination’s navigation item is fairly straightforward:
+
+  - ```swift
+      override func prepare(for segue: UIStoryboardSegue, sender:
+      Any?) {
+          segue.destination.navigationItem.title = textField.text
+      }
+    ```
+
+- Build and run your app. Then enter a short string into the text field. When you press the button, the method you just added will update the title on the yellow screen.
+- Writing the code for passing data between scenes can be a little tricky at first. But you’ll discover that passing data between screens is extremely useful and will allow you to write very flexible code. You’ll continue working with passing information with segues in the Quiz project.
