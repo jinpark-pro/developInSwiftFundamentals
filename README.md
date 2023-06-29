@@ -4405,3 +4405,42 @@
 
 - Build and run your app. Then enter a short string into the text field. When you press the button, the method you just added will update the title on the yellow screen.
 - Writing the code for passing data between scenes can be a little tricky at first. But you’ll discover that passing data between screens is extremely useful and will allow you to write very flexible code. You’ll continue working with passing information with segues in the Quiz project.
+
+#### Create Programmatic Segues
+
+- Sometimes you’ll need to use some logic to determine whether or not to perform a segue. Every segue that you’ve created at this point has involved dragging from a button to a view controller. When you create a segue this way, it will always be performed when the button is pressed. In this section, you’ll define a few generic segues between view controllers and decide programmatically whether they should be performed.
+- Before you begin, restore your application to a clean slate. Remove all existing segues, controls, and labels from your storyboard. You also need to remove any outlets you've created, as well as the prepare(for:sender:) and unwindToRed(segue:) methods.
+- In this example, you’ll place two buttons on the red view controller. One button will segue to the yellow screen, and the other will segue to green. The UI will also include a UISwitch that will determine whether or not the segues will be performed. If the switch is enabled, the segue can be performed; otherwise, no segue will take place.
+- Begin by placing two buttons and a switch from the Object library onto the red view. Update the title of one button to read "Push to Yellow" and the other to "Push to Green." Place the switch below the buttons. In this example, don't be too concerned with creating constraints to position the views for every screen size and orientation.
+- Rather than Control-dragging from the buttons to the view controllers, you'll want to Control-drag from the red view controller to the yellow and green view controllers. By doing so, you're defining two generic segues: one that moves from red to yellow, and another that moves from red to green.
+
+  - Control-drag from the view controller icon at the top of the red screen to the yellow view controller and create a `Show` segue, then repeat this step for the green view controller.(1)
+
+    - <img src="./resources/segue.png" alt="Segue" width="300" />
+
+- In order to perform the segues in code, you’ll need to give each segue a valid identifier string. Select the segue itself by tapping on the segue line. In the Attributes inspector, name one identifier “Yellow” and the other “Green.”
+- You’ll need to check the status of the UISwitch in code to determine whether or not to perform the segue. In order to do this, you’ll need to create an outlet for the switch. Open the assistant editor and Control-drag from the switch to a valid location within the ViewController definition.
+  - `@IBOutlet var segueSwitch: UISwitch!`
+- Create an action for each button by Control-dragging from the button to a valid location within the ViewController definition. Name `yellowButtonTapped` and `greenButtonTapped`.
+- To perform a segue programmatically, there's a method that exists on view controllers named `performSegue(withIdentifier:sender:)`.
+
+  - The first parameter for this method takes a String, which corresponds to the identifier that you assigned the segues in the Attributes inspector.
+  - The sender parameter is additional information that you can supply to the segue regarding which control triggered the segue, but it’s not needed in this example and can be set to nil.
+  - Call `performSegue(withIdentifier:, sender:)` in each method only if the switch is set to the “On” position.
+
+    - ```swift
+        @IBAction func yellowButtonTapped(_ sender: Any) {
+            if segueSwitch.isOn {
+                performSegue(withIdentifier: “Yellow”, sender: nil)
+            }
+        }
+         
+        @IBAction func greenButtonTapped(_ sender: Any) {
+            if segueSwitch.isOn {
+                performSegue(withIdentifier: “Green”, sender: nil)
+            }
+        }
+      ```
+
+- Build and run your application. When you press each button, the corresponding action will be triggered. Each action checks the status of the switch, and performs the appropriate segue if the switch is enabled.
+- Recall that the identifier property of the `UIStoryboardSegue` passed to `prepare(for:sender:)` tells you the name of the segue that’s about to be performed. Examine the API documentation for `shouldPerformSegue(withIdentifier:sender:)`. How could you move the check of `segueSwitch.isOn` to `shouldPerformSegue(withIdentifier:sender:)` rather than inside each button’s action?
