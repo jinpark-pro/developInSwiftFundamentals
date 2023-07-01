@@ -4444,3 +4444,90 @@
 
 - Build and run your application. When you press each button, the corresponding action will be triggered. Each action checks the status of the switch, and performs the appropriate segue if the switch is enabled.
 - Recall that the identifier property of the `UIStoryboardSegue` passed to `prepare(for:sender:)` tells you the name of the segue that’s about to be performed. Examine the API documentation for `shouldPerformSegue(withIdentifier:sender:)`. How could you move the check of `segueSwitch.isOn` to `shouldPerformSegue(withIdentifier:sender:)` rather than inside each button’s action?
+
+#### Lab - Login
+
+- The objective of this lab is to create a login screen that passes a username between view controllers. You'll use view controllers, a navigation controller, and segues to create both the login screen and a simple landing screen that displays in its title either the username or text related to a forgotten username or password.
+  The instructions in this lab won’t cover constraints and Auto Layout. But as you work through the steps, take some time to ensure that your views adapt to different screen sizes and orientations.
+  Create a new project called "Login" using the iOS App template.
+
+- **Step 1 Create Your Storyboard Scenes With Simple Segues**
+
+  - Configure your storyboard to have two view controllers, the first one for the login screen and the second for the landing screen.
+  - Add two text fields and three buttons to the login screen. Change the text of the first button to say "Log In," the second to say "Forgot Username," and the third to say "Forgot Password."
+  - For the two text fields, use the Attributes inspector to set placeholder text to "Username" and "Password." To hide text that’s entered in the password text field, select the `Secure Text Entry` checkbox at the bottom of the Attributes inspector.
+  - From the login button to the landing screen, create a Show segue.
+  - Using the Attributes inspector for the landing screen view controller, find the `Presentation` option and choose `Full Screen`. This presents the view as a full screen rather than as a card that’s dismissible by swiping down. You want the user to feel they've entered your app — the login screen shouldn’t be lingering in the background.
+  - Run the app. Check that you can segue from the login screen to the landing screen. Since you haven’t set up a way to pass information from the login, your landing screen will be blank.
+
+- **Step 2 Add Navigation Controller and Prepare For Segue**
+
+  - Select your login view controller and click `Embed In` at the bottom for adding a navigation controller and add a title to the navigation item. Change its Large Title option to `Always`. Select the navigation controller’s navigation bar and check Prefers Large Titles.
+  - Select the navigation item for the landing screen. Change its Large Title option to `Always`.
+  - In the ViewController file add the `prepare(for:sender:)` method. Feel free to rely on autocomplete to properly override the method.
+  - Create an outlet from your username text field to the ViewController file.
+  - In `prepare(for:sender:)`, set the title of the destination view controller’s navigation item to the text from the username text field.
+
+    - ```swift
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            segue.destination.title = usernameText.text
+        }
+      ```
+
+  - Run the app and ensure that what you type in the username text field appears in the title of the landing screen when you tap the login button.
+
+- **Step 3 Add Programmatic Segues**
+
+  - Create a segue from the login view controller (not the login button) to the landing view controller. Be sure to give the segue a descriptive identifier.
+  - Create an outlet from each of the two remaining buttons (the Forgot Username button and the Forgot Password button), and give them descriptive names like "forgotUserNameButton."
+  - Create an action from each of the buttons.
+  - Within each action, call `performSegue(withIdentifier:sender:)`, passing the identifier of the most recently created segue. Instead of setting sender to `nil`, set sender to be the button that was tapped. For example, if the segue identifier is ForgottenUsernameOrPassword then the inside of the button's action might look as follows: `performSegue(withIdentifier: "ForgottenUsernameOrPassword", sender: sender)`
+  - Earlier in this lesson, you learned that the `prepare(for:sender:)` gives you access to the identifier of the segue that was called. Now that you have two possible identifiers, you need to use control flow statements to pass different information to the landing screen based on which segue was called. If the login segue was called, you want the landing screen's title to be the username. However, if the Forgot Password button was tapped, you want the title to read “Forgot Password.” Similarly, tapping the Forgot Username button will change the title to “Forgot Username.” Before reading on, take a minute to see if you can do this on your own using segue.identifier, sender, downcasting, and if statements.
+  - It’s OK if you didn't get it on your own. This is new material. If you want to pass a different title based on which button was tapped, the body of your prepare(for:sender:) method might look like the following:
+
+    - ```swift
+        guard let sender = sender as? UIButton else {return}
+         
+        if sender == forgotPasswordButton {
+            segue.destination.navigationItem.title = “Forgot Password”
+        } else if sender == forgotUsernameButton {
+            segue.destination.navigationItem.title = “Forgot Username”
+        } else {
+            segue.destination.navigationItem.title = usernameTextField.text
+        }
+      ```
+
+  - The code above casts the sender as a UIButton, which in this case always succeeds. Why is that? The login segue is specifically triggered by a button, and the ForgottenUsernameOrPassword segue is triggered by the method performSegue(withIdentifier:sender:), where you passed in the corresponding button as the sender. After that, an if statement checks whether sender was forgotPasswordButton and sets the title accordingly. If sender wasn’t forgotPasswordButton, another if statement checks whether sender was forgotUserNameButton and sets the title accordingly. If sender wasn’t forgotPasswordButton, there's only one remaining case — when the login button was tapped — which sets the title to the username.
+
+    - ```swift
+        import UIKit
+
+        class ViewController: UIViewController {
+            @IBOutlet var usernameText: UITextField!
+            @IBOutlet var forgotUsernameButton: UIButton!
+            @IBOutlet var forgotPasswordButton: UIButton!
+
+            override func viewDidLoad() {
+                super.viewDidLoad()
+                // Do any additional setup after loading the view.
+            }
+
+            override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+                guard let sender = sender as? UIButton else { return }
+
+                if sender == forgotUsernameButton {
+                    segue.destination.navigationItem.title = "Forgot Username"
+                } else if sender == forgotPasswordButton {
+                    segue.destination.navigationItem.title = "Forgot Password"
+                } else {
+                    segue.destination.navigationItem.title = usernameText.text
+                }
+            }
+            @IBAction func forgotUsernameClick(_ sender: Any) {
+                performSegue(withIdentifier: "ForgottenUsernameOrPassword", sender: sender)
+            }
+            @IBAction func forgotPasswordClick(_ sender: Any) {
+                performSegue(withIdentifier: "ForgottenUsernameOrPassword", sender: sender)
+            }
+        }
+      ```
