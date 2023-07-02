@@ -4531,3 +4531,19 @@
             }
         }
       ```
+
+### Lesson 3.8 Tab Bar Controllers
+
+- In the last lesson, you learned how to navigate from one view controller to another. But as you add features to an app, you may realize that drilling up and down with a navigation controller just doesn’t cut it. It may be time to flatten out your view controller hierarchy.
+- In this lesson, you’ll use tab bar controllers to organize different kinds of information or different modes of operation. Tab bar controllers are key to navigating between view controllers, allowing you to comfortably pack more functionality into a single app.
+- A tab bar controller allows you to arrange your app according to distinct modes or sections. For example, the Clock app is divided into five modes: World Clock, Alarm, Bedtime, Stopwatch, and Timer.
+- As you’d expect, a tab bar interface features a tab bar view, which runs along the bottom of the app’s screen. Each tab can contain its own independent navigation hierarchy, with the tab bar controller coordinating the navigation between the different view hierarchies. The tab bar distinguishes the currently selected tab with a different-colored icon and title.
+
+- **Add a Tab Bar Controller**
+
+  - To practice building a tab bar interface, you’ll create a simple app that navigates between several root view controllers. (This could be a good template for future projects that also use a tab bar controller.)
+  - Start by creating a new project named `RainbowTabs` using the iOS App template. Open the Main storyboard and, in the Document Outline, select View under View Controller. Using the Attributes inspector, set the view's background color to System Red.
+  - Next, you’ll create the tab bar controller. With the red view selected, click the `Embed In` button in the bottom toolbar and select `Tab Bar Controller`. Alternatively, go to the Xcode menu bar and choose Editor > Embed In > Tab Bar Controller.
+  - This action places a tab bar controller at the beginning of the scene.
+  - The tab bar controller maintains a list of tabs through its viewControllers property, an array of the root view controllers displayed by the tab bar interface.
+  - That last step added the red view controller to the tab bar controller’s array of root view controllers. For each root view controller, there’s an associated `UITabBarItem` instance. You now have a tab bar with one tab bar item.
