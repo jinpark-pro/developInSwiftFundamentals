@@ -4539,11 +4539,59 @@
 - A tab bar controller allows you to arrange your app according to distinct modes or sections. For example, the Clock app is divided into five modes: World Clock, Alarm, Bedtime, Stopwatch, and Timer.
 - As you’d expect, a tab bar interface features a tab bar view, which runs along the bottom of the app’s screen. Each tab can contain its own independent navigation hierarchy, with the tab bar controller coordinating the navigation between the different view hierarchies. The tab bar distinguishes the currently selected tab with a different-colored icon and title.
 
-- **Add a Tab Bar Controller**
+#### Add a Tab Bar Controller
 
-  - To practice building a tab bar interface, you’ll create a simple app that navigates between several root view controllers. (This could be a good template for future projects that also use a tab bar controller.)
-  - Start by creating a new project named `RainbowTabs` using the iOS App template. Open the Main storyboard and, in the Document Outline, select View under View Controller. Using the Attributes inspector, set the view's background color to System Red.
-  - Next, you’ll create the tab bar controller. With the red view selected, click the `Embed In` button in the bottom toolbar and select `Tab Bar Controller`. Alternatively, go to the Xcode menu bar and choose Editor > Embed In > Tab Bar Controller.
-  - This action places a tab bar controller at the beginning of the scene.
-  - The tab bar controller maintains a list of tabs through its viewControllers property, an array of the root view controllers displayed by the tab bar interface.
-  - That last step added the red view controller to the tab bar controller’s array of root view controllers. For each root view controller, there’s an associated `UITabBarItem` instance. You now have a tab bar with one tab bar item.
+- To practice building a tab bar interface, you’ll create a simple app that navigates between several root view controllers. (This could be a good template for future projects that also use a tab bar controller.)
+- Start by creating a new project named `RainbowTabs` using the iOS App template. Open the Main storyboard and, in the Document Outline, select View under View Controller. Using the Attributes inspector, set the view's background color to System Red.
+- Next, you’ll create the tab bar controller. With the red view selected, click the `Embed In` button in the bottom toolbar and select `Tab Bar Controller`. Alternatively, go to the Xcode menu bar and choose Editor > Embed In > Tab Bar Controller.
+- This action places a tab bar controller at the beginning of the scene.
+- The tab bar controller maintains a list of tabs through its viewControllers property, an array of the root view controllers displayed by the tab bar interface.
+- That last step added the red view controller to the tab bar controller’s array of root view controllers. For each root view controller, there’s an associated `UITabBarItem` instance. You now have a tab bar with one tab bar item.
+
+#### Add Tabs
+
+- To add another tab bar item, select View Controller in the Object library, and drag it onto the canvas. Give the view controller an orange background.
+- Next, you’ll need to add the new view controller into the viewControllers array.
+  - Control-drag from the tab bar controller to the orange view controller, and release the mouse or trackpad button. In the popover, you can see “view controllers” listed under `Relationship Segue`. Choose this option.
+- You should now see a second tab bar item on the tab bar controller.
+- Build and run your app. Notice that you can switch between the two view controllers by selecting a different tab bar item.
+- **Tab Bar Items**
+
+  - A tab bar item consists of two visual elements: an image and a label. The iOS SDK provides several iOS-style icons paired with system-defined text, referred to as system items. One example is the search icon that you see in the App Store tab bar.
+  - Here’s a complete list of available system item title with their corresponding icons:
+
+    - <img src="./resources/corresponding_icons.png" alt="Corresponding Icons" width="200"/>
+
+  - In your RainbowTabs project, select the tab bar item in the red view controller, and open the Attributes inspector. Choose any of the system items from the System Item pop-up menu. Notice how the tab bar item adjusts to your different selections.
+  - Now change the device orientation in Interface Builder to landscape using the “Orientation” button.
+    - Notice how the tab bar item’s title now appears to the right of the icon.
+    - When in portrait, tab bar items will be displayed with the icon just above the item title. In landscape, the icon and title will be displayed side by side.
+    - When on an iPhone in landscape, the tab bar will be thinner and have smaller images if you provide a smaller image to the `.landscapeImagePhone` property. That way less content is obscured by the tab bar.
+
+- **Customize Tab Bar Items**
+  - But maybe the system items don’t make sense for your app. You can use the Attributes inspector to customize an item’s label and its image, for both unselected and selected states.
+  - When providing icons of any kind for an iOS app, you should review the [Human Interface Guidelines for App Icons](https://developer.apple.com/design/human-interface-guidelines/app-icons) to ensure that you’re designing your icons in the right format and size.
+  - Before designing your own icons, consider using [SF Symbols](https://developer.apple.com/design/human-interface-guidelines/sf-symbols). These vector icons work great at all sizes, and you have lots to choose from. You can download the full set of symbols using the [SF Symbols 4](https://devimages-cdn.apple.com/design/resources/download/SF-Symbols-4.dmg). You can also type a common symbol name — for example, “circle” — into an Image field in the Attributes inspector to see what's available.
+  - With the red view's Tab Bar Item still selected, type “Red” in the Title field and type “r.square” into the Image field. From the menu, choose the matching symbol. The image is provided through SF Symbols as denoted by the “System” label next to the arrow. You can also customize the Selected Image attribute to distinguish the tab item's selected state (“r.square.fill” may be a good choice).
+  - Go ahead and make changes to the tab bar item for the orange view controller: type "Orange" in the Title field and type "o.square.fill" into the Image field.
+  - What if you want your tab bar item to indicate that new information is available for that view or mode? You can add a small red marker with white text, known as a badge, to the tab bar item. Use the Badge attribute to enter information.
+- **Configuring The Tab Bar**
+  - The background of the views in this application are a solid color and the tab bar will be presented as transparent in your app. This may make it difficult to see the tab bar items or the red badges. The tab bar supports an appearance option that will show the tab bar with a blur background at all times.
+    - Click on the Tab Bar in the Tab Bar Controller and click the checkbox next to Scroll Edge in the Appearances section of the Attributes inspector.
+- **Programmatic Customization**
+
+  - Storyboards are ideal for setting up initial, or default, view scenes; but they don’t allow you to make runtime adjustments using the Attributes inspector. That’s OK. You can accomplish any of these customizations in code.
+  - For example, imagine you want to alert your user that new information is available. Your app would have to update the badge at runtime. To assign a badge in code, set the `badgeValue` property to a non-nil string. You can access your view controller’s `UITabBarItem` instance through its `tabBarItem` property. For more explanation, you can reference the [UIViewController Documentation](https://developer.apple.com/documentation/uikit/uiviewcontroller).
+  - In ViewController, insert the following line to the `viewDidLoad()` function: `tabBarItem.badgeValue = “!”`
+  - Run your app in Simulator. You’ll notice the red tab item now has a badge.
+  - The badge draws your user's attention to that tab. After they've viewed the new information, the badge is no longer necessary. To remove the badge, assign a nil value to the badgeValue property in a `viewWillDisappear(_:)` method.
+
+    - ```swift
+        override func viewWillDisappear(_ animated: Bool) {
+            super.viewWillDisappear(animated)
+         
+            tabBarItem.badgeValue = nil
+        }
+      ```
+
+  - Build and run the app again, when you navigate to the Orange tab and you will see the badge on the red tab disappear.
