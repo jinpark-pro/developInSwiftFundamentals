@@ -4611,3 +4611,22 @@
 - What just happened? Whenever you add more view controllers than the tab bar can display, the tab bar controller inserts a special view controller, known as the More view controller. This view controller lists the omitted view controllers in a table, which can expand to accommodate any number of items.
 - The More view controller is unusual. It can’t be customized or selected. It doesn’t appear among the view controllers managed by the tab bar controller. It appears when needed and is otherwise separate from the rest of your content.
 - The More view controller can be quite useful for displaying additional tab items, but also consider that a More tab requires more time and effort from the user. A much better practice is to plan your app carefully so that you include only essential tabs — the minimum number necessary for your app and its information hierarchy. For iPhone apps, five is generally considered the maximum; for iPad - only apps, you can add a few more.
+
+#### Link The Tabs To Code
+
+- Currently, only the controller with the red view can be customized with code, because it’s the only controller that uses a UIViewController subclass. That subclass is called ViewController, and it was created as part of the iOS App template. At some point, you’re going to want to add new functionality into the other view controllers, such as fetching data or managing a user account. Regardless of the view controller’s responsibilities, there is a high chance you’ll need to use code in order to perform a task. This means you’ll need additional UIViewController subclasses, one for each of the different colored screens.
+- Begin by renaming the existing ViewController class to something more descriptive, such as RedViewController.(1) Update the class definition, then rename the ViewController file to RedViewController.(2) The filename does not have to match the class name, but it makes the class definition easier to locate in the future for yourself or other members of your team.
+
+  - <img src="./resources/rename_view_controller.png" alt="Rename View Controller" width="400" />
+
+- You’ll need to update the red view’s controller class from ViewController to RedViewController as well, since the ViewController class no longer exists.
+  - Highlight the red view’s controller in the Document Outline, then use the Identity inspector to set the custom class to the new name.
+- Now you’re ready to add new view controllers to your project.
+  - Select File -> New -> File (Command-N) from the Xcode menubar. Select “Cocoa Touch Class” as your starting template, then click Next. Set the subclass of your new class to `UIViewController`, then give your class a new name, `OrangeViewController`. It is convention to append “ViewController” to the end of your class name so it’s clear what type of object you’re subclassing. Click Next, then Create, to finalize the subclass creation.
+- Now that you have a new view controller to work with, you can update the controller of the orange view to OrangeViewController.
+  - Open the Main storyboard and select the orange view’s controller in the Document Outline. Use the Identity inspector to set the custom class to OrangeViewController.
+  - Repeat the steps of creating a new UIViewController subclass for every tab, and assign each view controller a unique custom class.
+
+#### Challenge
+
+- Change the tab bar controller to use three navigation controllers as its viewControllers. Each navigation controller’s root view controller should be one of the colored view controllers.
