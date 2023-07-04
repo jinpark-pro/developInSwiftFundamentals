@@ -4552,9 +4552,10 @@
 
 - To add another tab bar item, select View Controller in the Object library, and drag it onto the canvas. Give the view controller an orange background.
 - Next, you’ll need to add the new view controller into the viewControllers array.
-  - Control-drag from the tab bar controller to the orange view controller, and release the mouse or trackpad button. In the popover, you can see “view controllers” listed under `Relationship Segue`. Choose this option.
+  - **Control-drag from the tab bar controller to the orange view controller, and release the mouse or trackpad button. In the popover, you can see “view controllers” listed under `Relationship Segue`**. Choose this option.
 - You should now see a second tab bar item on the tab bar controller.
 - Build and run your app. Notice that you can switch between the two view controllers by selecting a different tab bar item.
+
 - **Tab Bar Items**
 
   - A tab bar item consists of two visual elements: an image and a label. The iOS SDK provides several iOS-style icons paired with system-defined text, referred to as system items. One example is the search icon that you see in the App Store tab bar.
@@ -4569,12 +4570,14 @@
     - When on an iPhone in landscape, the tab bar will be thinner and have smaller images if you provide a smaller image to the `.landscapeImagePhone` property. That way less content is obscured by the tab bar.
 
 - **Customize Tab Bar Items**
+
   - But maybe the system items don’t make sense for your app. You can use the Attributes inspector to customize an item’s label and its image, for both unselected and selected states.
   - When providing icons of any kind for an iOS app, you should review the [Human Interface Guidelines for App Icons](https://developer.apple.com/design/human-interface-guidelines/app-icons) to ensure that you’re designing your icons in the right format and size.
   - Before designing your own icons, consider using [SF Symbols](https://developer.apple.com/design/human-interface-guidelines/sf-symbols). These vector icons work great at all sizes, and you have lots to choose from. You can download the full set of symbols using the [SF Symbols 4](https://devimages-cdn.apple.com/design/resources/download/SF-Symbols-4.dmg). You can also type a common symbol name — for example, “circle” — into an Image field in the Attributes inspector to see what's available.
   - With the red view's Tab Bar Item still selected, type “Red” in the Title field and type “r.square” into the Image field. From the menu, choose the matching symbol. The image is provided through SF Symbols as denoted by the “System” label next to the arrow. You can also customize the Selected Image attribute to distinguish the tab item's selected state (“r.square.fill” may be a good choice).
   - Go ahead and make changes to the tab bar item for the orange view controller: type "Orange" in the Title field and type "o.square.fill" into the Image field.
   - What if you want your tab bar item to indicate that new information is available for that view or mode? You can add a small red marker with white text, known as a badge, to the tab bar item. Use the Badge attribute to enter information.
+
 - **Configuring The Tab Bar**
   - The background of the views in this application are a solid color and the tab bar will be presented as transparent in your app. This may make it difficult to see the tab bar items or the red badges. The tab bar supports an appearance option that will show the tab bar with a blur background at all times.
     - Click on the Tab Bar in the Tab Bar Controller and click the checkbox next to Scroll Edge in the Appearances section of the Attributes inspector.
@@ -4595,3 +4598,16 @@
       ```
 
   - Build and run the app again, when you navigate to the Orange tab and you will see the badge on the red tab disappear.
+
+#### Even More Tab Items
+
+- You’ve probably noticed that the current version of your project doesn’t live up to its “RainbowTabs” name. Try adding three more colors in three more tab items. A tab bar will display all tab bar items as long as there’s enough horizontal space.
+- Select View Controller in the Object library, and add three of them to the canvas. Set the background color of one view controller to yellow, another to green, and the third to blue. If you find it helpful, you can reposition the view controllers on the canvas to match the order on the tab bar.
+- Add each of these view controllers to the viewControllers property of the tab bar controller.
+- You can update the new tab bar items with images from the assets catalog or from SFSymbols.
+- Run your app in Simulator on an iPhone device. With five items on the tab bar, there isn’t much space left. What do you think will happen if you add a final purple view controller to the tab bar controller?
+- Drag another view controller onto the canvas, update its background color to purple, and add it to the tab bar controller’s array of view controllers. You’ll notice, in your tab bar controller scene, the fifth tab is replaced with a More tab item.
+- Run your app and check it out.
+- What just happened? Whenever you add more view controllers than the tab bar can display, the tab bar controller inserts a special view controller, known as the More view controller. This view controller lists the omitted view controllers in a table, which can expand to accommodate any number of items.
+- The More view controller is unusual. It can’t be customized or selected. It doesn’t appear among the view controllers managed by the tab bar controller. It appears when needed and is otherwise separate from the rest of your content.
+- The More view controller can be quite useful for displaying additional tab items, but also consider that a More tab requires more time and effort from the user. A much better practice is to plan your app carefully so that you include only essential tabs — the minimum number necessary for your app and its information hierarchy. For iPhone apps, five is generally considered the maximum; for iPad - only apps, you can add a few more.
