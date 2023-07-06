@@ -4709,7 +4709,7 @@
 
 - After `viewDidLoad()`, the next method in the view controller life cycle is `viewWillAppear(_:)`. This is called right before the view appears on the screen. This is an excellent place to add work that needs to be performed before the view is displayed (and every time it’s displayed) to the user. For example, if your view displays information relative to the user’s location, you may want to request the location in `viewWillAppear(_:)`. That way, the view can be updated to take advantage of the new location. Other tasks include: starting network requests, refreshing or updating views (such as the status bar, navigation bar, or table views), and adjusting to new screen orientations.
 - As you’d expect, `viewDidAppear(_:)` is called after the view appears on the screen. If your work needs to be performed each time the view appears — but may require more than a couple of seconds — you’ll want to place it in `viewDidAppear(_:)`. This way, your view will display quickly as your function continues to execute.
-- Use the `viewDidAppear(_:)` method for starting an animation or for other long - running code, such as fetching data.
+- Use the `viewDidAppear(_:)` method **for starting an animation or for other long - running code, such as fetching data**.
 - To continue exploring the life cycle, override the function `viewWillAppear(_:)`.
 - Because you're writing your own custom implementation of `viewWillAppear(_:)`, remember to call the superclass version of `viewWillAppear(_:)`. Because the call to `viewWillAppear(_:)` requires the animated property, you can pass along the parameter given to the subclass.
 - Next, add a print statement so you can check the order of the life cycle methods: `print(”ViewController - View Will Appear”)`
@@ -4752,3 +4752,98 @@
     - View controller views that will no longer be displayed are then removed, and those view controller’s `viewWillDisappear(_:)` and `viewDidDisappear(_:)` methods are called.
   - Finally, UIKit displays the new view and triggers `viewDidAppear(_:)`.
 - As you can see, there are many uses for the view controller life cycle methods. Each one is like a “notification” telling your code that the view event has taken place. Using this guide, you, as the developer, will figure out how best to take advantage of each of the methods for the particular task at hand.
+
+#### Lab - Order Of Events
+
+- **Objective**
+
+  - The objective of this lab is to further your understanding of the view’s life cycle. You will create an app that adds to the text of a label based on the events in the view controller life cycle.
+  - Create a new project called "OrderOfEvents" using the iOS App template.
+
+- **Step 1 Create New View Controller Subclasses**
+
+  - Drag out two more view controllers from the Object library, and place them next to the existing view controller in the storyboard. The first view controller will simply be a starting point for the app that has a button to segue to the next screen. The second view controller will have a label that displays the order of different view controller life cycle events. The third view controller will provide a way to navigate away from the second view controller.
+  - Create two new files, one for each of the new view controllers, by choosing File > New > File from the Xcode menu bar (or press Command-N), then choosing Cocoa Touch Class. Name the files “MiddleViewController” and “LastViewController.” Check that they’re both subclasses of UIViewController.
+  - One at a time, select the middle and last view controllers in the storyboard and link them to the files you just created, using the Identity inspector to set their class to MiddleViewController and LastViewController.
+  - Note that the original view controller in your storyboard (the one provided by the project template) already has a corresponding ViewController file and its class is properly assigned in the Identity inspector.
+
+- **Step 2 Set Up Your Storyboard**
+
+  - Embed the first view controller in a navigation controller.
+  - On this view controller, add a button that says: “Show me the life cycle.” Create a Show segue from the button to the middle view controller.
+  - Add a button to the bottom of the middle view controller. Create a Show segue from this button to the last view controller. Since no information is being passed between view controllers, you don’t need to worry about setting the segue’s identifier.
+  - Add a label to the top of the middle view controller. Replace its text with: “Nothing has happened yet.” Since this label will need more lines later on, use the Attributes inspector to set Lines to 0. This attribute will allow the label to expand as needed.
+  - Add a label to the last view controller, and replace its text with: “Go back and see if anything happened.”
+
+- **Step 3 Update the Label Based On the Life Cycle Event**
+
+  - In the storyboard, create an outlet from the label in the middle view controller to MiddleViewController.
+  - Add a variable property of type Int just below the outlet for your label. Call it “eventNumber” and set it equal to 1. At the end of each life cycle event, your code will add 1 to this property — numbering events as they’re added to the label.
+  - In MiddleViewController, add a method to update your label for a given event. Use conditional binding to unwrap the existing text in the label. Set the label text equal to what was already there, plus a statement about the life-cycle event that just occurred, then update eventNumber. This statement should use eventNumber to keep track of the order of events. Your code might look as follows:
+
+    - ```swift
+        func addEvent(from: String) {
+            if let existingText = label.text {
+                label.text = "\(existingText)\nEvent number \(eventNumber) was \(from)"
+                eventNumber += 1
+            }
+        }
+      ```
+
+  - What's happening? The above code unwraps the text in the label — which you need to do because the value is optional. Next, it adds a newline (\n) to the label text (starting a new line), a description of the event that just occurred, and its event number. The code increments eventNumber by one, so that the next time eventNumber is accessed, it will describe the next event number in the sequence.
+  - In MiddleViewController, implement all five life-cycle methods you learned in this lesson: `viewDidLoad()`, `viewWillAppear(_:)`, `viewDidAppear(_:)`, `viewWillDisappear(_:)`, and `viewDidDisappear(_:)`.
+
+    - ```swift
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            addEvent(from: "viewDidLoad")
+        }
+      ```
+
+  - When you've finished filling out the body of all five life cycle methods, run the app and navigate from screen to screen. What happens when you navigate to the last view controller and back to the middle view controller? Do all the life cycle events happen again? If not, why not? What about when you navigate all the way back to the initial view controller and then to the middle view controller? Do all the life cycle events happen again? Why is this different from navigating from the last to the middle view controller?
+
+    - ```swift
+        import UIKit
+
+        class MiddleViewController: UIViewController {
+            @IBOutlet var eventMessage: UILabel!
+            var eventNumber: Int = 1
+
+            func addEvent(from: String) {
+                if let existingText = eventMessage.text {
+                    eventMessage.text = "\(existingText)\nEvent Number \(eventNumber) was \(from)"
+                    print(eventNumber)
+                    eventNumber += 1
+                }
+            }
+            override func viewDidLoad() {
+                super.viewDidLoad()
+                addEvent(from: "viewDidLoad")
+            }
+
+            override func viewWillAppear(_ animated: Bool) {
+                addEvent(from: "viewWillAppear")
+            }
+            override func viewDidAppear(_ animated: Bool) {
+                addEvent(from: "viewDidAppear")
+            }
+            override func viewWillDisappear(_ animated: Bool) {
+                addEvent(from: "viewWillDisappear")
+            }
+            override func viewDidDisappear(_ animated: Bool) {
+                addEvent(from: "viewDidDisappear")
+            }
+        }
+
+        /*
+          Output on the MiddleViewController
+          Nothing has happened yet.
+          Event Number 1 was viewDidLoad
+          Event Number 2 was viewWillAppear
+          Event Number 3 was viewDidAppear
+          Event Number 4 was viewWillDisappear
+          Event Number 5 was viewDidDisappear
+          Event Number 6 was viewWillAppear
+          Event Number 7 was viewDidAppear
+        */
+      ```
