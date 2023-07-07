@@ -4847,3 +4847,41 @@
           Event Number 7 was viewDidAppear
         */
       ```
+
+### Lesson 3.10 Building Simple Workflows
+
+- In this unit, you learned about many of the UIKit tools that help you build common user interfaces and respond to user interactions. In this lesson, you’ll tie those concepts together to design simple workflows and familiar navigation hierarchies.
+- You’ve learned that UIKit is the foundation for building iOS apps. Its conventions drive how iOS users interact with their devices, the operating system, and most of the apps they use every day. And it’s because of these conventions that many iOS apps today feel familiar to long-time users.
+- The [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) resource defines some of the best practices for building intuitive workflows and familiar navigation hierarchies. As an app developer, you have the opportunity to put these practices to excellent use.
+
+#### Design Principles
+
+- Equipped with a wide variety of views and controls in your toolset, you’re already able to build many features into your apps. But to build an app that’s both simple and powerful requires mastery of the Human Interface Guidelines — an understanding of when, where, and how to use UI objects in a familiar way.
+- The first page of the Human Interface Guidelines includes a list of six characteristics to keep in mind as you design your apps.
+
+- **Aesthetic Integrity**
+
+  - Your app’s appearance and behavior should make sense for its goals and purpose. For example, an app that helps people perform a serious task can keep them focused by using subtle graphics, standard controls, and predictable interactions. On the other end of the spectrum, an entertaining app, such as a game, can sport a captivating appearance that promises fun and excitement, while encouraging discovery.
+
+- **Consistency**
+
+  - A consistent app incorporates features and behaviors in ways that people expect. Whenever possible, use system-provided interface elements, well-known icons, standard text styles, and uniform terminology — all available in UIKit — to deliver a familiar experience.
+  - As you design specific features, explore how other apps have solved similar problems. For example, if you’re designing a workflow for completing an order in an e-commerce app, take a look at the checkout flow of popular e-commerce apps. You shouldn’t blatantly copy other apps, but you can use good examples as a starting point for ​your design.
+
+- **Direct Manipulation**
+
+  - Through direct manipulation of onscreen content, users can see the immediate, visible results of their actions—which both adds engagement and facilitates understanding. When your app presents content that users can change or adjust, consider providing a way to manipulate the content with a gesture or by rotating the device. Many photo editing apps, for example, use swipe gestures to adjust settings or apply effects.
+
+- **Feedback**
+
+  - Users should never wonder if an app responded to their actions. Make sure your app provides perceptible feedback—in the form of alerts, animations, or other confirmations — to let users know what’s going on. If your app is loading data from the internet, display the network activity indicator. If the action triggered by a button isn’t available, dim the button.
+  - For some good examples, take a look at the built-in iOS apps. In what ways do they acknowledge user actions? You might notice that interactive elements are highlighted briefly when tapped, progress indicators communicate the status of long-running operations, and animation and sound help clarify the results of actions.
+
+- **Metaphors**
+
+  - Users catch on faster when an app’s objects and actions are metaphors for familiar experiences — whether rooted in the real or digital world. Have you ever wondered why the home screen on a computer is called the Desktop? Early versions of graphical interfaces used the Desktop metaphor to help users feel at home with this new computing paradigm. Folders represented directories, documents looked like paper, and the trash can was for deleting files.
+  - Metaphors work even better in iOS because people interact physically with things on the screen. iOS interfaces use distinct visual layers and realistic motion to convey hierarchy and depth. Users can move views out of the way to discover information. They drag and swipe content. They toggle switches, move sliders, and scroll through picker values. They even flick through pages of books and magazines.
+
+- **User Control**
+
+  - No matter how awesome an app is, it doesn’t take control. It might suggest a course of action or warn about dangerous consequences, but the user should always get to make the important decisions. As you design your apps, try to give users decision-making power without bombarding them with alerts or options at every juncture. An app can make people feel in control by keeping interactive elements familiar and predictable, confirming destructive actions, and making it easy to cancel operations — even when they’re already underway. The best apps find the correct balance between enabling users and avoiding unwanted outcomes.
