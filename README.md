@@ -4931,3 +4931,21 @@
     - **Use a navigation bar to traverse a hierarchy of data.** The navigation bar’s title can display the user’s current position in the hierarchy, and the Back button makes it easy to return to the previous position.
     - **Use a tab bar to present peer categories of content or functionality.** A tab bar lets people quickly and easily switch between categories or modes of operation, regardless of their current location.
     - **Use the proper transition style.** Whenever you’re transitioning to a new screen to display more detail about an item, you should use a right-to-left push transition used by a Show segue within a navigation controller. If the user is switching contexts — from displaying contacts to adding a new contact, for example — use a modal transition.
+
+#### Example Workflow
+
+- If you were to build an alarm and stopwatch app, it would be useful to plan out the features and workflow of the app before sitting down to build it. A good way to do this is with a simple flowchart that details the purpose of each screen, the mode of navigating from one screen to another, and the general navigation hierarchy of the app.
+- For this example, assume the app needs the following features:
+  - Display alarms
+  - Toggle alarms on and off
+  - Create alarms
+  - Edit alarms
+  - Change the sound of alarms
+  - Basic stopwatch functionality (display, start, lap, stop, reset)
+- Looking at the planned features, you can see that there are two separate modes in the app: alarm and stopwatch. A tab bar controller would provide a flat navigation design that would allow the user to clearly see both distinct features.
+  - Because the alarm and stopwatch tabs are separate, each can focus on the workflows necessary to run its own feature.
+  - The stopwatch functionality can easily exist on a single view. So, the stopwatch tab doesn’t need any more than its own tab.
+  - Managing alarms may require more than one screen. For example, it may be useful to have additional screens to view, create, and edit different alarms.
+- For this, you can build a view to list all the alarms and present different modal views when the user selects a preexisting alarm or needs to create a new one. The flowchart below illustrates the navigation hierarchy and overall workflow of this hypothetical app.
+
+  - <img src="./resources/example_workflow.png" alt="Example Workflow" width="400" />
