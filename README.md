@@ -4894,3 +4894,40 @@
   - [Color](https://developer.apple.com/design/human-interface-guidelines/color) talks about using color to help people understand how to interact with interface elements.
   - [Tables](https://developer.apple.com/design/human-interface-guidelines/lists-and-tables) gives specific guidelines for presenting information in a table view.
 - As a new developer, you’ll be more successful if you follow everything in the Human Interface Guidelines. But as you gain experience, you may recognize use cases that call for something outside the box. There are many great apps that extend beyond iOS conventions. As the saying goes, learn the rules like a pro, so you can break them like an artist.
+
+#### Navigation Hierarchy
+
+- Your job as a developer is to implement navigation in a way that supports the purpose of your app without distracting the user. Navigation should feel natural and familiar, and shouldn’t dominate the interface or draw focus away from the content.
+- In iOS, there are three main styles of navigation: hierarchical, flat, and content-driven or experience-driven.
+
+- **Hierarchical Navigation**
+
+  - In this style, the user makes one choice per screen until reaching a destination. To navigate to another destination, they must retrace their steps or start over from the beginning and make different choices. Settings and Mail use a hierarchical navigation style.
+  - For this style, you'll typically use **navigation controllers** to enable navigation through a series of hierarchical screens. When a new screen is displayed, a Back button on the leading end of the navigation bar allows an easy return. (To give the user context, the bar may display the title of the current screen.)
+  - Consider the Settings app. Users open Settings to view or update preferences, which are grouped into categories. These are hierarchical relationships: Each category contains subcategories or individual settings that the user can change.
+  - The interface is designed using the same hierarchy. When you open the Settings app, you’re presented with a list of categories. Choose a category and you see a list of subcategories or individual preferences. When you want to return to a parent list higher in the hierarchy, you can use the Back button to return to the previous view.
+
+- **Flat Navigation**
+
+  - In a flat navigation design, users switch between multiple content categories. Music and the App Store use this approach.
+  - For flat navigation, you’ll typically use a **tab bar controller** to organize information at the app level. A tab bar is a good way to provide access to several workflows or distinct modes of operation. You might also use a page controller.
+  - Consider the App Store, which displays five categories of tasks, each presented by a tab: curated Today view, browse games, browse apps, Apple Arcade, or search.
+  - Some apps combine multiple navigation styles. For example, the App Store uses a tab bar controller to separate tasks in a flat style but relies on hierarchial navigation within each tab.
+
+- **Content-Driven, or Experience-Driven, Navigation**
+
+  - In this style, the user moves freely through content, or the content itself may define the navigation. Games, books, and other immersive apps generally use this type of navigation.
+
+    - <img src="./resources/content-driven_navigation.png" alt="Content-Driven Navigation" width="500" />
+
+  - In this course, you won’t be building apps that rely on content-driven navigation.
+
+- **Navigation Design Guidelines**
+
+  - It’s important that users always know where they are in your app and how to get to their next destination. Regardless of navigation style, it’s essential that the path through content is logical, predictable, and easy to follow. A general guideline is to give people only one path, or navigation style, on each screen. If they need to see a screen in multiple contexts, or places in your app, consider using a modal view to complete the task.
+  - As you think about the navigation hierarchy of your app, here are a few guidelines to follow:
+    - **Design an information structure that makes it fast and easy to get to content.** Organize your information in a way that requires a minimum number of taps, swipes, and screens.
+    - **Use standard navigation components.** Whenever possible, use standard navigation controls, such as tab bars, segmented controls, table views, collection views, and split views. Users are already familiar with these controls and will intuitively know how to get around in your app.
+    - **Use a navigation bar to traverse a hierarchy of data.** The navigation bar’s title can display the user’s current position in the hierarchy, and the Back button makes it easy to return to the previous position.
+    - **Use a tab bar to present peer categories of content or functionality.** A tab bar lets people quickly and easily switch between categories or modes of operation, regardless of their current location.
+    - **Use the proper transition style.** Whenever you’re transitioning to a new screen to display more detail about an item, you should use a right-to-left push transition used by a Show segue within a navigation controller. If the user is switching contexts — from displaying contacts to adding a new contact, for example — use a modal transition.
