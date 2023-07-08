@@ -4885,3 +4885,12 @@
 - **User Control**
 
   - No matter how awesome an app is, it doesn’t take control. It might suggest a course of action or warn about dangerous consequences, but the user should always get to make the important decisions. As you design your apps, try to give users decision-making power without bombarding them with alerts or options at every juncture. An app can make people feel in control by keeping interactive elements familiar and predictable, confirming destructive actions, and making it easy to cancel operations — even when they’re already underway. The best apps find the correct balance between enabling users and avoiding unwanted outcomes.
+
+#### Human Interface Guidelines
+
+- The Human Interface Guidelines document is your best resource for planning and designing apps. Take a moment to read through a handful of sections to get a feel for the type of information it covers.
+- Here are a few great sections to check out:
+  - [Data Entry](https://developer.apple.com/design/human-interface-guidelines/entering-data) details best practices for longer input screens or forms for collecting information from the user.
+  - [Color](https://developer.apple.com/design/human-interface-guidelines/color) talks about using color to help people understand how to interact with interface elements.
+  - [Tables](https://developer.apple.com/design/human-interface-guidelines/lists-and-tables) gives specific guidelines for presenting information in a table view.
+- As a new developer, you’ll be more successful if you follow everything in the Human Interface Guidelines. But as you gain experience, you may recognize use cases that call for something outside the box. There are many great apps that extend beyond iOS conventions. As the saying goes, learn the rules like a pro, so you can break them like an artist.
