@@ -4949,3 +4949,26 @@
 - For this, you can build a view to list all the alarms and present different modal views when the user selects a preexisting alarm or needs to create a new one. The flowchart below illustrates the navigation hierarchy and overall workflow of this hypothetical app.
 
   - <img src="./resources/example_workflow.png" alt="Example Workflow" width="400" />
+
+#### Lab - Pizza Delivery
+
+- **Objective**
+
+  - The objective of this lab is to practice designing simple and intuitive workflows and navigation hierarchies. You’ll use what you’ve learned about design principles to plan out the navigation hierarchy and flow for a hypothetical pizza delivery app.
+
+- **Step 1 Place Your Order**
+
+  - Take a look at a few popular e-commerce apps to get a good idea of purchase and checkout processes.
+  - Whether in Keynote, in Pages, or on paper, create a flowchart that outlines the navigation hierarchy for your pizza delivery app. The ordering process should allow the user to view the menu, order a pizza, create a custom pizza, and proceed to their cart.
+
+- **Step 2 Check Out**
+
+  - In addition to thinking through the ordering process, you’ll need to think about the checkout process. Again, look at some of your favorite e-commerce websites or apps to see how they handle checking out. You don’t have to actually buy anything — just go far enough that you get a good sense of navigation hierarchy and workflow.
+  - Once a customer has finished selecting or creating their pizza in your pizza delivery app, what will they do next? Design the navigation hierarchy for checking out, and add it to your flowchart.
+  - Determine how the app will flow from ordering the pizza to the checkout process. Can a customer leave the ordering navigation hierarchy and still view their cart? Is the cart accessible only after going through the ordering process? Design what you think is best for the user — and for a successful pizza business.
+
+- **Step 3 Other Useful Features**
+
+  - Are there other steps you think might be essential to a pizza delivery app? If so, think of the simplest way to include them and add them to your flowchart.
+
+- Congratulations! This sort of practice will help you create user-friendly workflows as you start designing your own apps. If you created your flowchart on paper, take a picture of it so you can save it to your project folder. If you created it on the computer, be sure to save the file.
