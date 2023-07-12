@@ -5071,3 +5071,16 @@
 - As you’ve already learned, when you embed the root view controller in a navigation controller, the Show segue will adapt from a modal presentation to a right-to-left push. In your quiz, when the player has answered the last question, you can push to the final view controller to display the results.
 - Should all three view controllers be contained in a navigation controller? Remember that a modal presentation is the right choice whenever the context of your app will change. And it’s a context shift when the player transitions from the introduction screen to the question screen. That means that the first view controller should modally present a view controller contained in a navigation controller. Select the second view controller, then click the Embed In button and choose Navigation Controller.
 - Create a Show segue from the first view controller's button to the navigation controller. This gives the user the ability to start the quiz.
+
+  - <img src="./resources/QnA_screens.png" alt="QnA Screens" width="300" />
+
+##### Create the Result Screen
+
+- After the player has finished the quiz, the app will display the results, along with a short description. The player should have some way to dismiss the results and return to the introduction screen so that another player can take the quiz. Here’s an example of this interface:
+
+  - <img src="./resources/result_screen.png" alt="Result Screen" width="200" />
+
+- Now that you’ve embedded the results screen in a navigation controller, a navigation bar is available for placing titles and buttons — as long as the view controller has a navigation item. You’ll add that now.
+  - Update the final view controller's title to "Results" in the Attributes inspector for its Navigation Item, or simply double-click in the navigation item.
+  - Add a Done button that dismisses the results and returns to the introduction screen. Drag a bar button item from the Object library to the right side of the navigation item. In the Attributes inspector, update the bar button's System Item attribute to Done, which also automatically changes the text and font of the button.
+- By now you’re a pro at positioning stack views with constraints. To replicate the results screen, create a vertical stack view with two labels. Use the Align tool to center the stack vertically, and use the Add New Constraints tool to set the leading and trailing edges to 20. Use System Font 50.0 for the first label and System Font 17.0 for the second label. Set Alignment for both labels to centered. The second label will describe more about the results and will likely run to multiple lines, so you’ll want to set the Lines attribute to 0 and the Line Break to Word Wrap. Your scene should end up with two centered labels, the top one larger than the one below it.
