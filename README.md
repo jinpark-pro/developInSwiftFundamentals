@@ -5057,3 +5057,17 @@
   - With the constraint added, navigate to the Size inspector and locate the “Trailing Space to: 🐱” constraint. Click Edit and set Constant to ≥ 0.
   - Repeat the process for the 🐰 and 🐢.
 - Along the way, after positioning and adding constraints, you might notice some yellow warnings. That’s OK. Click the Update Frames button near the bottom of Interface Builder to readjust the position and size of your views to match the constraints you’ve created.
+
+##### Create the Question and Answer Screen
+
+- The second view controller will display each question, one at a time, along with input controls that allow the player to respond. The controls you use — buttons, switches, or sliders — need to make sense for the questions and answers in your quiz. You’ll think through the controls a bit later in the project.
+- After the player has answered a question, your app will need to make a decision:
+  - If there’s another question in the quiz, update the labels and controls in the view controller accordingly.
+  - If there are no more questions, display the results in a new view controller.
+- How will the app know what to do? You’ll need to create some logic that determines whether or not to make a segue after receiving an answer to the current question. If you were to create a segue by Control-dragging from the input control to the next view controller, it would force the segue to take place whenever the player interacts with the control.
+- Instead, you can invoke a segue programmatically between the second and third view controllers.
+  - Control-drag from the view controller icon, above the second view controller's view, to the third view controller, and create a Show segue.
+  - Highlight the segue in the storyboard. Then use the Attributes inspector to give it an identifier string, "Results."
+- As you’ve already learned, when you embed the root view controller in a navigation controller, the Show segue will adapt from a modal presentation to a right-to-left push. In your quiz, when the player has answered the last question, you can push to the final view controller to display the results.
+- Should all three view controllers be contained in a navigation controller? Remember that a modal presentation is the right choice whenever the context of your app will change. And it’s a context shift when the player transitions from the introduction screen to the question screen. That means that the first view controller should modally present a view controller contained in a navigation controller. Select the second view controller, then click the Embed In button and choose Navigation Controller.
+- Create a Show segue from the first view controller's button to the navigation controller. This gives the user the ability to start the quiz.
