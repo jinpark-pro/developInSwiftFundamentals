@@ -5084,3 +5084,13 @@
   - Update the final view controller's title to "Results" in the Attributes inspector for its Navigation Item, or simply double-click in the navigation item.
   - Add a Done button that dismisses the results and returns to the introduction screen. Drag a bar button item from the Object library to the right side of the navigation item. In the Attributes inspector, update the bar button's System Item attribute to Done, which also automatically changes the text and font of the button.
 - By now you’re a pro at positioning stack views with constraints. To replicate the results screen, create a vertical stack view with two labels. Use the Align tool to center the stack vertically, and use the Add New Constraints tool to set the leading and trailing edges to 20. Use System Font 50.0 for the first label and System Font 17.0 for the second label. Set Alignment for both labels to centered. The second label will describe more about the results and will likely run to multiple lines, so you’ll want to set the Lines attribute to 0 and the Line Break to Word Wrap. Your scene should end up with two centered labels, the top one larger than the one below it.
+
+##### Create Descriptive Subclasses
+
+- Now that you have three view controllers in your storyboard scene, you’ll need three UIViewController subclasses in code.
+  - Create a new file by choosing File > New > File from the Xcode menu bar. Select Cocoa Touch Class as your starting template, then choose UIViewController from the Subclass pop-up menu. This choice will automatically append “ViewController” to the class name, making the object’s type clear to other developers. Name the class “QuestionViewController” and click Next. The Group pop-up menu should list a folder that matches the name of the project, PersonalityQuiz. Choose it and click Create.
+  - Repeat these steps to create a second class, naming it “ResultsViewController.” When you’re finished, you’ll see two new files in the Project navigator for your quiz.
+- You might also notice that the Project navigator lists a subclass of UIViewController called “ViewController.” The iOS App template automatically assigned this name to your app's first view controller.
+  - To be more descriptive, click the filename and change it to "IntroductionViewController." Next open the file and change the class name to "IntroductionViewController," then close the file.
+- Now your project has three descriptively named UIViewController subclasses.
+  - Reopen the Main storyboard. One at a time, select each view controller and use the Identity inspector to assign it the appropriate custom class. The first view controller will be IntroductionViewController, followed by the QuestionViewController and ResultsViewController.
