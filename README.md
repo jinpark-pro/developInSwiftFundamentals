@@ -5028,3 +5028,32 @@
     - The third view controller tallies up the answers and presents the final outcome. This result can be dismissed, allowing another player to start the quiz from the first view controller.
 
   - <img src="./resources/overview_personality_quiz.png" alt="Overview - Personality Quiz" width="500" />
+
+#### Part Two - Project Setup
+
+- Create a new project using the iOS App template. Name it “PersonalityQuiz,” and open the Main storyboard. The storyboard already contains one view controller, but you’ll need two more. Drag two view controllers from the Object library onto the canvas, and position all three in a horizontal row.
+
+##### Create the Introduction Screen
+
+- The first view controller will invite the player to take your quiz. At a minimum, it needs to include a label that introduces the quiz and a button to begin. Beyond these simple requirements, the design of the screen is entirely up to you.
+- Add a label from the Object library onto the view controller. Then add a button just below the label. With the label selected, use the Attributes inspector and set the alignment for the label to centered.
+  - Change the label's text, text color, and font: the text reads "Which Animal Are You?" using the Georgia font Regular 30.0.
+  - Select the button and update the title to read "Begin Personality Quiz" using the System font 15.0.
+- Whenever you have multiple items in a horizontal row or a vertical column, it’s a good idea to use a stack view. This approach will reduce the number of constraints you’ll need to create and manage.
+  - Highlight the label and button, then click the Embed In button and select Stack View.
+- With the stack still selected, use the Attributes inspector to check that the Axis is set to Vertical, and set both the Alignment and Distribution to Fill. These settings ensure that elements in the stack are positioned vertically and that they fill all available space along the stack view's axis.
+- The label and button should be centered both horizontally and vertically. Although you can create two constraints to do that, the label is too close to the screen’s horizontal bounds. Use leading and trailing constraints to ensure that it doesn't run off the screen no matter the device size.
+  - Use the Add Constraint tool to create leading and trailing constraints 8 points from each side.
+  - Next, use the Align tool to add a constraint that centers the stack view vertically. Check "Vertically in Container" and click "Add 1 Constraint."
+- That’s all that’s necessary for an introduction screen, but it’s a little boring. What are the possible outcomes? For this topic, it would be fun to add an emoji for each animal (dog, cat, rabbit, and turtle) and position them in the four corners of the view. If there aren’t any emoji that fit your particular quiz topic, consider using images in place of emoji text.
+- If you haven't already, drag four more labels from the Object library onto the view. Replace the text with the emoji for each animal.
+  - To bring up the emoji picker, highlight the label text in the Attributes inspector, then press Control-Command-Space. Enlarge all the emoji by setting the Font to System 40.0. Finally, use the blue layout guides to place each label in a corner with the recommended margins.
+- To hold your emoji in their respective corners on all screen sizes, you’ll need to add two constraints to each label.
+  - Begin by selecting the top-left label and clicking the Add New Constraints button. Enable the top and leading constraints. If you used the layout guides, the top constraint should have a value of 0 and the leading constraint should have a value of 20. Add these two constraints.
+  - The position of your top-left emoji is all set. Now repeat the steps for the other three labels, using the appropriate edges to create constraints. Check out the four Add New Constraints tool values, from left to right in the following diagram, for the dog, cat, rabbit, and turtle labels.
+- Xcode isn’t satisfied with only these constraints. It produces a warning notifying you that trailing and leading constraints are missing, which may cause overlapping with other views. The reason is that labels often have dynamic values or sizes. For this interface design, you're fine leaving it as is. However, it’s best practice to satisfy the compiler and resolve all warnings.
+- The 🐶 and 🐰 need trailing constraints whereas the 🐱 and 🐢 need leading constraints. You can use several options to meet the requirements of your interface's design. The quickest is to add a horizontal space between the 🐶 and 🐱 as well as the 🐰 and 🐢. Set the constraints to ≥ 0 so that they remain in place no matter the screen size.
+  - Control-Drag from the 🐶 to the 🐱 and select Horizontal Spacing.
+  - With the constraint added, navigate to the Size inspector and locate the “Trailing Space to: 🐱” constraint. Click Edit and set Constant to ≥ 0.
+  - Repeat the process for the 🐰 and 🐢.
+- Along the way, after positioning and adding constraints, you might notice some yellow warnings. That’s OK. Click the Update Frames button near the bottom of Interface Builder to readjust the position and size of your views to match the constraints you’ve created.
