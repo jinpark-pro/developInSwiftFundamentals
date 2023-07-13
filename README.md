@@ -5094,3 +5094,36 @@
   - To be more descriptive, click the filename and change it to "IntroductionViewController." Next open the file and change the class name to "IntroductionViewController," then close the file.
 - Now your project has three descriptively named UIViewController subclasses.
   - Reopen the Main storyboard. One at a time, select each view controller and use the Identity inspector to assign it the appropriate custom class. The first view controller will be IntroductionViewController, followed by the QuestionViewController and ResultsViewController.
+
+#### Part Three - Create Questions and Answers
+
+- During the project planning phase, you considered three different question types: single-answer, multiple-answer, and ranged response. Now take some time to come up with your list of questions. Think about how you can reword each question to fit one of the three categories.
+
+- **Single-Answer Questions**
+
+  - Suppose you ask “Which food do you like the most?” The answer might include a list of four foods, and the player must pick one. What kind of control would you use? A simple approach would be to present a button for each answer, organized in a vertical stack view.
+  - Begin by dragging a vertical stack view from the Object library to the QuestionViewController. Now add four buttons to the stack view. Use the Align tool to center the stack vertically within the view, then use the Add New Constraints tool to set its leading and trailing edges to 20 pixels. Add space between the buttons by setting Spacing to 20 in the Attributes inspector. If necessary, click the Update Frames button to reposition the stack based on the constraints you’ve created.
+  - Of course, the button titles will change based on the answers you provide. You’ll update them later, when you move on to coding the quiz.
+
+- **Multiple-Answer Questions**
+
+  - The question “Which of the following foods do you like?” suggests that the player can choose multiple answers. Rather than using buttons for the answers, it would make more sense to create pairs of labels and switches—so the player can switch on all positive answers. When the player has made their selections, they can tap a button to submit the answers and move on to the next question.
+  - Before you begin, you might want to hide the single-answer stack view. Select the stack in the storyboard or the outline, then open the Attributes inspector, and deselect `Installed` at the bottom of the pane.
+  - The switch UI is not much different from the button UI. Each label-and-switch pair can be held in a horizontal stack view. And just like the single-answer question, the rows can be held in a vertical stack view.
+  - Begin by adding a label and a switch from the Object library. Highlight both of them, then click the Embed In button and choose Stack View. In the Attributes inspector for the stack view, make sure that the Axis is set to `Horizontal` and that Alignment and Distribution are both set to `Fill`.
+  - Select the stack view, then copy (Command-C) and paste (Command-V) it to add three copies to the view. Now select all four horizontal stacks, and click the Embed In button and choose Stack View to place them in another stack view. In the Attributes inspector for this new stack view, set Axis to Vertical, Alignment and Distribution to Fill, and Spacing between elements to 20.
+  - Add a button to the bottom of the stack view, and set its title to “Submit Answer.” Finally, use the Align tool to center the stack vertically within the view, then use the Add New Constraints tool to set the leading and trailing edges to 20 pixels from each margin. ​If necessary, use the Update Frames button to reposition the frames based on the constraints you just created.
+
+- **Range Questions**
+
+  - The third type of question might follow this format: “How much do you like this particular food?” You could probably think of a way to use a button or a switch for the answer, but the player might have a better experience if their choice feels a little more freeform. To allow the player a range of answers, you could use a slider as the input control, with a label on either end of the slider.
+  - To make things easier, you might want to hide the multiple-answer stack, just as you did earlier with the single-answer stack. Select it in the storyboard, open the Attributes inspector, and deselect Installed at the bottom of the pane.
+  - You can use stack views to create this interface without having to define very many constraints—similar to the switch approach. Begin by adding two labels to the canvas from the Object library, then select both, click the Embed In button and choose Stack View. In the Attributes inspector, check that the Axis is set to `Horizontal`, Alignment is set to `Fill`, and Distribution is set to `Equal Spacing`.
+  - Next, drag a slider from the Object library onto the canvas. Select the slider and the horizontal stack, then click the Embed In button and choose Stack View. In the Attributes inspector, verify that the Axis is set to Vertical, the Alignment and Distribution are both set to Fill, and the Spacing is set to 20.
+  - Add a button to the bottom of the stack, and set its title to “Submit Answer.” Use the Align tool to center the stack vertically within the view, then use the Add New Constraints tool to align the leading and trailing edges with 20 pixels of spacing to each margin. If necessary, use the Update Frames button to reposition the frames based on the constraints you’ve created.
+  - Before you move on, you’ll need to re-enable the stack views that you uninstalled during the building process. In the Document Outline, select each stack view, then select the Installed checkbox in the Attributes inspector.
+
+- **Question Label and Progress**
+
+  - No matter what kind of question you ask your players, you need to display it in a label. Add a label to the top of the view. Use the Add New Constraints tool to position the label 20 pixels below the navigation bar and 20 pixels from the leading and trailing margins. In the Attributes inspector, set the text alignment to center and the font to System Font 32.0. Set the Lines attributes to 0 to give the label the ability to use as many lines as needed. Change the Line Break attribute to Word Wrap.
+  - Players often like to know how far along they are in the quiz. Search for “Progress View” in the Object library, and add it to the view. Use the Add New Constraints tool to position the progress view 20 pixels from the bottom and 20 pixels from the leading and trailing edge of the view.
