@@ -5127,3 +5127,254 @@
 
   - No matter what kind of question you ask your players, you need to display it in a label. Add a label to the top of the view. Use the Add New Constraints tool to position the label 20 pixels below the navigation bar and 20 pixels from the leading and trailing margins. In the Attributes inspector, set the text alignment to center and the font to System Font 32.0. Set the Lines attributes to 0 to give the label the ability to use as many lines as needed. Change the Line Break attribute to Word Wrap.
   - Players often like to know how far along they are in the quiz. Search for “Progress View” in the Object library, and add it to the view. Use the Add New Constraints tool to position the progress view 20 pixels from the bottom and 20 pixels from the leading and trailing edge of the view.
+
+#### Part Four - Models and Outlets
+
+- So far in this lesson, you’ve designed the view controllers in the storyboard, and you’ve got three UIViewController subclasses ready to receive some code. Now it’s time to create structures that hold the question data and to update the user interface based on the values of each question and its answers. Once the data has been laid out, you can update the user interface based on which question is being displayed.
+
+- **Data Models**
+
+  - Create a new file named "Question" to house the model definitions. Use this file to define all the structures necessary for your personality quiz. You can create this file by choosing File > New > File (or Command-N) from the Xcode menu bar, then selecting “Swift file.”
+  - It’s safe to assume that every Question will have text to represent the question itself, along with an array of Answer objects. Since your quiz can use three different types of input methods, you’ll create an enum that describes the question’s response type: single-answer, multiple-answer, or ranged response. An example of the structure is shown below:
+
+    - ```swift
+        struct Question {
+            var text: String
+            var type: ResponseType
+            var answers: [Answer]
+        }
+         
+        enum ResponseType {
+            case single, multiple, ranged
+        }
+      ```
+
+  - Every answer corresponds to a result type. In the animal example, suppose you ask “Which of these foods do you like the most?” and the possible answers are: “Steak,” “Fish,” “Carrots,” and “Corn.” Each response corresponds to a dog, cat, rabbit, and turtle, respectively — and therefore, to a particular emoji. If the answers property was an array of strings, there wouldn’t be a simple way to associate an answer with a particular result. Instead, an Answer struct will have a string to display to the player and a type property that ties the answer to a specific result.
+  - Here’s an example of the data:
+
+    - ```swift
+        struct Answer {
+            var text: String
+            var type: AnimalType
+        }
+         
+        enum AnimalType: Character {
+            case dog = “🐶”, cat = “🐱”, rabbit = “🐰”, turtle = “🐢”
+        }
+      ```
+
+  - Typically at the end of a personality quiz, the player receives some text about the outcome of the quiz. Since you’ve already defined an enum to represent each personality type — or in this case, animal type — you could include a definition property that will be presented as a label on the results screen.
+  - Here’s an example of a definition for the animal types:
+
+    - ```swift
+        enum AnimalType: Character {
+            case dog = “🐶”, cat = “🐱”, rabbit = “🐰”, turtle = “🐢”
+         
+            var definition: String {
+                switch self {
+                case .dog:
+                    return “You are incredibly outgoing. You surround
+                    yourself with the people you love and enjoy
+                    activities with your friends.”
+                case .cat:
+                    return “Mischievous, yet mild-tempered, you enjoy
+                    doing things on your own terms.”
+                case .rabbit:
+                    return “You love everything that’s soft. You are
+                    healthy and full of energy.”
+                case .turtle:
+                    return “You are wise beyond your years, and you
+                    focus on the details. Slow and steady wins the race.”
+                }
+            }
+        }
+      ```
+
+- **Display Questions and Answers**
+
+  - The QuestionViewController will hold the array of Question objects in a property called questions. As you create the objects, you’ll need to take special care with how many Answer objects you place in the answers property. When you built stack views for single- and multiple-answer responses, you created four buttons and four switches to represent a static number of possible answers. So any Question you create with a type property that’s set to single or multiple must have exactly four Answer objects.
+  - For the ranged response, you can get away with only two answers: the two ends of the slider. But it would be better to define four possible ranges so that the question can give points to each of the four outcomes. The collection of answers for a ranged response needs to be in some sort of order — from least likely to most likely, for example — so that you can accurately assign the answers to a result.
+  - In the following example, the array is filled with a question of each response type: single-answer, multiple-answer, and ranged response:
+
+    - ```swift
+        var questions: [Question] = [
+          Question(
+            text: "Which food do you like the most?",
+            type: .single,
+            answers: [
+              Answer(text: "Steak", type: .dog),
+              Answer(text: "Fish", type: .cat),
+              Answer(text: "Carrots", type: .rabbit),
+              Answer(text: "Corn", type: .turtle)
+            ]
+          ),
+         
+          Question(
+            text: "Which activities do you enjoy?",
+            type: .multiple,
+            answers: [
+              Answer(text: "Swimming", type: .turtle),
+              Answer(text: "Sleeping", type: .cat),
+              Answer(text: "Cuddling", type: .rabbit),
+              Answer(text: "Eating", type: .dog)
+            ]
+          ),
+         
+          Question(
+            text: "How much do you enjoy car rides?",
+            type: .ranged,
+            answers: [
+              Answer(text: "I dislike them", type: .cat),
+              Answer(text: "I get a little nervous", type: .rabbit),
+              Answer(text: "I barely notice them", type: .turtle),
+              Answer(text: "I love them", type: .dog)
+            ]
+          )
+        ]
+      ```
+
+- **Display Questions with the Right Controls**
+
+  - Now that you have a list of questions to draw from, you’ll need to keep track of which ones your app has already displayed and to calculate when you’ve displayed them all. One technique is to use an integer as an index into the questions collection. This integer will start at 0 (the index of the first element in a collection), and you’ll increment the value by 1 after the player answers each question.
+  - Add a property called questionIndex to your QuestionViewController: `var questionIndex = 0`
+  - As the player moves from question to question, you’ll need to show the correct stack view and to hide the other two. But before you can write code that changes the stack view’s visibility, you’ll need to create the necessary outlets and actions.
+  - Open the Main storyboard and select QuestionViewController. Open an assistant editor to view QuestionViewController alongside the storyboard. Control-drag from the single-answer stack view to the definition of the QuestionViewController class, then release the mouse or trackpad to bring up the popover. Verify that the Connection type is set to Outlet, then enter `singleStackView` into the Name field and click Connect. Repeat these steps two more times, entering the names `multipleStackView` for the multiple-answer stack and `rangedStackView` for the ranged stack.
+  - Next, create a reusable method, called `updateUI()`, that you can call before displaying each question to the player. You should call this method in viewDidLoad() to set the proper interface for the first question.
+  - The updateUI() method is responsible for updating a few key pieces of the interface, including the title in the navigation bar and the visibility of the stack views. You can use the questionIndex property to create a unique title — for example, “Question #4” — in the navigation item for each question. With the stack views, it’s easiest if you hide all three stack views, then inspect the type property of the Question to determine which stack should be visible.
+  - You can use the questionIndex property in conjunction with the questions collection to access the particular question:
+
+    - ```swift
+        func updateUI() {
+            singleStackView.isHidden = true
+            multipleStackView.isHidden = true
+            rangedStackView.isHidden = true
+         
+            navigationItem.title = “Question #\(questionIndex + 1)”
+         
+            let currentQuestion = questions[questionIndex]
+         
+            switch currentQuestion.type {
+            case .single:
+                singleStackView.isHidden = false
+            case .multiple:
+                multipleStackView.isHidden = false
+            case .ranged:
+                rangedStackView.isHidden = false
+            }
+        }
+      ```
+
+  - Build and run your app. If you’ve set everything up properly, the stack view that’s visible should correspond to the first question you defined in the questions property. Try reordering the questions to test each interface.
+
+- **Update the Buttons and Label Text**
+
+  - The interface on your question screen works, but you still need to update the button titles and label text. To make this happen, you’ll need to create outlets for the labels and buttons associated with each stack view.
+  - In addition to the outlets you created for the stack views, this screen requires 12 outlets for the controls and labels. There are four button outlets in the single-answer stack view, four label outlets in the multiple-answer stack view, and two label outlets in the ranged response stack view. You also have the label that displays the question text near the top of the screen, and the progress view near the bottom.
+  - When you create a large number of outlets, it’s important to use concise, easily recognizable variable names — and to keep the variable declarations organized near their corresponding stack view outlet. The code below provides an example of good variable names and outlet organization:
+
+    - ```swift
+        @IBOutlet var questionLabel: UILabel!
+         
+        @IBOutlet var singleStackView: UIStackView!
+        @IBOutlet var singleButton1: UIButton!
+        @IBOutlet var singleButton2: UIButton!
+        @IBOutlet var singleButton3: UIButton!
+        @IBOutlet var singleButton4: UIButton!
+         
+         
+        @IBOutlet var multipleStackView: UIStackView!
+        @IBOutlet var multiLabel1: UILabel!
+        @IBOutlet var multiLabel2: UILabel!
+        @IBOutlet var multiLabel3: UILabel!
+        @IBOutlet var multiLabel4: UILabel!
+         
+         
+        @IBOutlet var rangedStackView: UIStackView!
+        @IBOutlet var rangedLabel1: UILabel!
+        @IBOutlet var rangedLabel2: UILabel!
+         
+        @IBOutlet var questionProgressView: UIProgressView!
+      ```
+
+  - Go ahead and create the outlets above. Since the screen has so many controls overlapping one another, you’ll probably find it’s easier to Control-drag from the item in the Document Outline to the view controller definition, rather than Control-dragging from the item on the canvas.
+  - With the outlets in place, you can update each of the controls in the updateUI() method. Two of the outlets, questionLabel and questionProgressView, will need to be updated with every new question. The label and button outlets need to be updated only if their related stack view will be displayed.
+  - For the question label, assign its text to the current question string. For the progress view, calculate the percentage progress by dividing the questionIndex by the total number of questions.
+
+    - ```swift
+        func updateUI() {
+            singleStackView.isHidden = true
+            multipleStackView.isHidden = true
+            rangedStackView.isHidden = true
+         
+            let currentQuestion = questions[questionIndex]
+            let currentAnswers = currentQuestion.answers
+            let totalProgress = Float(questionIndex) /
+                Float(questions.count)
+         
+            navigationItem.title = “Question #\(questionIndex + 1)”
+            questionLabel.text = currentQuestion.text
+            questionProgressView.setProgress(totalProgress, animated:
+                true)
+         
+            switch currentQuestion.type {
+            case .single:
+                singleStackView.isHidden = false
+            case .multiple:
+                multipleStackView.isHidden = false
+            case .ranged:
+                rangedStackView.isHidden = false
+            }
+        }
+      ```
+
+  - To keep the switch statement concise, you can refactor the updates to stack specific controls into their own methods.
+  - In the single-answer stack view, each button title corresponds to an answer. Use the `setTitle(_:for:)` method to update the title. The first button will use the first answer string, the second button will use the second answer string, and so on.
+
+    - ```swift
+        func updateSingleStack(using answers: [Answer]) {
+            singleStackView.isHidden = false
+            singleButton1.setTitle(answers[0].text, for: .normal)
+            singleButton2.setTitle(answers[1].text, for: .normal)
+            singleButton3.setTitle(answers[2].text, for: .normal)
+            singleButton4.setTitle(answers[3].text, for: .normal)
+        }
+      ```
+
+  - Similarly, in the multiple-answer stack view, each label’s text corresponds to an answer. Set the text property of the first label to the first answer string, and repeat for the other three labels.
+
+    - ```swift
+        func updateMultipleStack(using answers: [Answer]) {
+            multipleStackView.isHidden = false
+            multiLabel1.text = answers[0].text
+            multiLabel2.text = answers[1].text
+            multiLabel3.text = answers[2].text
+            multiLabel4.text = answers[3].text
+        }
+      ```
+
+  - For the ranged response, you’ll need to set up the stack view a bit differently. While there are only two labels to update, the quiz will work better if every question has four answers (even though only two answers are required).
+  - Since the number of answers isn’t guaranteed, it wouldn’t be safe to index directly into the collection. For example, if you used answers[3] to access the fourth element of answers, but the collection contained only two Answer structs, the program would crash.
+  - No matter how many answers you have for your ranged response question, the first and last properties of the collection allow you to safely access the two Answer structs that correspond to the labels.
+
+    - ```swift
+        func updateRangedStack(using answers: [Answer]) {
+            rangedStackView.isHidden = false
+            rangedLabel1.text = answers.first?.text
+            rangedLabel2.text = answers.last?.text
+        }
+      ```
+
+  - With these three new methods defined, update the switch statement cases in updateUI() to call them.
+
+    - ```swift
+        switch currentQuestion.type {
+        case .single:
+            updateSingleStack(using: currentAnswers)
+        case .multiple:
+            updateMultipleStack(using: currentAnswers)
+        case .ranged:
+            updateRangedStack(using: currentAnswers)
+        }
+      ```
+
+  - Build and run your app. The labels and buttons should all update to reflect the first question. Great work! If you see controls that aren’t updating, use the Connections inspector for QuestionViewController to verify that you’ve created each @IBOutlet properly. Hover over every item in the list to check their outlets, and—if necessary—break any incorrect outlets.
