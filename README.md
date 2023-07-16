@@ -5378,3 +5378,165 @@
       ```
 
   - Build and run your app. The labels and buttons should all update to reflect the first question. Great work! If you see controls that aren’t updating, use the Connections inspector for QuestionViewController to verify that you’ve created each @IBOutlet properly. Hover over every item in the list to check their outlets, and—if necessary—break any incorrect outlets.
+
+- **Retrieve Answers with Actions**
+
+  - So far, you’ve generated a list of questions, and your app is displaying the correct user interface for the first question. That’s an excellent start. In this section, you’ll record the player’s answers and move to the next question. When the player has answered every question in the collection, you’ll present the results screen.
+  - No matter which set of controls you use, you’ll need to initialize an empty collection that can store the player’s answers: `var answersChosen: [Answer] = []`
+  - In the single-answer stack view, you’ll determine which outcome each tapped button corresponds to, append it to the collection, then move on to the next question. All four buttons will perform the same work, so you can create one @IBAction that any of the four buttons will call when tapped.
+
+    - Begin by Control-dragging from the first button in the single-answer stack view to a space within the QuestionViewController class definition. This is the same way you created an @IBOutlet, but this time you’ll change the Connection type to `Action`. Name the method “singleAnswerButtonPressed” and change the Type from Any to `UIButton` — so that the sender parameter of the method will be of type UIButton.
+    - Connect the three remaining buttons in the single-answer stack view to this newly created @IBAction.
+    - Why do you need to update the type? You’re tying the tap from multiple buttons to this one action, so you’ll need to specify which button triggered the method. You can use an if statement and == to compare two UIButton objects, or you can use a switch statement. If the method was triggered using singleButton1, the app will know that the player selected the first answer.
+    - Try filling in the action body with code that checks which button was tapped, then appends the chosen answer to the answersChosen array. Once you’ve finished adding the answer to the array, you’ll need to go to the next question. Create a new method called `nextQuestion()` and leave it empty. You’ll fill it in later. For now, just add a call to nextQuestion() at the end of singleAnswerButtonPressed(\_:)
+
+      - ```swift
+          @IBAction func singleAnswerButtonPressed(_ sender: UIButton) {
+              let currentAnswers = questions[questionIndex].answers
+           
+              switch sender {
+              case singleButton1:
+                  answersChosen.append(currentAnswers[0])
+              case singleButton2:
+                  answersChosen.append(currentAnswers[1])
+              case singleButton3:
+                  answersChosen.append(currentAnswers[2])
+              case singleButton4:
+                  answersChosen.append(currentAnswers[3])
+              default:
+                  break
+              }
+           
+              nextQuestion()
+          }
+        ```
+
+  - For the multiple-answer user interface, you’ll determine which answers to add to the collection based on the switches the player has enabled.
+
+    - Control-drag from the Submit Answer button to code, and create an action with the name “multipleAnswerButtonPressed.” Go ahead and change the Arguments attribute to `None`, since you don’t need the button to determine which answers were chosen.
+    - Next, create four outlets, one for each UISwitch, so that you can check which are enabled and then add those answers to the collection. Control-drag from each UISwitch in the Document Outline to code, and give each switch a name like `multiSwitch1`. To keep your code neat and organized, enter the code for each of these outlets near the label variables associated with the multiple-answer stack view.
+    - If the first switch is enabled, you want to add the first answer. Unlike the method with single-answer questions, this method allows you to append as many as four answers per question.
+
+      - ```swift
+          @IBAction func multipleAnswerButtonPressed() {
+              let currentAnswers = questions[questionIndex].answers
+           
+              if multiSwitch1.isOn {
+                  answersChosen.append(currentAnswers[0])
+              }
+              if multiSwitch2.isOn {
+                  answersChosen.append(currentAnswers[1])
+              }
+              if multiSwitch3.isOn {
+                  answersChosen.append(currentAnswers[2])
+              }
+              if multiSwitch4.isOn {
+                  answersChosen.append(currentAnswers[3])
+              }
+           
+              nextQuestion()
+          }
+        ```
+
+  - For a ranged response question, you’ll read the current position of the UISlider and use that value to determine which answer to add to the collection.
+
+    - Control-drag from the Submit Answer button to code, and create an action with the name “rangedAnswerButtonPressed.” Again, change the Arguments attribute to None.
+    - Next, create an @IBOutlet for the UISlider. Control-drag from the slider in the Document Outline to code and give it a name, `rangedSlider`. As you did in earlier steps, place the code for this outlet near the label variables associated with the ranged response stack view.
+    - Take a moment to think about how you can use the slider’s value to correspond to four different answers. A slider’s value ranges from 0 to 1, so a value between 0 and 0.25 could correspond to the first answer, and an answer between .75 and 1 could correspond to the final answer.
+    - To convert a slider value to an array’s index, use the equation index = slider value \* (number of answers - 1) rounded to the nearest integer. This results in the following method implementation for rangedAnswerButtonPressed:
+
+      - ```swift
+          @IBAction func rangedAnswerButtonPressed() {
+              let currentAnswers = questions[questionIndex].answers
+              let index = Int(round(rangedSlider.value *
+                Float(currentAnswers.count - 1)))
+           
+              answersChosen.append(currentAnswers[index])
+           
+              nextQuestion()
+          }
+        ```
+
+- **Pass Data to the Results View**
+
+  - When it is time to show the results screen you will need to pass the user’s responses to it. Open ResultsViewController and add a property to hold the user’s responses: `var responses: [Answer]`
+  - This will cause Xcode to report a compilation error stating “Class ‘ResultsViewController’ has no initializers”. This is because responses does not have an initial value nor is it ever assigned a value in an initializer. To resolve this you will create a custom initializer for ResultsViewController that takes responses as an argument–satisfying the compiler. Add the following initializer:
+
+    - ```swift
+        init?(coder: NSCoder, responses: [Answer]) {
+            self.responses = responses
+            super.init(coder: coder)
+        }
+      ```
+
+  - This new initializer takes two parameters, coder and responses.
+    - The coder parameter will be provided and is used by UIKit to initialize your view controller from the information defined in your Storyboard.
+    - The responses parameter will be supplied by you, when calling this initializer, and assigned to self.responses which you just added.
+    - Finally, the super initializer is called passing through coder.
+  - Unfortunately all this work led to a new compilation error stating “required initializer init(coder:) must be provided by subclass of UIViewController.” When you provide your own initializer, you must implement any required initializers that the superclass defines.
+
+    - For more information, click the red symbol next to the error.
+    - Xcode provides you with a “fix-it” for this problem. Click the “Fix” button to insert the suggested code fix.
+
+      - ```swift
+          required init?(coder: NSCoder) {
+              fatalError(”init(coder:) has not been implemented”)
+          }
+        ```
+
+    - In this case, you’re no longer interested in the provided required initializer because you’ll be using your own. This implementation of the required initializer, if called, will now crash your application—you won’t be calling it.
+
+- **Respond to Answered Questions**
+
+  - Now that you've handled the user input for each question and can pass responses to ResultsViewController, it's time to implement the nextQuestion() method in QuestionViewController. For this, you increment the value of questionIndex by 1, then determine whether any remaining questions exist. If they do, you call updateUI() to update the title and display the proper stack view. The method uses the new value of questionIndex to display the next question. If no questions remain, it's time to present the results using the segue you created in the storyboard.
+
+    - ```swift
+        func nextQuestion() {
+            questionIndex += 1
+         
+            if questionIndex < questions.count {
+                updateUI()
+            } else {
+                performSegue(withIdentifier: “Results”, sender: nil)
+            }
+        }
+      ```
+
+  - Build and run your app, then test each of your input controls. Do you notice any bugs? One issue is that the interfaces for multiple-answer and ranged responses retain the answer values from the previous question of the same type. For example, if the player has moved a slider all the way to the left for one question, the next question that uses a slider starts with the slider all the way to the left.
+  - To resolve this problem, you can reset the positions of the switches and slider to logical defaults when the next question is displayed.
+
+    - Update the updateMultipleStack(using:) and updateRangedStack(using:) methods to include code that resets the positions of their controls.
+
+      - ```swift
+          func updateMultipleStack(using answers: [Answer]) {
+              multipleStackView.isHidden = false
+              multiSwitch1.isOn = false
+              multiSwitch2.isOn = false
+              multiSwitch3.isOn = false
+              multiSwitch4.isOn = false
+              multiLabel1.text = answers[0].text
+              multiLabel2.text = answers[1].text
+              multiLabel3.text = answers[2].text
+              multiLabel4.text = answers[3].text
+          }
+          func updateRangedStack(using answers: [Answer]) {
+              rangedStackView.isHidden = false
+              rangedSlider.setValue(0.5, animated: false)
+              rangedLabel1.text = answers.first?.text
+              rangedLabel2.text = answers.last?.text
+          }
+        ```
+
+  - The second, most glaring, issue is that you cannot proceed to the results view because the app crashes. When you call performSegue(withIdentifier: “Results”, sender: nil), UIKit is using the default required initializer for ResultsViewController. If you recall, you made that method crash when called. You need to tell your Storyboard what to call instead when this segue is triggered.
+
+    - Locate the Results segue as identified by the arrow between the question and results controllers. Control-drag from the segue to QuestionsViewController to create an @IBSegueAction.
+    - Fill in `showResults` for the name and set Arguments to `None`, then click Connect. This inserts a method similar to an @IBAction except that it’s unique to segues. The method is set to return an optional ResultsViewController. It’s your job within the implementation to initialize and return one. Using the custom initializer you created earlier, return a new instance of ResultsViewController passing in the provided coder and answersChosen from self.
+
+      - ```swift
+          @IBSegueAction func showResults(_ coder: NSCoder) ->  ResultsViewController? {
+              return ResultsViewController(coder: coder, responses:
+                answersChosen)
+          }
+        ```
+
+  - Now when the Results segue is performed, this method is called and its return value is used to present the controller.
