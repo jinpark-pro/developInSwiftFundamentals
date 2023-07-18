@@ -5545,59 +5545,96 @@
 
 - You have a working user interface for multiple question types, and you're recording the player's answers. The final steps include calculating the results, presenting them, and dismissing the results screen so that the quiz is ready for a new player.
 
-- **Calculate Answer Frequency**
+##### Calculate Answer Frequency
 
-  - Now that the ResultsViewController has the player's responses, it's time to think about how to calculate the personality. What was the most common personality type among the selected answers? In this example, if the player gave two answers that corresponded closely to dog and only one for each other animal, the best result would be dog. If two or more animals are tied for the most answers, either one would be a valid result.
-  - How can you tally up the results? You need to loop through each of the Answer structures in the responses property and calculate which type was most common in the collection.
-  - A good solution might be the dictionary data model, where the key is the response type and the value is the number of times a player has selected it as an answer—in effect a histogram. For example, if the player gave two answers that corresponded closely to dog and only one for each other animal, the dictionary looks like the following:
+- Now that the ResultsViewController has the player's responses, it's time to think about how to calculate the personality. What was the most common personality type among the selected answers? In this example, if the player gave two answers that corresponded closely to dog and only one for each other animal, the best result would be dog. If two or more animals are tied for the most answers, either one would be a valid result.
+- How can you tally up the results? You need to loop through each of the Answer structures in the responses property and calculate which type was most common in the collection.
+- A good solution might be the dictionary data model, where the key is the response type and the value is the number of times a player has selected it as an answer—in effect a histogram. For example, if the player gave two answers that corresponded closely to dog and only one for each other animal, the dictionary looks like the following:
 
-    - ```swift
-        {
-          cat: 1,
-          dog: 2,
-          rabbit: 1,
-          turtle: 1
+  - ```swift
+      {
+        cat: 1,
+        dog: 2,
+        rabbit: 1,
+        turtle: 1
+      }
+    ```
+
+- To begin, within ResultsViewController declare a method named calculatePersonalityResult that you can call in viewDidLoad(). Within that method, you calculate the frequency of each response, as in the code above. For the “Which animal are you?” quiz, you can use the following code:
+
+  - ```swift
+      override func viewDidLoad() {
+          super.viewDidLoad()
+          calculatePersonalityResult()
+      }
+       
+      func calculatePersonalityResult() {
+        let frequencyOfAnswers = responses.reduce(into: [:]) {
+          (counts, answer) in counts[answer.type, default: 0] += 1
         }
-      ```
+      }
+    ```
 
-  - To begin, within ResultsViewController declare a method named calculatePersonalityResult that you can call in viewDidLoad(). Within that method, you calculate the frequency of each response, as in the code above. For the “Which animal are you?” quiz, you can use the following code:
+- When calculating the result, you don't need the entire Answer structure. You care about only the type property of each Answer. So, you can reduce responses into a new dictionary of type [AnimalType: Int], where Int is the frequency a player selected the corresponding AnimalType.
+- Here's a breakdown of what's happening.
 
-    - ```swift
-        override func viewDidLoad() {
-            super.viewDidLoad()
-            calculatePersonalityResult()
-        }
-         
-        func calculatePersonalityResult() {
-          let frequencyOfAnswers = responses.reduce(into: [:]) {
-            (counts, answer) in counts[answer.type, default: 0] += 1
+  - reduce(into:) is a method on Array that iterates over each item, combining them into a single value using the code you provide. Just as a for...in loop executes its body once for each item in an array, reduce(into:) executes the code inside the following braces once per item. But the code inside the braces differs from the body of a loop. It's a closure that takes two parameters, which you see as (counts, answer) in.
+    - The first parameter is the item you're reducing into.
+    - The second parameter is the item from the collection for current iteration. (You can find more information about closures in the [Swift Language Guide](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/closures/).)
+  - In this case, you're reducing responses into a dictionary that's initially empty — the argument passed for `into:` — and then incrementing the value in the dictionary that corresponds to the key for each response.
+  - Notice the `default:` parameter in the subscript to counts. This is a way to guard against missing keys in a dictionary.
+
+    - If the key doesn't exist, it’s created and set to the value specified for default. By supplying a default value, you avoid the extra logic you'd otherwise need to handle the nil value a dictionary normally returns when a key doesn't exist.
+    - The following is the equivalent code without using default subscript syntax:
+
+      - ```swift
+          let frequencyOfAnswers = responses.reduce(into:
+            [AnimalType: Int]()) { (counts, answer) in
+              if let existingCount = counts[answer.type] {
+                  counts[answer.type] = existingCount + 1
+              } else {
+                  counts[answer.type] = 1
+              }
           }
-        }
-      ```
+        ```
 
-  - When calculating the result, you don't need the entire Answer structure. You care about only the type property of each Answer. So, you can reduce responses into a new dictionary of type [AnimalType: Int], where Int is the frequency a player selected the corresponding AnimalType.
-  - Here's a breakdown of what's happening.
+    - If you don't specify a default value for a nonexistent key, you must unwrap the subscript result before attempting to increment it, and insert a new value if it doesn't exist yet. Also notice that you're now required to specify type information for the initial value for the `into:` parameter. When 0 was specified as the default value for counts, Swift was able to infer that values of the counts dictionary should be of type Int. (In both cases, Swift can infer the keys to be AnimalType because that's the type you're passing.)
 
-    - reduce(into:) is a method on Array that iterates over each item, combining them into a single value using the code you provide. Just as a for...in loop executes its body once for each item in an array, reduce(into:) executes the code inside the following braces once per item. But the code inside the braces differs from the body of a loop. It's a closure that takes two parameters, which you see as (counts, answer) in.
-      - The first parameter is the item you're reducing into.
-      - The second parameter is the item from the collection for current iteration. (You can find more information about closures in the [Swift Language Guide](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/closures/).)
-    - In this case, you're reducing responses into a dictionary that's initially empty — the argument passed for `into:` — and then incrementing the value in the dictionary that corresponds to the key for each response.
-    - Notice the `default:` parameter in the subscript to counts. This is a way to guard against missing keys in a dictionary.
+  - For more details, Option+Click `reduce(into:)` to open quick help. You'll find an example usage that’s exactly what you've just done — it's the ideal method for this task.
 
-      - If the key doesn't exist, it’s created and set to the value specified for default. By supplying a default value, you avoid the extra logic you'd otherwise need to handle the nil value a dictionary normally returns when a key doesn't exist.
-      - The following is the equivalent code without using default subscript syntax:
+##### Determine the Most Frequent Answers
 
-        - ```swift
-            let frequencyOfAnswers = responses.reduce(into:
-              [AnimalType: Int]()) { (counts, answer) in
-                if let existingCount = counts[answer.type] {
-                    counts[answer.type] = existingCount + 1
-                } else {
-                    counts[answer.type] = 1
-                }
-            }
-          ```
+- Now that you have a dictionary that knows the frequency of each response, it's possible to determine which value is the largest. You can use the Swift `sorted(by:)` method on a dictionary to place each key/value pair into an array, sorting the value properties in descending order.
 
-      - If you don't specify a default value for a nonexistent key, you must unwrap the subscript result before attempting to increment it, and insert a new value if it doesn't exist yet. Also notice that you're now required to specify type information for the initial value for the `into:` parameter. When 0 was specified as the default value for counts, Swift was able to infer that values of the counts dictionary should be of type Int. (In both cases, Swift can infer the keys to be AnimalType because that's the type you're passing.)
+  - ```swift
+      let frequentAnswersSorted = frequencyOfAnswers.sorted(by:
+      { (pair1, pair2) in
+          return pair1.value > pair2.value
+      })
+       
+      let mostCommonAnswer = frequentAnswersSorted.first!.key
+    ```
 
-    - For more details, Option+Click `reduce(into:)` to open quick help. You'll find an example usage that’s exactly what you've just done — it's the ideal method for this task.
+- How does this code work exactly? Assume your dictionary looks like the following:
+
+  - ```swift
+      {
+        cat : 1,
+        dog : 2,
+        rabbit : 1,
+        turtle : 1
+      }
+    ```
+
+- The parameter you pass into sorted(by:) is a closure that takes any two key-value pairs.
+  - In the animal quiz, pair1 might correspond to cat : 1 and pair2 might be dog : 2. Within the body of the closure, you need to return a Boolean value to indicate which of the pairs is larger. In the case of return 1 > 2, the Boolean value is false — so the method knows that pair2 is larger than pair1.
+  - When the method is finished, the array frequentAnswersSorted might look something like the following code. For key/value pairs that have the same value, there's no way to rank one over the other — so rabbit, turtle, and cat may be in a different order. But it doesn't matter, since you only care about the first element in the array.
+    - `[(dog, 2), (rabbit, 1), (turtle, 1), (cat, 1)]`
+- You can simplify the closure using four techniques.
+  - First, you can use `$0` and `$1` as implicit parameter names without defining your own parameters, so you can remove (pair1, pair2) in. You can also refer to the elements of the pairs by number rather than by name, replacing the reference to `.value` with `1`.
+  - Next, you can eliminate the return statement for closures that contain just one expression. The closure automatically `returns` that value.
+  - Finally, you can use `trailing closure` syntax to remove the parentheses around the call to `sorted(by:)` and eliminate the argument label.
+- The call to reduce(into:) above also used trailing closure syntax.
+  - That method has two parameters. You needed to pass the first argument using traditional function - call syntax inside parentheses.
+  - Then you supplied the last argument — the trailing closure — outside the parentheses.
+- Using these techniques, and retrieving the key of the first element of the result, you can simplify the code into one line: `let mostCommonAnswer = frequencyOfAnswers.sorted { $0.1 > $1.1 }.first!.key`
