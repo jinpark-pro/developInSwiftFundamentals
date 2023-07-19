@@ -5666,3 +5666,16 @@
   - Since the app doesn't need to retain or pass back any information when the ResultsViewController is dismissed, you can leave the method body blank.
 - In the storyboard, Control-drag from the Done button to the Exit button at the top of the view controller. Select the `unwindToQuizIntroductionWithSegue` option that appears in the popover.
 - Now when the player taps the Done button, the unwind segue will dismiss the view controllers that were created after the IntroductionViewController was displayed. This includes both the QuestionViewController and the ResultsViewController.
+
+##### Wrap-Up
+
+- Congratulations on building a custom personality quiz app for iOS!
+- This project was intense, and there was a lot going on with the interface. If you struggled to create stack views, add constraints, create outlets, or modify the attributes of view and controls, take some time to practice working with Interface Builder. It's one of your most valuable tools for building apps — and will reduce a lot of code you'd have to write if you created the interface programmatically.
+- If you had any issues with the Swift code, remember that you can always refer to the Xcode documentation for additional information about methods and properties — or refer to the previous unit that covered Swift syntax and data types.
+
+##### Stretch Goals - Dynamic Questions and Add Replay Value
+
+- Would you like to extend your personality quiz further? Are there steps you'd like to improve on? Here are some ideas that will make the questions more dynamic and add replay value to your app:
+  - Allow the player to choose between multiple personality quizzes from the introduction screen.
+  - Randomize the order in which the questions are presented, as well as the order of the answers.
+  - Allow single-answer and multiple-answer questions to have a dynamic number of answers, rather than always four. Hint: Rather than creating the controls in Interface Builder, you'll need to add/remove labels and controls from stack views programmatically.
