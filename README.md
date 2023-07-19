@@ -5679,3 +5679,16 @@
   - Allow the player to choose between multiple personality quizzes from the introduction screen.
   - Randomize the order in which the questions are presented, as well as the order of the answers.
   - Allow single-answer and multiple-answer questions to have a dynamic number of answers, rather than always four. Hint: Rather than creating the controls in Interface Builder, you'll need to add/remove labels and controls from stack views programmatically.
+
+### Lesson 3.11 Evaluate Your App
+
+- Guide - Prepare Your Test
+  - The final step in preparing to test your app prototype is deciding who to test with. The quality of your data depends on the users you test with, so it’s important to select them carefully. And you’ll want to make sure that you’re ready right at the start to provide each participant with an enjoyable experience.
+  - Use the Prepare section of the App Design Workbook to finalize your plans for testing your app prototype. Then go for it—test the app prototype!
+- Validate
+  - You’ll have a lot of information to digest after testing your prototype. It’s important to summarize and draw the correct conclusions from your testing data so that you know how to improve your app.
+  - Work through the Validate section of the App Design Workbook. You’ll start by formatting your data to make it digestible. Then you’ll summarize your observations by discovering relationships between them. Then you’ll zoom out to root causes and identify core issues.
+- Iterate
+  - Look closely at your first prototype and you’ll see a world-changing app beginning to take form. Now comes the critical phase of any design—revising and looking for opportunities to make improvements, large and small.
+  - Complete the Iterate section of the App Design Workbook to use the conclusions from your analysis as a guide to reevaluate choices you made throughout your app design journey.
+  - And then you are ready to do two things—rework your app design, and then try to build your app using all the coding skills and tools you have been learning.
