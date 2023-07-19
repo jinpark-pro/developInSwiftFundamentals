@@ -5638,3 +5638,35 @@
   - That method has two parameters. You needed to pass the first argument using traditional function - call syntax inside parentheses.
   - Then you supplied the last argument — the trailing closure — outside the parentheses.
 - Using these techniques, and retrieving the key of the first element of the result, you can simplify the code into one line: `let mostCommonAnswer = frequencyOfAnswers.sorted { $0.1 > $1.1 }.first!.key`
+
+##### View the Results
+
+- Now all that's left is to update the text of your labels to appropriate values inside `calculatePersonalityResult`. You'll need to add some outlets in ResultsViewController so that each label's text can be updated in code. Open the assistant editor and Control-drag from each label to a space within the ResultsViewController class definition. Give each label an appropriate name.
+
+  - ```swift
+      @IBOutlet var resultAnswerLabel: UILabel!
+      @IBOutlet var resultDefinitionLabel: UILabel!
+    ```
+
+- Add the following code at the end of calculatePersonalityResult to update your labels with the data held in mostCommonAnswer:
+
+  - ```swift
+      resultAnswerLabel.text = “You are a \(mostCommonAnswer.rawValue)!”
+      resultDefinitionLabel.text = mostCommonAnswer.definition
+    ```
+
+- Build and run your app, and you’ll finally get to see your quiz results visually.
+
+##### Restart the Quiz
+
+- In most personality quizzes, the player goes through all the questions only once. After the results have been displayed, players shouldn’t have a way to go back and change previously answered questions to try and achieve a different outcome. Unfortunately, the Back button on the result screen implies that they can do that. To hide the Back button in the navigation bar, add the following line of code to the bottom of viewDidLoad() for ResultsViewController:
+
+navigationItem.hidesBackButton = true
+
+Instead of changing previous responses, the player should be able to dismiss the results and start with a clean slate. A tap of the Done button can return to the IntroductionViewController, making it very clear that the quiz is over. But at the moment, the Done button doesn't connect to any sort of action.
+You'll need to create an unwind method in the first view controller. Add the following to the IntroductionViewController definition:
+
+@IBAction func unwindToQuizIntroduction(segue:
+UIStoryboardSegue) {
+
+}
